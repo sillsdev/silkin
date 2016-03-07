@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<?define Product="SilKin"?>
+<?define Product="SILKin"?>
 <?define UpgradeCode="F2E0BC87-74B6-4788-BAE9-D747A1D385C9"?>
-<?define BUILD_NUMBER="2.2.0"?>
+<?define BUILD_NUMBER="2.1.0"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="*" Name="$(var.Product) $(var.BUILD_NUMBER)" Language="1033" Version="$(var.BUILD_NUMBER)" Manufacturer="SIL International" UpgradeCode="$(var.UpgradeCode)">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
@@ -15,18 +15,14 @@
 		rest of the app the first time the icon is run.  If this is not behavior you
 		are trying to support, you're better off using non-advertised shortcuts. "
 		-->
-    <PropertyRef Id="NETFRAMEWORK40FULL" />
-    <Condition Message="Before SilKin can install, you need to install Microsoft's free .NET Framework 4.0.">
-			Installed OR NETFRAMEWORK40FULL
-		</Condition>
-    <Media Id="1" Cabinet="SilKin.cab" EmbedCab="yes" CompressionLevel="high" />
+    <Media Id="1" Cabinet="SILKin.cab" EmbedCab="yes" CompressionLevel="high" />
     <Property Id="DISABLEADVTSHORTCUTS" Value="1" />
     <Feature Id="ProgramFiles" Level="1" Absent="disallow" Title="Program Files">
       <ComponentGroupRef Id="Application" />
     </Feature>
     <DirectoryRef Id="TARGETDIR">
       <Directory Id="ProgramMenuFolder" SourceName="Programs">
-        <Directory Id="SilKinMenu" Name="SilKin $(var.BUILD_NUMBER)">
+        <Directory Id="SilKinMenu" Name="$(var.Product) $(var.BUILD_NUMBER)">
           <Component Id="AddShortcutApp" Guid="510DFBFE-F440-4876-8AE3-42CEC795DEC4">
             <Shortcut Id="ShortcutApp" Name="SIL Kinship" Target="[!silkin.bat]" Hotkey="0" Icon="SilKinIcon.ico" WorkingDirectory="APPLICATIONFOLDER" Show="minimized" />
             <Shortcut Id="desktopShortcutApp" Directory="DesktopFolder" Name="SIL Kinship" Target="[!silkin.bat]" Icon="SilKinIcon.ico" WorkingDirectory="APPLICATIONFOLDER" Show="minimized" />
