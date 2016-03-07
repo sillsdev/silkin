@@ -1,0 +1,7 @@
+1. silkin.jar is built with NetBeans. Once it is built, there is a dist folder with a lib sub-folder. This folder tree is copied to the output/Release folder.
+
+2. The Java JDK is downloaded from the Oracle site by searching for "get Java se JDK" and agreeing to the licenses. The JDK files are placed in a folder called output/Release/jdk
+
+3. The Library folder tree (from the silkin git repo) is copied to output/Release/Library
+
+4. From the Installer folder, launch msbuild. It reports some errors but it has built the .msi file in the output folder.
