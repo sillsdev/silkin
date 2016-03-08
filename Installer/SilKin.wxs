@@ -29,6 +29,15 @@
             <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
             <RegistryValue Root="HKCU" Key="Software\SIL\SilKin" Name="SilKinDir" Type="string" Value="[APPLICATIONFOLDER]" />
           </Component>
+		  <Component Id="AddWhatsNewShortcut" Guid="25B64F4C-B8A2-430C-A447-1530F8912E03">
+            <Shortcut Id="ShortcutWhatsNew" Name="What's New" Target="[!what_s_new.rtf]" Hotkey="0" IconIndex="0" Show="normal" />
+            <RegistryValue Root="HKCU" Key="Software\SIL\Pathway" Name="WhatsNew" Type="string" Value="[!what_s_new.rtf]" />
+          </Component>
+          <Component Id="AddKnownBugsShortcut" Guid="0296ED73-0DE8-4320-8CF6-21759CAC4536">
+            <Shortcut Id="ShortcutKnownBugs" Name="Known Bugs" Target="[!known_bugs.rtf]" Hotkey="0" IconIndex="0" Show="normal" />
+            <RegistryValue Root="HKCU" Key="Software\SIL\Pathway" Name="KnownBugs" Type="string" Value="[!known_bugs.rtf]" />
+          </Component>
+
         </Directory>
       </Directory>
       <Directory Id="DesktopFolder" Name="Desktop" />

@@ -1914,4 +1914,21 @@
   <File Path="Library\PredEncodings" ComponentGuid="7D208505-D7E8-4B8A-92A6-2BA276371B1E" />
   <File Path="Library\Standard_Macros" ComponentGuid="C3247C93-3BF2-4B1F-AD96-CA4D60588D97" />
   <File Path="Library\WeightVector" ComponentGuid="855504DF-3D8D-405D-B865-FBB805C69CF8" />
+  <File Path="dist\Known Bugs.rtf" ComponentGuid="156254FF-A319-4088-9A0A-C378491EF2D9" />
+  <File Path="dist\What's New.rtf" ComponentGuid="3CE0C2E2-BFB7-41A2-96EA-449A74735427" />
+  <File Path="Library\Context Under Construction\.DS_Store" ComponentGuid="98AB3FBE-CD54-40B9-9DF5-2D0898F51F29" />
+  <File Path="Library\Context Under Construction\Adam-and-Eve.silk" ComponentGuid="BA072FD8-9F31-4419-8A8B-02B42D590C69" />
+  <File Path="Library\Context Under Construction\AdoptionDemo.silk" ComponentGuid="2476E341-359C-4BEA-A0B5-EA9A0D7C63A3" />
+  <File Path="Library\Context Under Construction\ClanDemo.silk" ComponentGuid="DEEE95CF-0114-4D32-BB84-5E1D31D85468" />
+  <File Path="Library\Context Under Construction\MultiChart-Example.silk" ComponentGuid="EFC00B2D-4B67-48DD-926D-DAF671B33F13" />
+  <File Path="Library\Contexts\.DS_Store" ComponentGuid="8EBF9AE2-9294-47B8-9FB4-E0AEDC3100F1" />
+  <File Path="Library\Contexts\Adam-and-Eve.ctxt" ComponentGuid="972E7BFB-A295-45A8-A5D3-F25C3A6AE5B0" />
+  <File Path="Library\Domain Theory Files\.DS_Store" ComponentGuid="51F8D504-718E-450B-8C28-01AD1E217CED" />
+  <File Path="Library\Feature Vectors\.DS_Store" ComponentGuid="E8021EC1-723E-43A2-A74C-D9825B4C0FC0" />
+  <File Path="Library\Help Files\.DS_Store" ComponentGuid="65FDFF70-36B2-492D-B450-41F61F0E243D" />
+  <File Path="Library\Suggestions\.DS_Store" ComponentGuid="89E41388-2BF7-4718-B9CF-EABA651A0456" />
+  <File Path="Library\Suggestions\Adam-and-Eve.html" ComponentGuid="C4853520-77B4-4601-B8D9-2C6FDF4D76B0" />
+  <File Path="Library\.DS_Store" ComponentGuid="7F7B14A0-AA08-4F65-86C2-D0C49D9D8B7D" />
+  <File Path="SilKin.bat" ComponentGuid="F5531DE8-A6E7-4175-BB51-21D169685ECA" />
+  <File Path="SilKinIcon.ico" ComponentGuid="3C290886-316F-47FC-B301-177CDFE04C04" />
 </FileLibrary>

@@ -5,20 +5,20 @@
       <Directory Id="LocalAppDataFolder">
         <Directory Id="PFSIL" Name="SIL">
           <Directory Id="APPLICATIONFOLDER" Name="SilKin">
-            <Component Id="silkin.bat" Guid="38593C45-DDE8-4102-BF6A-E566563A8612">
-              <File Id="silkin.bat" Name="SilKin.bat" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\SilKin.bat" />
-            </Component>
-            <Component Id="silkinicon.ico" Guid="B8E7FF06-8E23-493E-9B5B-5B9108A27638">
-              <File Id="silkinicon.ico" Name="SilKinIcon.ico" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\SilKinIcon.ico" />
-            </Component>
             <Directory Id="dist" Name="dist">
               <Directory Id="lib" Name="lib">
                 <Component Id="swing_layout_1.0.4.jar" Guid="16EE1220-BDDB-4580-89AF-D59201D4348F">
                   <File Id="swing_layout_1.0.4.jar" Name="swing-layout-1.0.4.jar" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\dist\lib\swing-layout-1.0.4.jar" />
                 </Component>
               </Directory>
+              <Component Id="known_bugs.rtf" Guid="156254FF-A319-4088-9A0A-C378491EF2D9">
+                <File Id="known_bugs.rtf" Name="Known Bugs.rtf" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\dist\Known Bugs.rtf" />
+              </Component>
               <Component Id="silkin.jar" Guid="A9F3E1A1-4126-46E8-89AD-B0110927E3EA">
                 <File Id="silkin.jar" Name="SILKin.jar" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\dist\SILKin.jar" />
+              </Component>
+              <Component Id="what_s_new.rtf" Guid="3CE0C2E2-BFB7-41A2-96EA-449A74735427">
+                <File Id="what_s_new.rtf" Name="What's New.rtf" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\dist\What's New.rtf" />
               </Component>
             </Directory>
             <Directory Id="jdk" Name="jdk">
@@ -4743,361 +4743,32 @@
                 </Component>
               </Directory>
               <Directory Id="context_under_construction" Name="Context Under Construction">
-                <Directory Id="latest_xsl" Name="Latest XSL">
-                  <Component Id="silk_status.xsl" Guid="41A516F6-754A-4BEE-A456-8E47C130A91C">
-                    <File Id="silk_status.xsl" Name="Silk-status.xsl" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Latest XSL\Silk-status.xsl" />
-                  </Component>
-                </Directory>
-                <Directory Id="merz_files" Name="Merz Files">
-                  <Directory Id="claire_mql" Name="Claire MQL">
-                    <Component Id="claire_mql_2.silk" Guid="AAEE70F9-8364-49C7-9D93-859E35FA8CAD">
-                      <File Id="claire_mql_2.silk" Name="Claire MQL-2.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Merz Files\Claire MQL\Claire MQL-2.silk" />
-                    </Component>
-                    <Component Id="claire_mql_3.silk" Guid="61531D0C-3A39-4846-B5C5-89AB1BE915C7">
-                      <File Id="claire_mql_3.silk" Name="Claire MQL-3.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Merz Files\Claire MQL\Claire MQL-3.silk" />
-                    </Component>
-                    <Component Id="claire_mql_4.silk" Guid="9799BF95-5BE7-4613-B210-FF04EEC55C6E">
-                      <File Id="claire_mql_4.silk" Name="Claire MQL-4.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Merz Files\Claire MQL\Claire MQL-4.silk" />
-                    </Component>
-                    <Component Id="claire_mql_download_1.silk" Guid="BA7ED005-E352-41DC-9981-94DDA8FF3B3E">
-                      <File Id="claire_mql_download_1.silk" Name="Claire MQL-download-1.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Merz Files\Claire MQL\Claire MQL-download-1.silk" />
-                    </Component>
-                    <Component Id="claire_mql_download_2.silk" Guid="30819E5D-83BD-4372-8266-DEA081AFAF22">
-                      <File Id="claire_mql_download_2.silk" Name="Claire MQL-download-2.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Merz Files\Claire MQL\Claire MQL-download-2.silk" />
-                    </Component>
-                    <Component Id="claire_mql_new.silk" Guid="28426FBD-0018-44FA-A3A4-E398A7EDF1B7">
-                      <File Id="claire_mql_new.silk" Name="Claire MQL-new.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Merz Files\Claire MQL\Claire MQL-new.silk" />
-                    </Component>
-                    <Component Id="claire_mql.silk" Guid="5D4C56D2-F2EF-477B-BCE6-EA7C62B0D11B">
-                      <File Id="claire_mql.silk" Name="Claire MQL.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Merz Files\Claire MQL\Claire MQL.silk" />
-                    </Component>
-                    <Component Id="claire_mql_22.silk" Guid="B261903C-6B14-4002-B569-A22B8EAC780C">
-                      <File Id="claire_mql_22.silk" Name="Claire MQL_22.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Merz Files\Claire MQL\Claire MQL_22.silk" />
-                    </Component>
-                    <Component Id="claire_mql_twin.silk" Guid="352A9957-F44A-4576-8934-BA29F2ECDC82">
-                      <File Id="claire_mql_twin.silk" Name="Claire MQL_twin.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Merz Files\Claire MQL\Claire MQL_twin.silk" />
-                    </Component>
-                    <Component Id="claire_mql_twin_nltest_.silk" Guid="18D20299-1331-42CA-B4C8-42DE8D46667E">
-                      <File Id="claire_mql_twin_nltest_.silk" Name="Claire MQL_Twin_NLTest .silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Merz Files\Claire MQL\Claire MQL_Twin_NLTest .silk" />
-                    </Component>
-                    <Component Id="mbelime_claire.silk" Guid="C95E9F93-66A9-49D6-8B3C-26DBCBBA0A2A">
-                      <File Id="mbelime_claire.silk" Name="Mbelime Claire.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Merz Files\Claire MQL\Mbelime Claire.silk" />
-                    </Component>
-                  </Directory>
-                  <Component Id="claire_mql_terms.txt" Guid="58E6A3CF-0807-4A24-9754-1722BF284895">
-                    <File Id="claire_mql_terms.txt" Name="Claire MQL terms.txt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Merz Files\Claire MQL terms.txt" />
-                  </Component>
-                  <Component Id="harflett_family_tree.silk" Guid="5E77CEEC-CC29-4F39-A915-046770760E40">
-                    <File Id="harflett_family_tree.silk" Name="Harflett Family Tree.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Merz Files\Harflett Family Tree.silk" />
-                  </Component>
-                  <Component Id="harflett_tree_gm.silk" Guid="480B46D7-E6E1-4105-BBF7-6564B0310FEA">
-                    <File Id="harflett_tree_gm.silk" Name="Harflett Tree-GM.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Merz Files\Harflett Tree-GM.silk" />
-                  </Component>
-                  <Component Id="test_adr_.thy" Guid="D72586E1-6878-46F0-BC84-AF38DA226383">
-                    <File Id="test_adr_.thy" Name="Test(Adr).thy" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Merz Files\Test(Adr).thy" />
-                  </Component>
-                  <Component Id="test.silk" Guid="9A2DECED-F6AF-4501-A230-7FC446C33437">
-                    <File Id="test.silk" Name="Test.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Merz Files\Test.silk" />
-                  </Component>
-                  <Component Id="test.thy" Guid="684F3737-D8B5-4843-AB89-79001F798D27">
-                    <File Id="test.thy" Name="Test.thy" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Merz Files\Test.thy" />
-                  </Component>
-                </Directory>
-                <Directory Id="older_tests" Name="Older Tests">
-                  <Component Id="adam_and_eve_postxml.silk" Guid="40EBC6E6-02AF-4C8F-96DE-2EAA17DB4CE5">
-                    <File Id="adam_and_eve_postxml.silk" Name="Adam-and-Eve PostXML.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Adam-and-Eve PostXML.silk" />
-                  </Component>
-                  <Component Id="adam_and_eve_adr_.thy" Guid="E29B28B6-4D48-4564-AEE8-E1448296E1A7">
-                    <File Id="adam_and_eve_adr_.thy" Name="Adam-and-Eve(Adr).thy" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Adam-and-Eve(Adr).thy" />
-                  </Component>
-                  <Component Id="adam_and_eve.silk" Guid="E76BC302-9F28-463C-B8CD-E77516357D87">
-                    <File Id="adam_and_eve.silk" Name="Adam-and-Eve.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Adam-and-Eve.silk" />
-                  </Component>
-                  <Component Id="adam_and_eve.thy" Guid="7B648E57-E91B-417A-A585-2A5549EE635F">
-                    <File Id="adam_and_eve.thy" Name="Adam-and-Eve.thy" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Adam-and-Eve.thy" />
-                  </Component>
-                  <Component Id="engtest_generated_14.silk" Guid="901B4D91-3972-4F59-BF83-F5C61F1B4F20">
-                    <File Id="engtest_generated_14.silk" Name="EngTest Generated 14.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest Generated 14.silk" />
-                  </Component>
-                  <Component Id="engtest_generated_16_1_distinct.silk" Guid="09B3F249-D18B-4590-A949-B25D56966A51">
-                    <File Id="engtest_generated_16_1_distinct.silk" Name="EngTest Generated 16-1-Distinct.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest Generated 16-1-Distinct.silk" />
-                  </Component>
-                  <Component Id="engtest_generated_16_1.silk" Guid="82D821F6-7DE1-4158-8242-A4AE82BB63DA">
-                    <File Id="engtest_generated_16_1.silk" Name="EngTest Generated 16-1.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest Generated 16-1.silk" />
-                  </Component>
-                  <Component Id="engtest_generated_16_2.silk" Guid="D7F87D5B-9906-49F4-A933-E68626D2D575">
-                    <File Id="engtest_generated_16_2.silk" Name="EngTest Generated 16-2.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest Generated 16-2.silk" />
-                  </Component>
-                  <Component Id="engtest_generated_16.silk" Guid="9FED162B-32B5-436B-853D-A36B3D8C0EED">
-                    <File Id="engtest_generated_16.silk" Name="EngTest Generated 16.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest Generated 16.silk" />
-                  </Component>
-                  <Component Id="engtest_generated_thy_promoted.silk" Guid="5C1D005A-8CD6-4C5B-9ABC-0960FF4DABE5">
-                    <File Id="engtest_generated_thy_promoted.silk" Name="EngTest Generated Thy-Promoted.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest Generated Thy-Promoted.silk" />
-                  </Component>
-                  <Component Id="engtest_generated_thy_promoted2.silk" Guid="60A8AD48-D1BA-46FE-988C-C939895E731E">
-                    <File Id="engtest_generated_thy_promoted2.silk" Name="EngTest Generated Thy-Promoted2.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest Generated Thy-Promoted2.silk" />
-                  </Component>
-                  <Component Id="engtest_synthetic_with_eip.silk" Guid="B92C0751-563A-42AA-B64C-5CAA7E151527">
-                    <File Id="engtest_synthetic_with_eip.silk" Name="EngTest Synthetic with EIP.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest Synthetic with EIP.silk" />
-                  </Component>
-                  <Component Id="engtest_synthetic_3.silk" Guid="7D793173-1954-42E8-9F2C-C0A291E07474">
-                    <File Id="engtest_synthetic_3.silk" Name="EngTest Synthetic-3.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest Synthetic-3.silk" />
-                  </Component>
-                  <Component Id="engtest_synthetic.silk" Guid="A796F6AB-7393-4F3F-B492-0643CA0B251E">
-                    <File Id="engtest_synthetic.silk" Name="EngTest Synthetic.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest Synthetic.silk" />
-                  </Component>
-                  <Component Id="engtest_synthetic20_altered.silk" Guid="7C4FEE7F-65B7-469F-8EEF-5D24C2C690C5">
-                    <File Id="engtest_synthetic20_altered.silk" Name="EngTest Synthetic20 altered.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest Synthetic20 altered.silk" />
-                  </Component>
-                  <Component Id="engtest_synthetic20.silk" Guid="900BF5F3-6514-48D8-A40E-B7673019FE95">
-                    <File Id="engtest_synthetic20.silk" Name="EngTest Synthetic20.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest Synthetic20.silk" />
-                  </Component>
-                  <Component Id="engtest_synthetic20a.silk" Guid="49047506-F4FA-4963-B8A0-39002FD896B3">
-                    <File Id="engtest_synthetic20a.silk" Name="EngTest Synthetic20a.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest Synthetic20a.silk" />
-                  </Component>
-                  <Component Id="engtest_with_processed.silk" Guid="14688644-EA0D-4588-86D0-204900631BC2">
-                    <File Id="engtest_with_processed.silk" Name="EngTest with Processed.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest with Processed.silk" />
-                  </Component>
-                  <Component Id="engtest_with_suggestions___acc_defs.silk" Guid="F991F364-07AF-4E13-8DC1-1BC66C6E6B97">
-                    <File Id="engtest_with_suggestions___acc_defs.silk" Name="EngTest with Suggestions &amp; Acc-Defs.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest with Suggestions &amp; Acc-Defs.silk" />
-                  </Component>
-                  <Component Id="engtest_with_suggestions_post_xml_2.silk" Guid="34F70E9F-BE40-461C-A468-02FC822339CE">
-                    <File Id="engtest_with_suggestions_post_xml_2.silk" Name="EngTest with Suggestions Post-XML 2.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest with Suggestions Post-XML 2.silk" />
-                  </Component>
-                  <Component Id="engtest_with_suggestions_post_xml_3.silk" Guid="C72B43FF-8AAF-4556-9C75-CB6641669D40">
-                    <File Id="engtest_with_suggestions_post_xml_3.silk" Name="EngTest with Suggestions Post-XML 3.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest with Suggestions Post-XML 3.silk" />
-                  </Component>
-                  <Component Id="engtest_with_suggestions_post_xml_4.silk" Guid="AAD1736D-5867-435C-93D0-9A33B419B4B2">
-                    <File Id="engtest_with_suggestions_post_xml_4.silk" Name="EngTest with Suggestions Post-XML 4.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest with Suggestions Post-XML 4.silk" />
-                  </Component>
-                  <Component Id="engtest_with_suggestions_post_xml.silk" Guid="688ED2A0-753E-4986-90D2-6664F0B4EA48">
-                    <File Id="engtest_with_suggestions_post_xml.silk" Name="EngTest with Suggestions Post-XML.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest with Suggestions Post-XML.silk" />
-                  </Component>
-                  <Component Id="engtest_with_suggestions_out.silk" Guid="2E626F10-8374-4723-A8A0-DA6B4FC6E6D3">
-                    <File Id="engtest_with_suggestions_out.silk" Name="EngTest with Suggestions-Out.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest with Suggestions-Out.silk" />
-                  </Component>
-                  <Component Id="engtest_with_suggestions2.silk" Guid="39151A9A-A749-4D9F-8105-DF1C274A44CC">
-                    <File Id="engtest_with_suggestions2.silk" Name="EngTest with Suggestions2.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest with Suggestions2.silk" />
-                  </Component>
-                  <Component Id="engtest.silk" Guid="19C081C7-847B-4576-9F3E-70ECBE90A9A6">
-                    <File Id="engtest.silk" Name="EngTest.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest.silk" />
-                  </Component>
-                  <Component Id="engtest2.silk" Guid="B3D6BE7A-D9BF-449B-B2B8-145C53F1CE0E">
-                    <File Id="engtest2.silk" Name="EngTest2.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest2.silk" />
-                  </Component>
-                  <Component Id="engtest3.silk" Guid="3BDCB23E-37C9-4319-980F-1DB079FD76CB">
-                    <File Id="engtest3.silk" Name="EngTest3.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest3.silk" />
-                  </Component>
-                  <Component Id="engtest4.silk" Guid="BFD489EB-3627-4D35-9A11-2D50F378C71B">
-                    <File Id="engtest4.silk" Name="EngTest4.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\EngTest4.silk" />
-                  </Component>
-                  <Component Id="eng_udp_demo.silk" Guid="E20A2429-4A0C-4B5A-94ED-845B61E1F279">
-                    <File Id="eng_udp_demo.silk" Name="Eng_UDP_Demo.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Eng_UDP_Demo.silk" />
-                  </Component>
-                  <Component Id="guinea_pig_adr_.thy" Guid="907149A0-2AD2-410B-AD66-DAF9948FD322">
-                    <File Id="guinea_pig_adr_.thy" Name="guinea-pig(Adr).thy" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\guinea-pig(Adr).thy" />
-                  </Component>
-                  <Component Id="guinea_pig.silk" Guid="B265ED08-2BC5-47B3-B569-F9DD851A03CA">
-                    <File Id="guinea_pig.silk" Name="guinea-pig.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\guinea-pig.silk" />
-                  </Component>
-                  <Component Id="guinea_pig.thy" Guid="03C8C4ED-436F-43CA-AA7F-6600CDBE7D8F">
-                    <File Id="guinea_pig.thy" Name="guinea-pig.thy" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\guinea-pig.thy" />
-                  </Component>
-                  <Component Id="silk_status_old.xsl" Guid="BACCB78F-94D7-4CCC-9B86-0119559846FF">
-                    <File Id="silk_status_old.xsl" Name="Silk-status-Old.xsl" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Silk-status-Old.xsl" />
-                  </Component>
-                  <Component Id="test_7_3.silk" Guid="B7B32D39-C7FB-4F55-8E50-F996851898CD">
-                    <File Id="test_7_3.silk" Name="Test 7-3.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test 7-3.silk" />
-                  </Component>
-                  <Component Id="test_7_3a.silk" Guid="B01E784B-E9F9-4A97-9C9C-5945A103D6BE">
-                    <File Id="test_7_3a.silk" Name="Test 7-3a.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test 7-3a.silk" />
-                  </Component>
-                  <Component Id="test_7_3b.silk" Guid="1AF92702-7E8E-4636-AACD-E2082F2F1450">
-                    <File Id="test_7_3b.silk" Name="Test 7-3b.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test 7-3b.silk" />
-                  </Component>
-                  <Component Id="test_7_3c.silk" Guid="4EBB4A99-F8F6-4048-922B-0468A9D66A24">
-                    <File Id="test_7_3c.silk" Name="Test 7-3c.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test 7-3c.silk" />
-                  </Component>
-                  <Component Id="test_7_3g.silk" Guid="E6F73A9E-EBA2-4874-8A78-37E9B60FFBDB">
-                    <File Id="test_7_3g.silk" Name="Test 7-3g.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test 7-3g.silk" />
-                  </Component>
-                  <Component Id="test_7_4a.silk" Guid="21464136-3A17-4244-AE36-61CBE0E268BB">
-                    <File Id="test_7_4a.silk" Name="Test 7-4a.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test 7-4a.silk" />
-                  </Component>
-                  <Component Id="test_7_4b_diff.silk" Guid="94862A5D-A83D-4682-89B9-66D5581192AD">
-                    <File Id="test_7_4b_diff.silk" Name="Test 7-4b-diff.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test 7-4b-diff.silk" />
-                  </Component>
-                  <Component Id="test_7_4b.silk" Guid="47A40F6F-0C51-4B7B-9D8A-31EF6638AFF5">
-                    <File Id="test_7_4b.silk" Name="Test 7-4b.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test 7-4b.silk" />
-                  </Component>
-                  <Component Id="test_7_4c.silk" Guid="4BC114E2-54A4-4AB6-9ACD-007AE7FFA972">
-                    <File Id="test_7_4c.silk" Name="Test 7-4c.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test 7-4c.silk" />
-                  </Component>
-                  <Component Id="test_adr_.thy2" Guid="35C14BDD-ACA8-4CFE-B899-30A53BB54C60">
-                    <File Id="test_adr_.thy2" Name="Test(Adr).thy" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test(Adr).thy" />
-                  </Component>
-                  <Component Id="test_6_25a.silk" Guid="1C0B28DE-F9C3-44CB-BE95-CA43F33B2835">
-                    <File Id="test_6_25a.silk" Name="Test-6-25a.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test-6-25a.silk" />
-                  </Component>
-                  <Component Id="test_6_25b.silk" Guid="BA1AD6DD-49ED-4E67-A6DA-5E6A3F44DBB3">
-                    <File Id="test_6_25b.silk" Name="Test-6-25b.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test-6-25b.silk" />
-                  </Component>
-                  <Component Id="test_6_26a.silk" Guid="505031F2-8584-42ED-8723-91EE1BA359A4">
-                    <File Id="test_6_26a.silk" Name="Test-6-26a.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test-6-26a.silk" />
-                  </Component>
-                  <Component Id="test_6_26b.silk" Guid="397BED7D-AA87-45E4-94DF-8AB909383274">
-                    <File Id="test_6_26b.silk" Name="Test-6-26b.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test-6-26b.silk" />
-                  </Component>
-                  <Component Id="test_6_26c.silk" Guid="7F044B1D-1119-4051-8878-E8B8925DC0BD">
-                    <File Id="test_6_26c.silk" Name="Test-6-26c.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test-6-26c.silk" />
-                  </Component>
-                  <Component Id="test_6_26d.silk" Guid="C568A2AD-52C1-46BD-87EA-7806C5FBFFDF">
-                    <File Id="test_6_26d.silk" Name="Test-6-26d.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test-6-26d.silk" />
-                  </Component>
-                  <Component Id="test_6_26e.silk" Guid="971E8070-D434-48D4-B7B3-6162AA8DA40C">
-                    <File Id="test_6_26e.silk" Name="Test-6-26e.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test-6-26e.silk" />
-                  </Component>
-                  <Component Id="test_6_26f.silk" Guid="17D94A08-5BAB-4C2C-BE85-11B46E02608E">
-                    <File Id="test_6_26f.silk" Name="Test-6-26f.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test-6-26f.silk" />
-                  </Component>
-                  <Component Id="test_6_26g.silk" Guid="05443800-07C2-4AA8-B85E-0A7CC69DCFD9">
-                    <File Id="test_6_26g.silk" Name="Test-6-26g.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test-6-26g.silk" />
-                  </Component>
-                  <Component Id="test_6_26h.silk" Guid="545CF05E-F864-4E31-BD10-CE8BC533BA05">
-                    <File Id="test_6_26h.silk" Name="Test-6-26h.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test-6-26h.silk" />
-                  </Component>
-                  <Component Id="test_6_6b.silk" Guid="92CF762E-C9CE-4660-B5BF-413BD24A0A81">
-                    <File Id="test_6_6b.silk" Name="Test-6-6b.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test-6-6b.silk" />
-                  </Component>
-                  <Component Id="test_7_2.silk" Guid="91BBA943-8DD5-4301-B8F0-D4E52D3845E9">
-                    <File Id="test_7_2.silk" Name="Test-7-2.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test-7-2.silk" />
-                  </Component>
-                  <Component Id="test_7_2a.silk" Guid="0C054ED6-C08A-49EF-A927-457BDFE2874A">
-                    <File Id="test_7_2a.silk" Name="Test-7-2a.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test-7-2a.silk" />
-                  </Component>
-                  <Component Id="test_a.silk" Guid="5CB313CE-4490-4FE5-B110-9E6AD2BA99EF">
-                    <File Id="test_a.silk" Name="Test-A.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test-A.silk" />
-                  </Component>
-                  <Component Id="test_a2.silk" Guid="36FDDD9B-1784-4062-9B66-4F0E45788BCA">
-                    <File Id="test_a2.silk" Name="Test-A2.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test-A2.silk" />
-                  </Component>
-                  <Component Id="test_a3.silk" Guid="63EC7F71-B6DB-4FCC-80B5-C08DB5CC1FFC">
-                    <File Id="test_a3.silk" Name="Test-A3.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test-A3.silk" />
-                  </Component>
-                  <Component Id="test.silk2" Guid="8A12467D-95F7-481E-92A3-51806A8A0904">
-                    <File Id="test.silk2" Name="Test.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test.silk" />
-                  </Component>
-                  <Component Id="test.thy2" Guid="D40A2AB4-95E9-45F0-9847-9ED6210E7858">
-                    <File Id="test.thy2" Name="Test.thy" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Test.thy" />
-                  </Component>
-                  <Component Id="test12_2_adr_.thy" Guid="685BFBBB-F632-4CB6-ADC0-EDA6B9D1B2A6">
-                    <File Id="test12_2_adr_.thy" Name="test12-2(Adr).thy" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\test12-2(Adr).thy" />
-                  </Component>
-                  <Component Id="test12_2_trace_a.silk" Guid="CE340246-B350-43F8-A49A-63321858065B">
-                    <File Id="test12_2_trace_a.silk" Name="test12-2-trace-A.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\test12-2-trace-A.silk" />
-                  </Component>
-                  <Component Id="test12_2_trace_b.silk" Guid="4C653801-5860-45D4-B69F-3CE446874A3A">
-                    <File Id="test12_2_trace_b.silk" Name="test12-2-trace-B.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\test12-2-trace-B.silk" />
-                  </Component>
-                  <Component Id="test12_2_trace_c.silk" Guid="06BE6CC8-B7C5-4372-BA7B-8AF32CAE16D7">
-                    <File Id="test12_2_trace_c.silk" Name="test12-2-trace-C.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\test12-2-trace-C.silk" />
-                  </Component>
-                  <Component Id="test12_2_tracer_2.silk" Guid="A34BEE01-7355-417C-A26F-8131C54F1805">
-                    <File Id="test12_2_tracer_2.silk" Name="test12-2-tracer 2.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\test12-2-tracer 2.silk" />
-                  </Component>
-                  <Component Id="test12_2_tracer_3.silk" Guid="E7063519-917C-448E-A397-FE8CC9031316">
-                    <File Id="test12_2_tracer_3.silk" Name="test12-2-tracer 3.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\test12-2-tracer 3.silk" />
-                  </Component>
-                  <Component Id="test12_2_tracer_4.silk" Guid="EFA88806-D4D7-48B4-AA0C-C1EDCF34ACFA">
-                    <File Id="test12_2_tracer_4.silk" Name="test12-2-tracer 4.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\test12-2-tracer 4.silk" />
-                  </Component>
-                  <Component Id="test12_2_tracer.silk" Guid="0974B211-A548-44FA-BE28-303274405B53">
-                    <File Id="test12_2_tracer.silk" Name="test12-2-tracer.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\test12-2-tracer.silk" />
-                  </Component>
-                  <Component Id="test12_2.thy" Guid="C45E8B72-CDA5-4C39-884F-223C848FC37D">
-                    <File Id="test12_2.thy" Name="test12-2.thy" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\test12-2.thy" />
-                  </Component>
-                  <Component Id="testchars_1.silk" Guid="8D2416D3-EDAE-4C28-8B68-46331B9AED2E">
-                    <File Id="testchars_1.silk" Name="TestChars-1.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\TestChars-1.silk" />
-                  </Component>
-                  <Component Id="testchars.silk" Guid="0FE5648D-8D4C-4811-A4D0-D41662FEDF56">
-                    <File Id="testchars.silk" Name="TestChars.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\TestChars.silk" />
-                  </Component>
-                  <Component Id="testone_a_1.silk" Guid="C41419AC-A7EA-47B0-989B-5FD32F61BA04">
-                    <File Id="testone_a_1.silk" Name="TestOne-A-1.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\TestOne-A-1.silk" />
-                  </Component>
-                  <Component Id="testone_a_2.silk" Guid="87D2B148-5CA6-4C84-9B90-540E57EAC015">
-                    <File Id="testone_a_2.silk" Name="TestOne-A-2.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\TestOne-A-2.silk" />
-                  </Component>
-                  <Component Id="testone_a_post_autodefs.silk" Guid="40549003-5F1B-4CE2-9B95-0AA76C37644A">
-                    <File Id="testone_a_post_autodefs.silk" Name="TestOne-A-post-autoDefs.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\TestOne-A-post-autoDefs.silk" />
-                  </Component>
-                  <Component Id="testone_a.silk" Guid="4A7AF329-A753-4B98-A244-443D9FA660CE">
-                    <File Id="testone_a.silk" Name="TestOne-A.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\TestOne-A.silk" />
-                  </Component>
-                  <Component Id="testone_b.silk" Guid="4A44C0E4-269D-4FFF-8F74-D55316CCFBDA">
-                    <File Id="testone_b.silk" Name="TestOne-B.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\TestOne-B.silk" />
-                  </Component>
-                  <Component Id="testone_c.silk" Guid="75D514B5-159C-48D3-834E-B1ABD60AEFE1">
-                    <File Id="testone_c.silk" Name="TestOne-C.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\TestOne-C.silk" />
-                  </Component>
-                  <Component Id="testone_d.silk" Guid="EBB262CB-CEF8-4235-9DB2-CE636549375A">
-                    <File Id="testone_d.silk" Name="TestOne-D.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\TestOne-D.silk" />
-                  </Component>
-                  <Component Id="testone.silk" Guid="256833CC-3638-41A7-818A-5803E855964D">
-                    <File Id="testone.silk" Name="TestOne.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\TestOne.silk" />
-                  </Component>
-                  <Component Id="teststart.silk" Guid="15369782-187E-4DCA-BEBE-DB11E6A59CA7">
-                    <File Id="teststart.silk" Name="TestStart.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\TestStart.silk" />
-                  </Component>
-                  <Component Id="testthree_a_1.silk" Guid="3EED0931-4B85-42FF-9565-9F7BA9D912AB">
-                    <File Id="testthree_a_1.silk" Name="TestThree-A-1.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\TestThree-A-1.silk" />
-                  </Component>
-                  <Component Id="testthree_a_2.silk" Guid="1D02F283-3FF5-4A3E-B422-96D46EC88D0D">
-                    <File Id="testthree_a_2.silk" Name="TestThree-A-2.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\TestThree-A-2.silk" />
-                  </Component>
-                  <Component Id="testthree_a_3.silk" Guid="AD0DDA6A-997F-42A1-A49B-2A72A5609D96">
-                    <File Id="testthree_a_3.silk" Name="TestThree-A-3.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\TestThree-A-3.silk" />
-                  </Component>
-                  <Component Id="testthree_a.silk" Guid="368815F9-0376-4521-B518-A4480C1217D3">
-                    <File Id="testthree_a.silk" Name="TestThree-A.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\TestThree-A.silk" />
-                  </Component>
-                  <Component Id="testthree_b.silk" Guid="617A4108-2681-4673-9F57-AFC1EFB07E03">
-                    <File Id="testthree_b.silk" Name="TestThree-B.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\TestThree-B.silk" />
-                  </Component>
-                  <Component Id="testtwo.silk" Guid="A1649E14-5B66-4860-84AE-47780E29F5B8">
-                    <File Id="testtwo.silk" Name="TestTwo.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\TestTwo.silk" />
-                  </Component>
-                  <Component Id="tracer_adr_.thy" Guid="7318738F-E376-486B-99B6-D8FC992D54C6">
-                    <File Id="tracer_adr_.thy" Name="Tracer(Adr).thy" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Tracer(Adr).thy" />
-                  </Component>
-                  <Component Id="tracer.silk" Guid="DF85FC44-493B-4196-A61A-DB6EC0BF9E45">
-                    <File Id="tracer.silk" Name="Tracer.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Tracer.silk" />
-                  </Component>
-                  <Component Id="tracer.thy" Guid="54911A1C-4A7E-4C4F-B165-EA4797FA5DAB">
-                    <File Id="tracer.thy" Name="Tracer.thy" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Older Tests\Tracer.thy" />
-                  </Component>
-                </Directory>
-                <Component Id="crossgenmarriage_a.silk" Guid="04469055-C243-45EB-8C26-7BCE08C892B3">
-                  <File Id="crossgenmarriage_a.silk" Name="CrossGenMarriage-A.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\CrossGenMarriage-A.silk" />
+                <Component Id="_.ds_store" Guid="98AB3FBE-CD54-40B9-9DF5-2D0898F51F29">
+                  <File Id="_.ds_store" Name=".DS_Store" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\.DS_Store" />
                 </Component>
-                <Component Id="crossgenmarriage_b.silk" Guid="68759EAE-4C44-4023-86E2-6357F8C88AB9">
-                  <File Id="crossgenmarriage_b.silk" Name="CrossGenMarriage-B.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\CrossGenMarriage-B.silk" />
+                <Component Id="adam_and_eve.silk" Guid="BA072FD8-9F31-4419-8A8B-02B42D590C69">
+                  <File Id="adam_and_eve.silk" Name="Adam-and-Eve.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Adam-and-Eve.silk" />
                 </Component>
-                <Component Id="crossgenmarriage.silk" Guid="66743E0A-C063-478F-A98A-346867ADFB14">
-                  <File Id="crossgenmarriage.silk" Name="CrossGenMarriage.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\CrossGenMarriage.silk" />
+                <Component Id="adoptiondemo.silk" Guid="2476E341-359C-4BEA-A0B5-EA9A0D7C63A3">
+                  <File Id="adoptiondemo.silk" Name="AdoptionDemo.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\AdoptionDemo.silk" />
                 </Component>
-                <Component Id="engtest_synthetic_2.silk" Guid="7B7F0A1D-DA19-48FE-944A-B15375F4B949">
-                  <File Id="engtest_synthetic_2.silk" Name="EngTest Synthetic-2.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\EngTest Synthetic-2.silk" />
+                <Component Id="clandemo.silk" Guid="DEEE95CF-0114-4D32-BB84-5E1D31D85468">
+                  <File Id="clandemo.silk" Name="ClanDemo.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\ClanDemo.silk" />
                 </Component>
-                <Component Id="engtest_synthetic_2a.silk" Guid="916CD009-B00B-4072-ABC7-6A00411EE872">
-                  <File Id="engtest_synthetic_2a.silk" Name="EngTest Synthetic-2a.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\EngTest Synthetic-2a.silk" />
+                <Component Id="multichart_example.silk" Guid="EFC00B2D-4B67-48DD-926D-DAF671B33F13">
+                  <File Id="multichart_example.silk" Name="MultiChart-Example.silk" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\MultiChart-Example.silk" />
                 </Component>
-                <Component Id="silk_status.xsl2" Guid="B297095C-395A-4D49-8694-F3F11BB72C43">
-                  <File Id="silk_status.xsl2" Name="Silk-status.xsl" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Silk-status.xsl" />
+                <Component Id="silk_status.xsl" Guid="B297095C-395A-4D49-8694-F3F11BB72C43">
+                  <File Id="silk_status.xsl" Name="Silk-status.xsl" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Context Under Construction\Silk-status.xsl" />
                 </Component>
               </Directory>
               <Directory Id="contexts" Name="Contexts">
+                <Component Id="_.ds_store2" Guid="8EBF9AE2-9294-47B8-9FB4-E0AEDC3100F1">
+                  <File Id="_.ds_store2" Name=".DS_Store" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\.DS_Store" />
+                </Component>
+                <Component Id="adam_and_eve.ctxt" Guid="972E7BFB-A295-45A8-A5D3-F25C3A6AE5B0">
+                  <File Id="adam_and_eve.ctxt" Name="Adam-and-Eve.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Adam-and-Eve.ctxt" />
+                </Component>
                 <Component Id="agta.ctxt" Guid="49A2E6D3-E628-4AAE-9D98-ED43BDE69739">
                   <File Id="agta.ctxt" Name="Agta.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Agta.ctxt" />
                 </Component>
@@ -5107,17 +4778,11 @@
                 <Component Id="cayuga.ctxt" Guid="25B33B97-216B-4A5B-BB25-FD42C766DCF9">
                   <File Id="cayuga.ctxt" Name="Cayuga.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Cayuga.ctxt" />
                 </Component>
-                <Component Id="claire_mql_.ctxt" Guid="32DF3814-2557-4A7A-8164-8637A3418D63">
-                  <File Id="claire_mql_.ctxt" Name="Claire MQL .ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Claire MQL .ctxt" />
-                </Component>
                 <Component Id="cogui.ctxt" Guid="A471F48C-5990-4CAD-B48E-3ABC41ABDBE6">
                   <File Id="cogui.ctxt" Name="Cogui.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Cogui.ctxt" />
                 </Component>
                 <Component Id="coreguaje.ctxt" Guid="23C75191-42B9-42C5-A4C5-0A51E1719325">
                   <File Id="coreguaje.ctxt" Name="Coreguaje.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Coreguaje.ctxt" />
-                </Component>
-                <Component Id="crossgenmarriage.ctxt" Guid="D773FC00-952B-40AE-BB24-A0333E1BCF29">
-                  <File Id="crossgenmarriage.ctxt" Name="CrossGenMarriage.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\CrossGenMarriage.ctxt" />
                 </Component>
                 <Component Id="crow_1.ctxt" Guid="2CA4A61F-BEBB-4D95-A3C0-BCD393BA9E81">
                   <File Id="crow_1.ctxt" Name="Crow-1.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Crow-1.ctxt" />
@@ -5136,15 +4801,6 @@
                 </Component>
                 <Component Id="english.ctxt" Guid="4195F9D8-44A0-4D00-BBF5-715D0C519537">
                   <File Id="english.ctxt" Name="English.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\English.ctxt" />
-                </Component>
-                <Component Id="engtest.ctxt" Guid="39CC73F3-49DB-476B-BBFD-83CD63B66F72">
-                  <File Id="engtest.ctxt" Name="EngTest.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\EngTest.ctxt" />
-                </Component>
-                <Component Id="engtest2.ctxt" Guid="C086CB02-6163-4F40-A48F-F1F9459C6D3C">
-                  <File Id="engtest2.ctxt" Name="EngTest2.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\EngTest2.ctxt" />
-                </Component>
-                <Component Id="eng_udp_demo.ctxt" Guid="552BF3C2-4A93-4210-BACD-89F21269F11D">
-                  <File Id="eng_udp_demo.ctxt" Name="Eng_UDP_Demo.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Eng_UDP_Demo.ctxt" />
                 </Component>
                 <Component Id="eskimo_baffin_bay.ctxt" Guid="A60664C1-1F7E-46F0-9DE1-D9F94724FEC1">
                   <File Id="eskimo_baffin_bay.ctxt" Name="Eskimo Baffin Bay.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Eskimo Baffin Bay.ctxt" />
@@ -5200,9 +4856,6 @@
                 <Component Id="mohawk.ctxt" Guid="EAE8007F-3A20-4DDA-A5E6-B9150B996628">
                   <File Id="mohawk.ctxt" Name="Mohawk.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Mohawk.ctxt" />
                 </Component>
-                <Component Id="morris_stout_reunion.ctxt" Guid="1CB32723-47EA-4302-BB48-4C67EFC6888B">
-                  <File Id="morris_stout_reunion.ctxt" Name="Morris-Stout Reunion.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Morris-Stout Reunion.ctxt" />
-                </Component>
                 <Component Id="omaha_1_partial.ctxt" Guid="2A1E53EC-6A26-4619-84A6-07F283E9C8A7">
                   <File Id="omaha_1_partial.ctxt" Name="Omaha-1 Partial.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Omaha-1 Partial.ctxt" />
                 </Component>
@@ -5248,27 +4901,6 @@
                 <Component Id="tabla.ctxt" Guid="53659F66-8D78-4F00-B10A-467B859FC05B">
                   <File Id="tabla.ctxt" Name="Tabla.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Tabla.ctxt" />
                 </Component>
-                <Component Id="test_7_3.ctxt" Guid="B7A806F1-76CB-4C8E-9FC5-9791418AE00E">
-                  <File Id="test_7_3.ctxt" Name="Test 7-3.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Test 7-3.ctxt" />
-                </Component>
-                <Component Id="test_7_3g.ctxt" Guid="92AAA225-AD81-4A35-A446-D43E80547F48">
-                  <File Id="test_7_3g.ctxt" Name="Test 7-3g.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Test 7-3g.ctxt" />
-                </Component>
-                <Component Id="test_7_4a.ctxt" Guid="24DB6520-8A7E-4092-BAFB-A5C56EB62016">
-                  <File Id="test_7_4a.ctxt" Name="Test 7-4a.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Test 7-4a.ctxt" />
-                </Component>
-                <Component Id="test_7_4b.ctxt" Guid="EAE94712-6F13-4D09-BD5D-A529F765B63D">
-                  <File Id="test_7_4b.ctxt" Name="Test 7-4b.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Test 7-4b.ctxt" />
-                </Component>
-                <Component Id="test_6_4.ctxt" Guid="DFEAB577-4B76-48E5-A29D-A88CBEA55C1A">
-                  <File Id="test_6_4.ctxt" Name="Test-6-4.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Test-6-4.ctxt" />
-                </Component>
-                <Component Id="test_6_4b.ctxt" Guid="0E7679C9-C337-489C-9638-08093F25DD88">
-                  <File Id="test_6_4b.ctxt" Name="Test-6-4b.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Test-6-4b.ctxt" />
-                </Component>
-                <Component Id="test_7_4b.ctxt2" Guid="FFBE35A1-4530-4C76-A34F-5633020AFD83">
-                  <File Id="test_7_4b.ctxt2" Name="Test-7-4b.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Test-7-4b.ctxt" />
-                </Component>
                 <Component Id="trobriand.ctxt" Guid="4D2CCA7D-ECE9-4D8B-95C8-5DBC898CAFB1">
                   <File Id="trobriand.ctxt" Name="Trobriand.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Trobriand.ctxt" />
                 </Component>
@@ -5281,9 +4913,6 @@
                 <Component Id="tuscarora.ctxt" Guid="77E2B6AA-95CD-4B09-BA28-B033E192A434">
                   <File Id="tuscarora.ctxt" Name="Tuscarora.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Tuscarora.ctxt" />
                 </Component>
-                <Component Id="twintest.ctxt" Guid="3EBD9490-92E1-43E2-BE11-442D15D7AE43">
-                  <File Id="twintest.ctxt" Name="TwinTest.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\TwinTest.ctxt" />
-                </Component>
                 <Component Id="wandamen.ctxt" Guid="8CE24AD5-15DA-42B7-BD26-05F19734608A">
                   <File Id="wandamen.ctxt" Name="Wandamen.ctxt" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts\Wandamen.ctxt" />
                 </Component>
@@ -5292,6 +4921,9 @@
                 </Component>
               </Directory>
               <Directory Id="domain_theory_files" Name="Domain Theory Files">
+                <Component Id="_.ds_store3" Guid="51F8D504-718E-450B-8C28-01AD1E217CED">
+                  <File Id="_.ds_store3" Name=".DS_Store" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Domain Theory Files\.DS_Store" />
+                </Component>
                 <Component Id="agta.thy" Guid="16DC15B5-9343-4B21-BAAA-AEF75E7E2CF6">
                   <File Id="agta.thy" Name="Agta.thy" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Domain Theory Files\Agta.thy" />
                 </Component>
@@ -5456,65 +5088,38 @@
                 </Component>
               </Directory>
               <Directory Id="feature_vectors" Name="Feature Vectors">
-                <Component Id="agta_test.fvect" Guid="8AE17FB0-958C-4D92-A177-7B2A5C5BA93F">
-                  <File Id="agta_test.fvect" Name="Agta-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Agta-test.fvect" />
+                <Component Id="_.ds_store4" Guid="E8021EC1-723E-43A2-A74C-D9825B4C0FC0">
+                  <File Id="_.ds_store4" Name=".DS_Store" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\.DS_Store" />
                 </Component>
                 <Component Id="agta.fvect" Guid="2D6DE0E6-149D-449D-B22B-790BF445459A">
                   <File Id="agta.fvect" Name="Agta.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Agta.fvect" />
                 </Component>
-                <Component Id="berik_test.fvect" Guid="0A3D9182-382C-436C-9EBC-D50EEB4AE48B">
-                  <File Id="berik_test.fvect" Name="Berik-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Berik-test.fvect" />
-                </Component>
                 <Component Id="berik.fvect" Guid="384EB888-2004-4820-91FC-85C2721E63D2">
                   <File Id="berik.fvect" Name="Berik.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Berik.fvect" />
-                </Component>
-                <Component Id="cayuga_test.fvect" Guid="135643E7-20B4-4C8D-B6D2-23C7D361E5C9">
-                  <File Id="cayuga_test.fvect" Name="Cayuga-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Cayuga-test.fvect" />
                 </Component>
                 <Component Id="cayuga.fvect" Guid="BB16D589-411C-409F-ABF3-FE385BB460BF">
                   <File Id="cayuga.fvect" Name="Cayuga.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Cayuga.fvect" />
                 </Component>
-                <Component Id="cogui_adr__test.fvect" Guid="B0E2B3B2-0F10-4DA5-BB81-9F0A06C22E61">
-                  <File Id="cogui_adr__test.fvect" Name="Cogui(Adr)-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Cogui(Adr)-test.fvect" />
-                </Component>
                 <Component Id="cogui_adr_.fvect" Guid="1B16306C-22BE-4E04-9D03-5754BF988A7D">
                   <File Id="cogui_adr_.fvect" Name="Cogui(Adr).fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Cogui(Adr).fvect" />
-                </Component>
-                <Component Id="cogui_test.fvect" Guid="7C9CA2F4-3234-4F96-924E-C34F8AC2D926">
-                  <File Id="cogui_test.fvect" Name="Cogui-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Cogui-test.fvect" />
                 </Component>
                 <Component Id="cogui.fvect" Guid="AD081403-205C-43F7-8AAF-06816664E57D">
                   <File Id="cogui.fvect" Name="Cogui.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Cogui.fvect" />
                 </Component>
-                <Component Id="coreguaje_test.fvect" Guid="934AEC7D-7F68-4520-A3FE-B8DF36409FB1">
-                  <File Id="coreguaje_test.fvect" Name="Coreguaje-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Coreguaje-test.fvect" />
-                </Component>
                 <Component Id="coreguaje.fvect" Guid="FB1F4C69-3E31-4891-9B11-E0E74AE96962">
                   <File Id="coreguaje.fvect" Name="Coreguaje.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Coreguaje.fvect" />
-                </Component>
-                <Component Id="crow_1_test.fvect" Guid="DCAB39DA-AE38-4F90-91DD-A91BB8C90BED">
-                  <File Id="crow_1_test.fvect" Name="Crow-1-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Crow-1-test.fvect" />
                 </Component>
                 <Component Id="crow_1.fvect" Guid="BAD95CC4-322F-427C-B58F-18E98B9CBA69">
                   <File Id="crow_1.fvect" Name="Crow-1.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Crow-1.fvect" />
                 </Component>
-                <Component Id="crow_2_test.fvect" Guid="B0DEE7FF-D567-4E87-BD90-023DBECCD61F">
-                  <File Id="crow_2_test.fvect" Name="Crow-2-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Crow-2-test.fvect" />
-                </Component>
                 <Component Id="crow_2.fvect" Guid="D26815C6-44A0-432C-BE6A-9E9A7B9D2187">
                   <File Id="crow_2.fvect" Name="Crow-2.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Crow-2.fvect" />
-                </Component>
-                <Component Id="crow_27_test.fvect" Guid="8D6D2D60-DF4B-4E9B-B199-61A6EEB3FC76">
-                  <File Id="crow_27_test.fvect" Name="Crow-27-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Crow-27-test.fvect" />
                 </Component>
                 <Component Id="crow_27.fvect" Guid="E1B26252-06CD-45F3-825B-971E56E9D07A">
                   <File Id="crow_27.fvect" Name="Crow-27.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Crow-27.fvect" />
                 </Component>
                 <Component Id="cubeo_adr_.fvect" Guid="702AFF1F-F6E4-4D23-BCD8-B9CCAF5FAE6D">
                   <File Id="cubeo_adr_.fvect" Name="Cubeo(Adr).fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Cubeo(Adr).fvect" />
-                </Component>
-                <Component Id="cubeo_test.fvect" Guid="C731B1D6-37E4-4FD5-8935-EF67DC7F5B07">
-                  <File Id="cubeo_test.fvect" Name="Cubeo-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Cubeo-test.fvect" />
                 </Component>
                 <Component Id="cubeo.fvect" Guid="F33248AF-2ED8-4CCA-BE75-40289008027D">
                   <File Id="cubeo.fvect" Name="Cubeo.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Cubeo.fvect" />
@@ -5543,266 +5148,137 @@
                 <Component Id="el_9.distn" Guid="D489374B-D45A-49B4-B8E6-C08D908EBFE2">
                   <File Id="el_9.distn" Name="el_9.distn" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\el_9.distn" />
                 </Component>
-                <Component Id="english_test.fvect" Guid="2BFFDC94-C25B-4F38-877D-5E0F03C8F744">
-                  <File Id="english_test.fvect" Name="English-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\English-test.fvect" />
-                </Component>
                 <Component Id="english.fvect" Guid="644A261B-34F2-46E5-8B1A-A67B153670DA">
                   <File Id="english.fvect" Name="English.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\English.fvect" />
-                </Component>
-                <Component Id="eskimo_baffin_bay_test.fvect" Guid="1446F07C-8B60-4E6F-A3FD-22DDE660496B">
-                  <File Id="eskimo_baffin_bay_test.fvect" Name="Eskimo Baffin Bay-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Eskimo Baffin Bay-test.fvect" />
                 </Component>
                 <Component Id="eskimo_baffin_bay.fvect" Guid="3139007C-E292-4679-BEA0-8B44073D2E88">
                   <File Id="eskimo_baffin_bay.fvect" Name="Eskimo Baffin Bay.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Eskimo Baffin Bay.fvect" />
                 </Component>
-                <Component Id="eskimo_greenland_test.fvect" Guid="2783609C-25D0-4B00-B572-1F29AB0291B5">
-                  <File Id="eskimo_greenland_test.fvect" Name="Eskimo Greenland-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Eskimo Greenland-test.fvect" />
-                </Component>
                 <Component Id="eskimo_greenland.fvect" Guid="DE9CA69B-5FE5-4D7A-9897-1F1BD63A9B65">
                   <File Id="eskimo_greenland.fvect" Name="Eskimo Greenland.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Eskimo Greenland.fvect" />
-                </Component>
-                <Component Id="guahibo_test.fvect" Guid="FCA832EF-C213-4D5C-92C1-4FC6B6D8F33D">
-                  <File Id="guahibo_test.fvect" Name="Guahibo-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Guahibo-test.fvect" />
                 </Component>
                 <Component Id="guahibo.fvect" Guid="B3980F2C-C935-4C25-B1DC-23706A9A0394">
                   <File Id="guahibo.fvect" Name="Guahibo.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Guahibo.fvect" />
                 </Component>
-                <Component Id="guahibo_flawed.fvect" Guid="177BA215-9BE1-4432-9337-E277A453A4FA">
-                  <File Id="guahibo_flawed.fvect" Name="Guahibo_Flawed.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Guahibo_Flawed.fvect" />
-                </Component>
-                <Component Id="gujarati_test.fvect" Guid="581B70B0-7B04-4385-877B-ECEE1D85DD44">
-                  <File Id="gujarati_test.fvect" Name="Gujarati-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Gujarati-test.fvect" />
-                </Component>
                 <Component Id="gujarati.fvect" Guid="C72F6801-5CE8-48EB-BAF6-C4C28CC68076">
                   <File Id="gujarati.fvect" Name="Gujarati.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Gujarati.fvect" />
-                </Component>
-                <Component Id="hawaiian_pure_test.fvect" Guid="CDBF7B3D-F127-46B4-83E0-F956DC400373">
-                  <File Id="hawaiian_pure_test.fvect" Name="Hawaiian-Pure-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Hawaiian-Pure-test.fvect" />
                 </Component>
                 <Component Id="hawaiian_pure.fvect" Guid="2CEC5D1E-7B47-481E-89DA-6AEE6DD6D6AE">
                   <File Id="hawaiian_pure.fvect" Name="Hawaiian-Pure.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Hawaiian-Pure.fvect" />
                 </Component>
-                <Component Id="hawaiian_test.fvect" Guid="8CEB6C59-EEA6-4D5B-8789-0CB9ACE9D600">
-                  <File Id="hawaiian_test.fvect" Name="Hawaiian-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Hawaiian-test.fvect" />
-                </Component>
                 <Component Id="hawaiian.fvect" Guid="C5E29F9E-0B92-4B22-96CC-4677E1EA5215">
                   <File Id="hawaiian.fvect" Name="Hawaiian.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Hawaiian.fvect" />
-                </Component>
-                <Component Id="hindi_test.fvect" Guid="800C084A-B7CA-4A4A-B1A0-8BC484897499">
-                  <File Id="hindi_test.fvect" Name="Hindi-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Hindi-test.fvect" />
                 </Component>
                 <Component Id="hindi.fvect" Guid="565C1C77-8E88-4FEF-8F3C-0B3F612552B8">
                   <File Id="hindi.fvect" Name="Hindi.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Hindi.fvect" />
                 </Component>
-                <Component Id="iau_test.fvect" Guid="48CA636D-5419-4DDB-8FEF-FB96B97850D8">
-                  <File Id="iau_test.fvect" Name="Iau-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Iau-test.fvect" />
-                </Component>
                 <Component Id="iau.fvect" Guid="9D8CCDCE-9055-46DF-9C3B-C352FCA6B893">
                   <File Id="iau.fvect" Name="Iau.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Iau.fvect" />
-                </Component>
-                <Component Id="iroquois_7_test.fvect" Guid="3475B2A6-D34A-4DFF-8907-296C94CAC341">
-                  <File Id="iroquois_7_test.fvect" Name="Iroquois-7-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Iroquois-7-test.fvect" />
                 </Component>
                 <Component Id="iroquois_7.fvect" Guid="E4FCE0F7-AC59-426C-8498-E5966C19BE33">
                   <File Id="iroquois_7.fvect" Name="Iroquois-7.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Iroquois-7.fvect" />
                 </Component>
-                <Component Id="kayabi_test.fvect" Guid="71F27D2E-07F2-453F-876C-D57D894F09CD">
-                  <File Id="kayabi_test.fvect" Name="Kayabi-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Kayabi-test.fvect" />
-                </Component>
                 <Component Id="kayabi.fvect" Guid="61282958-21AF-4A8E-947E-5B8D19768B3F">
                   <File Id="kayabi.fvect" Name="Kayabi.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Kayabi.fvect" />
-                </Component>
-                <Component Id="keriera_australian_test.fvect" Guid="C952D02B-3A5C-4139-90FD-AF34591FA0B6">
-                  <File Id="keriera_australian_test.fvect" Name="Keriera Australian-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Keriera Australian-test.fvect" />
                 </Component>
                 <Component Id="keriera_australian.fvect" Guid="14FF375E-C0DD-4BC6-B695-0E64B8D41BEE">
                   <File Id="keriera_australian.fvect" Name="Keriera Australian.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Keriera Australian.fvect" />
                 </Component>
-                <Component Id="keriera_test.fvect" Guid="C076CB94-A505-40B6-90A8-A30203901D04">
-                  <File Id="keriera_test.fvect" Name="Keriera-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Keriera-test.fvect" />
-                </Component>
                 <Component Id="keriera.fvect" Guid="CCAF61A4-27C4-4233-B593-D7168C745CB4">
                   <File Id="keriera.fvect" Name="Keriera.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Keriera.fvect" />
-                </Component>
-                <Component Id="magyar_test.fvect" Guid="C136F859-EB0D-4A6D-A8DE-B7169C0E4EDF">
-                  <File Id="magyar_test.fvect" Name="Magyar-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Magyar-test.fvect" />
                 </Component>
                 <Component Id="magyar.fvect" Guid="F97671B4-8EDD-4B5C-A7EF-B1B63B9BE7F7">
                   <File Id="magyar.fvect" Name="Magyar.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Magyar.fvect" />
                 </Component>
-                <Component Id="mairasi_test.fvect" Guid="6C859F51-6718-4F91-A454-366C2DB1B112">
-                  <File Id="mairasi_test.fvect" Name="Mairasi-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Mairasi-test.fvect" />
-                </Component>
                 <Component Id="mairasi.fvect" Guid="BAA50D98-6E26-492A-8A7D-07013C4AB4E4">
                   <File Id="mairasi.fvect" Name="Mairasi.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Mairasi.fvect" />
-                </Component>
-                <Component Id="majangir_test.fvect" Guid="783DD9EB-1CC0-4DC4-A966-078911B41CC4">
-                  <File Id="majangir_test.fvect" Name="Majangir-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Majangir-test.fvect" />
                 </Component>
                 <Component Id="majangir.fvect" Guid="D00BB87C-5368-42CB-9418-F4A1FA5C6DB1">
                   <File Id="majangir.fvect" Name="Majangir.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Majangir.fvect" />
                 </Component>
-                <Component Id="marathi_test.fvect" Guid="D8F5063E-861B-443C-8497-C608359FD39A">
-                  <File Id="marathi_test.fvect" Name="Marathi-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Marathi-test.fvect" />
-                </Component>
                 <Component Id="marathi.fvect" Guid="4C581940-4C45-4769-AA1F-6B87E21F52E9">
                   <File Id="marathi.fvect" Name="Marathi.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Marathi.fvect" />
-                </Component>
-                <Component Id="mer_test.fvect" Guid="B6749B66-8D50-4E4E-94BC-978DD39683BD">
-                  <File Id="mer_test.fvect" Name="Mer-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Mer-test.fvect" />
                 </Component>
                 <Component Id="mer.fvect" Guid="AD69452A-BC46-49CA-84A5-6B7E862C3109">
                   <File Id="mer.fvect" Name="Mer.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Mer.fvect" />
                 </Component>
-                <Component Id="mohawk_test.fvect" Guid="5AA5E874-5C9B-4059-98CD-CA66E9F7CD8F">
-                  <File Id="mohawk_test.fvect" Name="Mohawk-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Mohawk-test.fvect" />
-                </Component>
                 <Component Id="mohawk.fvect" Guid="EE07CCF0-5666-45C7-84F4-095574CEA79C">
                   <File Id="mohawk.fvect" Name="Mohawk.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Mohawk.fvect" />
-                </Component>
-                <Component Id="omaha_1_partial_test.fvect" Guid="EB97E490-3308-42B6-B7EA-3A476D1E9CA2">
-                  <File Id="omaha_1_partial_test.fvect" Name="Omaha-1 Partial-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Omaha-1 Partial-test.fvect" />
                 </Component>
                 <Component Id="omaha_1_partial.fvect" Guid="98EE90F6-4E77-43E6-97F8-66D3EFEEF00F">
                   <File Id="omaha_1_partial.fvect" Name="Omaha-1 Partial.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Omaha-1 Partial.fvect" />
                 </Component>
-                <Component Id="omaha_19_test.fvect" Guid="7F9AE8DF-B571-4030-88D2-D68AD91A266E">
-                  <File Id="omaha_19_test.fvect" Name="Omaha-19-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Omaha-19-test.fvect" />
-                </Component>
                 <Component Id="omaha_19.fvect" Guid="29987A58-AFFB-4554-B0A8-5494552D4670">
                   <File Id="omaha_19.fvect" Name="Omaha-19.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Omaha-19.fvect" />
-                </Component>
-                <Component Id="omaha_2_test.fvect" Guid="6A4D29C1-1514-401C-9531-0196CCBC973F">
-                  <File Id="omaha_2_test.fvect" Name="Omaha-2-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Omaha-2-test.fvect" />
                 </Component>
                 <Component Id="omaha_2.fvect" Guid="1521E2DC-A0C3-4F22-826C-BD28BD2B02DD">
                   <File Id="omaha_2.fvect" Name="Omaha-2.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Omaha-2.fvect" />
                 </Component>
-                <Component Id="omaha_3_partial_test.fvect" Guid="CFCE7A20-5F73-47D5-B18F-5A536BD8E410">
-                  <File Id="omaha_3_partial_test.fvect" Name="Omaha-3 Partial-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Omaha-3 Partial-test.fvect" />
-                </Component>
                 <Component Id="omaha_3_partial.fvect" Guid="6289552D-AD8A-4A1A-91D6-55A63F0380CE">
                   <File Id="omaha_3_partial.fvect" Name="Omaha-3 Partial.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Omaha-3 Partial.fvect" />
-                </Component>
-                <Component Id="omaha_69_test.fvect" Guid="2C97CB86-091D-410F-8B24-14F55CD9B90F">
-                  <File Id="omaha_69_test.fvect" Name="Omaha-69-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Omaha-69-test.fvect" />
                 </Component>
                 <Component Id="omaha_69.fvect" Guid="AD7B8EA7-2913-47FB-ACFB-189CA5F5C6FE">
                   <File Id="omaha_69.fvect" Name="Omaha-69.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Omaha-69.fvect" />
                 </Component>
-                <Component Id="omaha_82_test.fvect" Guid="3AFD1C60-D15B-4159-A3FE-943C4B02EC57">
-                  <File Id="omaha_82_test.fvect" Name="Omaha-82-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Omaha-82-test.fvect" />
-                </Component>
                 <Component Id="omaha_82.fvect" Guid="1EDB0EA5-3AC4-47BB-996E-627F4464B93A">
                   <File Id="omaha_82.fvect" Name="Omaha-82.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Omaha-82.fvect" />
-                </Component>
-                <Component Id="oneida_test.fvect" Guid="A5CBFC82-52EC-47D4-B9EF-CB681FDC20AF">
-                  <File Id="oneida_test.fvect" Name="Oneida-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Oneida-test.fvect" />
                 </Component>
                 <Component Id="oneida.fvect" Guid="1C6396FE-3596-4B00-9631-E5988B8D5BCF">
                   <File Id="oneida.fvect" Name="Oneida.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Oneida.fvect" />
                 </Component>
-                <Component Id="onondaga_test.fvect" Guid="A2500A10-3F9D-420C-B866-BEB51519CFE6">
-                  <File Id="onondaga_test.fvect" Name="Onondaga-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Onondaga-test.fvect" />
-                </Component>
                 <Component Id="onondaga.fvect" Guid="533AD3A2-FCCC-4788-8A49-45D53A127B36">
                   <File Id="onondaga.fvect" Name="Onondaga.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Onondaga.fvect" />
-                </Component>
-                <Component Id="osmanli_turk_test.fvect" Guid="0659C84C-82CE-4460-8D4A-881D87B309C6">
-                  <File Id="osmanli_turk_test.fvect" Name="Osmanli-Turk-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Osmanli-Turk-test.fvect" />
                 </Component>
                 <Component Id="osmanli_turk.fvect" Guid="27AE0D02-AB0D-4196-A5BD-295D4CF2E868">
                   <File Id="osmanli_turk.fvect" Name="Osmanli-Turk.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Osmanli-Turk.fvect" />
                 </Component>
-                <Component Id="pagibete_test.fvect" Guid="9255F22B-B2BE-472D-8724-11E176062374">
-                  <File Id="pagibete_test.fvect" Name="Pagibete-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Pagibete-test.fvect" />
-                </Component>
                 <Component Id="pagibete.fvect" Guid="2EFE9363-9FAA-41CC-BAF9-648F1313C27F">
                   <File Id="pagibete.fvect" Name="Pagibete.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Pagibete.fvect" />
-                </Component>
-                <Component Id="paumari_adr__test.fvect" Guid="7D813F47-1406-4DE6-A792-250F9DAC4EF0">
-                  <File Id="paumari_adr__test.fvect" Name="Paumari(Adr)-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Paumari(Adr)-test.fvect" />
                 </Component>
                 <Component Id="paumari_adr_.fvect" Guid="DFA2F017-2D72-45AF-B314-872B9C11F52F">
                   <File Id="paumari_adr_.fvect" Name="Paumari(Adr).fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Paumari(Adr).fvect" />
                 </Component>
-                <Component Id="paumari_test.fvect" Guid="2790DE95-72A6-4213-AA91-B096EF680B99">
-                  <File Id="paumari_test.fvect" Name="Paumari-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Paumari-test.fvect" />
-                </Component>
                 <Component Id="paumari.fvect" Guid="AAD6E24C-A67B-4CC2-BC36-CCE90093DCA6">
                   <File Id="paumari.fvect" Name="Paumari.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Paumari.fvect" />
-                </Component>
-                <Component Id="searchspace.fvect" Guid="FBC90E45-1AB7-451E-8662-DB3F844A919D">
-                  <File Id="searchspace.fvect" Name="SearchSpace.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\SearchSpace.fvect" />
-                </Component>
-                <Component Id="seneca_1_test.fvect" Guid="CFD9C65E-0917-4136-BF44-30E51F1CC51D">
-                  <File Id="seneca_1_test.fvect" Name="Seneca-1-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Seneca-1-test.fvect" />
                 </Component>
                 <Component Id="seneca_1.fvect" Guid="01A9F6E0-3837-4739-9C9C-B92B21B0CB2F">
                   <File Id="seneca_1.fvect" Name="Seneca-1.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Seneca-1.fvect" />
                 </Component>
-                <Component Id="seneca_test.fvect" Guid="81C0D734-57FB-4DB9-B127-749F2AD7DEB4">
-                  <File Id="seneca_test.fvect" Name="Seneca-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Seneca-test.fvect" />
-                </Component>
                 <Component Id="seneca.fvect" Guid="DAEAFBA9-9FC0-42EA-8423-C88B4711F0AA">
                   <File Id="seneca.fvect" Name="Seneca.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Seneca.fvect" />
-                </Component>
-                <Component Id="surui_adr__test.fvect" Guid="ECFEA7D0-4ED3-42ED-A3E4-7E0C7E0F9964">
-                  <File Id="surui_adr__test.fvect" Name="Surui(Adr)-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Surui(Adr)-test.fvect" />
                 </Component>
                 <Component Id="surui_adr_.fvect" Guid="BE8AA0DE-EF45-4686-B668-B6E470480C8E">
                   <File Id="surui_adr_.fvect" Name="Surui(Adr).fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Surui(Adr).fvect" />
                 </Component>
-                <Component Id="surui_test.fvect" Guid="11BD9E34-B826-41A4-BFEA-E2B4D5B23F33">
-                  <File Id="surui_test.fvect" Name="Surui-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Surui-test.fvect" />
-                </Component>
                 <Component Id="surui.fvect" Guid="98B52D44-6DF7-401A-AE64-95A02A7B93D7">
                   <File Id="surui.fvect" Name="Surui.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Surui.fvect" />
-                </Component>
-                <Component Id="tabla_test.fvect" Guid="A450A1C6-981E-4E1F-9239-1456F28528F2">
-                  <File Id="tabla_test.fvect" Name="Tabla-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Tabla-test.fvect" />
                 </Component>
                 <Component Id="tabla.fvect" Guid="5CFE04C3-8282-48B1-81E5-4CD114CB4AE8">
                   <File Id="tabla.fvect" Name="Tabla.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Tabla.fvect" />
                 </Component>
-                <Component Id="trobriand_test.fvect" Guid="B40CE4A7-F0A9-45DC-BB05-3EF8FB868E8A">
-                  <File Id="trobriand_test.fvect" Name="Trobriand-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Trobriand-test.fvect" />
-                </Component>
                 <Component Id="trobriand.fvect" Guid="5267899D-24D3-4539-B2BF-FFDA08B7123C">
                   <File Id="trobriand.fvect" Name="Trobriand.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Trobriand.fvect" />
-                </Component>
-                <Component Id="tswana_test.fvect" Guid="D370DDA8-304B-46A7-A67E-6D50854ECD48">
-                  <File Id="tswana_test.fvect" Name="Tswana-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Tswana-test.fvect" />
                 </Component>
                 <Component Id="tswana.fvect" Guid="A5902F00-FED5-4DD6-84BF-FF0981262A6B">
                   <File Id="tswana.fvect" Name="Tswana.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Tswana.fvect" />
                 </Component>
-                <Component Id="tucano_test.fvect" Guid="29439AA5-9D78-44A0-8D36-C2535678FC66">
-                  <File Id="tucano_test.fvect" Name="Tucano-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Tucano-test.fvect" />
-                </Component>
                 <Component Id="tucano.fvect" Guid="9038ED10-C342-464A-AEE3-0231EB0CB8E8">
                   <File Id="tucano.fvect" Name="Tucano.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Tucano.fvect" />
-                </Component>
-                <Component Id="tuscarora_test.fvect" Guid="20288F44-EB40-4EAD-87E4-B4CF5ED9E83C">
-                  <File Id="tuscarora_test.fvect" Name="Tuscarora-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Tuscarora-test.fvect" />
                 </Component>
                 <Component Id="tuscarora.fvect" Guid="2543756F-881C-4094-BFDD-C7FEBF8E46A2">
                   <File Id="tuscarora.fvect" Name="Tuscarora.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Tuscarora.fvect" />
                 </Component>
-                <Component Id="wandamen_test.fvect" Guid="4832D4E1-8368-4866-8F90-337FDBEA07BB">
-                  <File Id="wandamen_test.fvect" Name="Wandamen-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Wandamen-test.fvect" />
-                </Component>
                 <Component Id="wandamen.fvect" Guid="2C942C16-601E-42AE-9012-ECC20BF5D38F">
                   <File Id="wandamen.fvect" Name="Wandamen.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Wandamen.fvect" />
-                </Component>
-                <Component Id="zulu_test.fvect" Guid="9F2C5831-1B24-47F8-913A-A347188684E5">
-                  <File Id="zulu_test.fvect" Name="Zulu-test.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Zulu-test.fvect" />
                 </Component>
                 <Component Id="zulu.fvect" Guid="1FD6E4FA-BEFF-4702-BC02-6F992643BA96">
                   <File Id="zulu.fvect" Name="Zulu.fvect" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Feature Vectors\Zulu.fvect" />
                 </Component>
               </Directory>
               <Directory Id="help_files" Name="Help Files">
+                <Component Id="_.ds_store5" Guid="65FDFF70-36B2-492D-B450-41F61F0E243D">
+                  <File Id="_.ds_store5" Name=".DS_Store" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Help Files\.DS_Store" />
+                </Component>
                 <Component Id="chart.html" Guid="1913FE40-C736-40F4-B580-222AE76AD590">
                   <File Id="chart.html" Name="Chart.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Help Files\Chart.html" />
                 </Component>
@@ -5825,196 +5301,31 @@
                   <File Id="suggs.html" Name="Suggs.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Help Files\Suggs.html" />
                 </Component>
               </Directory>
-              <Directory Id="index_segments" Name="Index Segments">
-                <Component Id="basecbindex_a" Guid="E0BED608-0BBF-4E10-A93F-84730EDC4182">
-                  <File Id="basecbindex_a" Name="BaseCBIndex-A" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\BaseCBIndex-A" />
-                </Component>
-                <Component Id="basecbindex_b" Guid="D6FE46EF-DAE6-45E5-805A-E30B3B5FF023">
-                  <File Id="basecbindex_b" Name="BaseCBIndex-B" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\BaseCBIndex-B" />
-                </Component>
-                <Component Id="basecbindex_c" Guid="3CB67BD5-6180-4BCB-94F6-0392268A1F1E">
-                  <File Id="basecbindex_c" Name="BaseCBIndex-C" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\BaseCBIndex-C" />
-                </Component>
-                <Component Id="basecbindex_d" Guid="9E261498-C0B8-49BD-8B28-757A05C95222">
-                  <File Id="basecbindex_d" Name="BaseCBIndex-D" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\BaseCBIndex-D" />
-                </Component>
-                <Component Id="clausecounts_a" Guid="5CD085A2-05D3-4F49-A717-ED514A482B28">
-                  <File Id="clausecounts_a" Name="ClauseCounts-A" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\ClauseCounts-A" />
-                </Component>
-                <Component Id="clausecounts_b" Guid="946E0237-4CB2-4775-8C23-13AE619104E0">
-                  <File Id="clausecounts_b" Name="ClauseCounts-B" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\ClauseCounts-B" />
-                </Component>
-                <Component Id="clausecounts_c" Guid="49E38713-5EAB-4A11-A7C8-5BB7704230BF">
-                  <File Id="clausecounts_c" Name="ClauseCounts-C" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\ClauseCounts-C" />
-                </Component>
-                <Component Id="clausecounts_d" Guid="1FB6F87F-317F-425F-AA99-4F558D206EB3">
-                  <File Id="clausecounts_d" Name="ClauseCounts-D" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\ClauseCounts-D" />
-                </Component>
-                <Component Id="clauseindex_a" Guid="33E75F15-F8AF-4031-8076-000ACA5CB487">
-                  <File Id="clauseindex_a" Name="ClauseIndex-A" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\ClauseIndex-A" />
-                </Component>
-                <Component Id="clauseindex_b" Guid="1362EF81-DF0E-413B-A8E5-C8768CF3ABDF">
-                  <File Id="clauseindex_b" Name="ClauseIndex-B" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\ClauseIndex-B" />
-                </Component>
-                <Component Id="clauseindex_c" Guid="9945BA18-9EA2-4EF6-9552-36C4D99EDD19">
-                  <File Id="clauseindex_c" Name="ClauseIndex-C" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\ClauseIndex-C" />
-                </Component>
-                <Component Id="clauseindex_d" Guid="32956FD2-F5EC-4C60-B42C-E274DD28BBBC">
-                  <File Id="clauseindex_d" Name="ClauseIndex-D" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\ClauseIndex-D" />
-                </Component>
-                <Component Id="kintermsigtree_a" Guid="B35DB240-B8F4-40EB-BAF5-51E322ED4AD5">
-                  <File Id="kintermsigtree_a" Name="KinTermSigTree-A" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\KinTermSigTree-A" />
-                </Component>
-                <Component Id="kintermsigtree_b" Guid="3CBE08E7-FD5D-4065-B941-A1522E42EDBB">
-                  <File Id="kintermsigtree_b" Name="KinTermSigTree-B" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\KinTermSigTree-B" />
-                </Component>
-                <Component Id="kintermsigtree_c" Guid="73A457F0-2966-406F-882A-F2C8DFE44339">
-                  <File Id="kintermsigtree_c" Name="KinTermSigTree-C" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\KinTermSigTree-C" />
-                </Component>
-                <Component Id="kintermsigtree_d" Guid="05662858-7AC9-4BDF-9F50-E64335711DDA">
-                  <File Id="kintermsigtree_d" Name="KinTermSigTree-D" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\KinTermSigTree-D" />
-                </Component>
-                <Component Id="ktsigcompressed_a" Guid="83AE69A6-5FB8-4AD8-96FF-3CD94CFFD5AE">
-                  <File Id="ktsigcompressed_a" Name="KTSigCompressed-A" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\KTSigCompressed-A" />
-                </Component>
-                <Component Id="ktsigcompressed_b" Guid="CE37570A-F095-4CF5-854A-E433BB9E0A1A">
-                  <File Id="ktsigcompressed_b" Name="KTSigCompressed-B" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\KTSigCompressed-B" />
-                </Component>
-                <Component Id="ktsigcompressed_c" Guid="E5B1F697-E810-4460-B2BB-DC6E9E2A4A80">
-                  <File Id="ktsigcompressed_c" Name="KTSigCompressed-C" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\KTSigCompressed-C" />
-                </Component>
-                <Component Id="ktsigcompressed_d" Guid="B2090300-7CAB-42EA-A1BE-91670D2A4080">
-                  <File Id="ktsigcompressed_d" Name="KTSigCompressed-D" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\KTSigCompressed-D" />
-                </Component>
-                <Component Id="preddecodings_a" Guid="47295DA5-BA90-4B98-914C-68514B079AA6">
-                  <File Id="preddecodings_a" Name="PredDecodings-A" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\PredDecodings-A" />
-                </Component>
-                <Component Id="preddecodings_b" Guid="9451842D-23E0-4B2A-8151-D8433DC41CD8">
-                  <File Id="preddecodings_b" Name="PredDecodings-B" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\PredDecodings-B" />
-                </Component>
-                <Component Id="preddecodings_c" Guid="64712BC8-4858-4643-A9F2-E7288A99F849">
-                  <File Id="preddecodings_c" Name="PredDecodings-C" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\PredDecodings-C" />
-                </Component>
-                <Component Id="preddecodings_d" Guid="A10A5070-CDCC-4EE9-B5F6-728FDDD08DA2">
-                  <File Id="preddecodings_d" Name="PredDecodings-D" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\PredDecodings-D" />
-                </Component>
-                <Component Id="predencodings_a" Guid="2378783C-2BA3-4F60-BBB8-9D01FF387230">
-                  <File Id="predencodings_a" Name="PredEncodings-A" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\PredEncodings-A" />
-                </Component>
-                <Component Id="predencodings_b" Guid="CFB35228-E112-4447-8351-57F5C6332A59">
-                  <File Id="predencodings_b" Name="PredEncodings-B" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\PredEncodings-B" />
-                </Component>
-                <Component Id="predencodings_c" Guid="4237881A-2FC4-4DF9-873D-997F1427A8C2">
-                  <File Id="predencodings_c" Name="PredEncodings-C" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\PredEncodings-C" />
-                </Component>
-                <Component Id="predencodings_d" Guid="5E57ACC1-181B-42DA-9C20-E60686DB4B5F">
-                  <File Id="predencodings_d" Name="PredEncodings-D" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Index Segments\PredEncodings-D" />
-                </Component>
-              </Directory>
-              <Directory Id="old_indexes" Name="OLD Indexes">
-                <Component Id="basecbindex" Guid="FD198682-6176-414E-96D7-F457666A815B">
-                  <File Id="basecbindex" Name="BaseCBIndex" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\OLD Indexes\BaseCBIndex" />
-                </Component>
-                <Component Id="clausecounts" Guid="CB707D43-4886-4027-A035-49BBD7602D25">
-                  <File Id="clausecounts" Name="ClauseCounts" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\OLD Indexes\ClauseCounts" />
-                </Component>
-                <Component Id="clauseindex" Guid="15FCF594-4B81-42E1-B012-208D3ED62DEC">
-                  <File Id="clauseindex" Name="ClauseIndex" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\OLD Indexes\ClauseIndex" />
-                </Component>
-                <Component Id="kintermsigtree" Guid="C125CD7C-54E8-4A6A-A431-952AB70F528C">
-                  <File Id="kintermsigtree" Name="KinTermSigTree" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\OLD Indexes\KinTermSigTree" />
-                </Component>
-                <Component Id="ktsigcompressed" Guid="3EDA3786-4A2D-44D4-A847-68505ED17640">
-                  <File Id="ktsigcompressed" Name="KTSigCompressed" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\OLD Indexes\KTSigCompressed" />
-                </Component>
-                <Component Id="preddecodings" Guid="936060E5-8A2D-41D2-A2C8-E76EF94EBF47">
-                  <File Id="preddecodings" Name="PredDecodings" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\OLD Indexes\PredDecodings" />
-                </Component>
-                <Component Id="predencodings" Guid="7A2735D5-5F2C-4A8E-9568-B9540B93AEF7">
-                  <File Id="predencodings" Name="PredEncodings" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\OLD Indexes\PredEncodings" />
-                </Component>
-              </Directory>
               <Directory Id="suggestions" Name="Suggestions">
-                <Directory Id="older_tests2" Name="Older Tests">
-                  <Component Id="engtest_generated_16_1.html" Guid="0D877413-6F0B-407B-8D2A-4F4903D155DC">
-                    <File Id="engtest_generated_16_1.html" Name="EngTest Generated 16-1.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\Older Tests\EngTest Generated 16-1.html" />
-                  </Component>
-                  <Component Id="engtest_synthetic_15a.html" Guid="8937A185-FF51-4446-B19F-343AF080781E">
-                    <File Id="engtest_synthetic_15a.html" Name="EngTest Synthetic 15a.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\Older Tests\EngTest Synthetic 15a.html" />
-                  </Component>
-                  <Component Id="engtest_synthetic_15b.html" Guid="005C2CF5-11C2-4E3E-A6A5-710DC273B9AC">
-                    <File Id="engtest_synthetic_15b.html" Name="EngTest Synthetic 15b.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\Older Tests\EngTest Synthetic 15b.html" />
-                  </Component>
-                  <Component Id="engtest_synthetic13.html" Guid="BB4E869F-7847-4261-8C56-175C8FA34349">
-                    <File Id="engtest_synthetic13.html" Name="EngTest Synthetic13.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\Older Tests\EngTest Synthetic13.html" />
-                  </Component>
-                  <Component Id="engtest_prior.html" Guid="006FD210-B2C0-4431-95B5-D82DE19EC14C">
-                    <File Id="engtest_prior.html" Name="EngTest-Prior.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\Older Tests\EngTest-Prior.html" />
-                  </Component>
-                </Directory>
-                <Component Id="claire_mql_4.html" Guid="2A1BEB47-BDD9-490D-A4EF-2B9CCB6750FE">
-                  <File Id="claire_mql_4.html" Name="Claire MQL-4.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\Claire MQL-4.html" />
+                <Component Id="_.ds_store6" Guid="89E41388-2BF7-4718-B9CF-EABA651A0456">
+                  <File Id="_.ds_store6" Name=".DS_Store" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\.DS_Store" />
                 </Component>
-                <Component Id="claire_mql_download_1.html" Guid="E2665D67-D630-48F2-9B85-91C0D4E6691D">
-                  <File Id="claire_mql_download_1.html" Name="Claire MQL-download-1.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\Claire MQL-download-1.html" />
+                <Component Id="adam_and_eve.html" Guid="C4853520-77B4-4601-B8D9-2C6FDF4D76B0">
+                  <File Id="adam_and_eve.html" Name="Adam-and-Eve.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\Adam-and-Eve.html" />
                 </Component>
-                <Component Id="claire_mql_download_2.html" Guid="D12C1A3E-9710-4FDE-B064-06637E4F446E">
-                  <File Id="claire_mql_download_2.html" Name="Claire MQL-download-2.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\Claire MQL-download-2.html" />
-                </Component>
-                <Component Id="claire_mql.html" Guid="F3ED567A-4DD8-4F86-8155-39A920311A79">
-                  <File Id="claire_mql.html" Name="Claire MQL.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\Claire MQL.html" />
-                </Component>
-                <Component Id="engtest_synthetic.html" Guid="5D9A828C-4CD9-47E6-B9F6-A2C933DCECE4">
-                  <File Id="engtest_synthetic.html" Name="EngTest Synthetic.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\EngTest Synthetic.html" />
-                </Component>
-                <Component Id="engtest.html" Guid="69786857-0D4A-4CDF-98D5-E77103551E77">
-                  <File Id="engtest.html" Name="EngTest.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\EngTest.html" />
-                </Component>
-                <Component Id="engtest3.html" Guid="5A92C5B5-3CE0-44E1-9B9D-E3FA52C7B85A">
-                  <File Id="engtest3.html" Name="EngTest3.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\EngTest3.html" />
-                </Component>
-                <Component Id="scratchtest.html" Guid="FD36B624-A2C6-4CA1-81D9-B098D21F8853">
-                  <File Id="scratchtest.html" Name="ScratchTest.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\ScratchTest.html" />
-                </Component>
-                <Component Id="silk_status.xsl3" Guid="01A73855-32F8-4B60-AF50-A71A0873041B">
-                  <File Id="silk_status.xsl3" Name="Silk-status.xsl" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\Silk-status.xsl" />
-                </Component>
-                <Component Id="test_7_17f.html" Guid="2E1A8DF8-F698-40B9-A0F0-C967E7E88174">
-                  <File Id="test_7_17f.html" Name="Test 7-17f.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\Test 7-17f.html" />
-                </Component>
-                <Component Id="testone_a_1.html" Guid="D446E264-A6EC-4654-92FB-261843B9EE44">
-                  <File Id="testone_a_1.html" Name="TestOne-A-1.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\TestOne-A-1.html" />
-                </Component>
-                <Component Id="testone_a_2.html" Guid="EC0664BD-73B3-4BB4-8AF7-78FC8D2DF8FC">
-                  <File Id="testone_a_2.html" Name="TestOne-A-2.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\TestOne-A-2.html" />
-                </Component>
-                <Component Id="testthree_a.html" Guid="6300B318-509E-4FA8-96AE-E1B36DF8A75D">
-                  <File Id="testthree_a.html" Name="TestThree-A.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\TestThree-A.html" />
-                </Component>
-                <Component Id="testthree_c.html" Guid="2CC78197-C70D-4627-8126-4382B2AC8D37">
-                  <File Id="testthree_c.html" Name="TestThree-C.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\TestThree-C.html" />
-                </Component>
-                <Component Id="testthree.html" Guid="2AE85180-2CD4-41A9-A44B-0CE474C93BC6">
-                  <File Id="testthree.html" Name="TestThree.html" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\TestThree.html" />
+                <Component Id="silk_status.xsl2" Guid="01A73855-32F8-4B60-AF50-A71A0873041B">
+                  <File Id="silk_status.xsl2" Name="Silk-status.xsl" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Suggestions\Silk-status.xsl" />
                 </Component>
               </Directory>
+              <Component Id="_.ds_store7" Guid="7F7B14A0-AA08-4F65-86C2-D0C49D9D8B7D">
+                <File Id="_.ds_store7" Name=".DS_Store" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\.DS_Store" />
+              </Component>
               <Component Id="activitylog" Guid="A7C99C44-E92C-4322-850F-0E82D2EC356A">
                 <File Id="activitylog" Name="ActivityLog" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\ActivityLog" />
               </Component>
-              <Component Id="basecbindex2" Guid="172333E7-B719-42DB-B942-2DDECE0CEA31">
-                <File Id="basecbindex2" Name="BaseCBIndex" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\BaseCBIndex" />
+              <Component Id="basecbindex" Guid="172333E7-B719-42DB-B942-2DDECE0CEA31">
+                <File Id="basecbindex" Name="BaseCBIndex" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\BaseCBIndex" />
               </Component>
-              <Component Id="clausecount_summary_stats" Guid="B1683AA1-F706-4D19-AE6D-02D59BAD310F">
-                <File Id="clausecount_summary_stats" Name="ClauseCount Summary Stats" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\ClauseCount Summary Stats" />
+              <Component Id="clausecounts" Guid="E4D15970-4F9E-4A9C-A2A4-90B803608A46">
+                <File Id="clausecounts" Name="ClauseCounts" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\ClauseCounts" />
               </Component>
-              <Component Id="clausecount_summary_stats_nov_11" Guid="C66EC089-8DE9-4D29-BF63-78D390C8A8E6">
-                <File Id="clausecount_summary_stats_nov_11" Name="ClauseCount Summary Stats-Nov'11" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\ClauseCount Summary Stats-Nov'11" />
-              </Component>
-              <Component Id="clausecounts2" Guid="E4D15970-4F9E-4A9C-A2A4-90B803608A46">
-                <File Id="clausecounts2" Name="ClauseCounts" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\ClauseCounts" />
-              </Component>
-              <Component Id="clauseindex2" Guid="937A31A1-95BE-44C8-802E-1BD072ABDFE9">
-                <File Id="clauseindex2" Name="ClauseIndex" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\ClauseIndex" />
+              <Component Id="clauseindex" Guid="937A31A1-95BE-44C8-802E-1BD072ABDFE9">
+                <File Id="clauseindex" Name="ClauseIndex" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\ClauseIndex" />
               </Component>
               <Component Id="cluster_state" Guid="C2122DF7-ABA2-41C6-B059-5849A33DDEA5">
                 <File Id="cluster_state" Name="Cluster_State" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Cluster_State" />
@@ -6022,26 +5333,23 @@
               <Component Id="contexts.stub" Guid="0B55E6B4-9E32-46D1-8083-60F648A7BBB0">
                 <File Id="contexts.stub" Name="Contexts.stub" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Contexts.stub" />
               </Component>
-              <Component Id="errorlog" Guid="745BEA7E-381C-4C39-989E-7657CDC0293F">
-                <File Id="errorlog" Name="ErrorLog" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\ErrorLog" />
-              </Component>
               <Component Id="gedcom_dfa" Guid="8DEAA5A4-F471-434A-AECD-CE3B3F4DEAE9">
                 <File Id="gedcom_dfa" Name="GEDCOM_DFA" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\GEDCOM_DFA" />
               </Component>
-              <Component Id="kintermsigtree2" Guid="DB1CF324-F8AE-4EFE-8122-355FD0ADA50D">
-                <File Id="kintermsigtree2" Name="KinTermSigTree" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\KinTermSigTree" />
+              <Component Id="kintermsigtree" Guid="DB1CF324-F8AE-4EFE-8122-355FD0ADA50D">
+                <File Id="kintermsigtree" Name="KinTermSigTree" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\KinTermSigTree" />
               </Component>
               <Component Id="kin_dfa" Guid="D184C173-8593-4A4E-B2D3-AF9A11F95B14">
                 <File Id="kin_dfa" Name="Kin_DFA" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Kin_DFA" />
               </Component>
-              <Component Id="ktsigcompressed2" Guid="69BD229A-C142-444D-939C-979383E0EF8F">
-                <File Id="ktsigcompressed2" Name="KTSigCompressed" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\KTSigCompressed" />
+              <Component Id="ktsigcompressed" Guid="69BD229A-C142-444D-939C-979383E0EF8F">
+                <File Id="ktsigcompressed" Name="KTSigCompressed" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\KTSigCompressed" />
               </Component>
-              <Component Id="preddecodings2" Guid="3A7274C1-6081-415F-B23A-0DB06E1018AE">
-                <File Id="preddecodings2" Name="PredDecodings" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\PredDecodings" />
+              <Component Id="preddecodings" Guid="3A7274C1-6081-415F-B23A-0DB06E1018AE">
+                <File Id="preddecodings" Name="PredDecodings" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\PredDecodings" />
               </Component>
-              <Component Id="predencodings2" Guid="7D208505-D7E8-4B8A-92A6-2BA276371B1E">
-                <File Id="predencodings2" Name="PredEncodings" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\PredEncodings" />
+              <Component Id="predencodings" Guid="7D208505-D7E8-4B8A-92A6-2BA276371B1E">
+                <File Id="predencodings" Name="PredEncodings" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\PredEncodings" />
               </Component>
               <Component Id="standard_macros" Guid="C3247C93-3BF2-4B1F-AD96-CA4D60588D97">
                 <File Id="standard_macros" Name="Standard_Macros" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\Standard_Macros" />
@@ -6050,6 +5358,12 @@
                 <File Id="weightvector" Name="WeightVector" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\Library\WeightVector" />
               </Component>
             </Directory>
+            <Component Id="silkin.bat" Guid="F5531DE8-A6E7-4175-BB51-21D169685ECA">
+              <File Id="silkin.bat" Name="SilKin.bat" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\SilKin.bat" />
+            </Component>
+            <Component Id="silkinicon.ico" Guid="3C290886-316F-47FC-B301-177CDFE04C04">
+              <File Id="silkinicon.ico" Name="SilKinIcon.ico" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\output\Release\SilKinIcon.ico" />
+            </Component>
           </Directory>
         </Directory>
       </Directory>
@@ -6059,10 +5373,12 @@
     <ComponentGroup Id="Application">
       <ComponentRef Id="AddShortcutApp" />
       <ComponentRef Id="RegistryEntries" />
-      <ComponentRef Id="silkin.bat" />
-      <ComponentRef Id="silkinicon.ico" />
+      <ComponentRef Id="AddWhatsNewShortcut" />
+      <ComponentRef Id="AddKnownBugsShortcut" />
       <ComponentRef Id="swing_layout_1.0.4.jar" />
+      <ComponentRef Id="known_bugs.rtf" />
       <ComponentRef Id="silkin.jar" />
+      <ComponentRef Id="what_s_new.rtf" />
       <ComponentRef Id="appletviewer.exe" />
       <ComponentRef Id="extcheck.exe" />
       <ComponentRef Id="idlj.exe" />
@@ -7548,137 +6864,25 @@
       <ComponentRef Id="surui_adr.cen" />
       <ComponentRef Id="surui_ref.cen" />
       <ComponentRef Id="tabla_ref.cen" />
-      <ComponentRef Id="silk_status.xsl" />
-      <ComponentRef Id="claire_mql_2.silk" />
-      <ComponentRef Id="claire_mql_3.silk" />
-      <ComponentRef Id="claire_mql_4.silk" />
-      <ComponentRef Id="claire_mql_download_1.silk" />
-      <ComponentRef Id="claire_mql_download_2.silk" />
-      <ComponentRef Id="claire_mql_new.silk" />
-      <ComponentRef Id="claire_mql.silk" />
-      <ComponentRef Id="claire_mql_22.silk" />
-      <ComponentRef Id="claire_mql_twin.silk" />
-      <ComponentRef Id="claire_mql_twin_nltest_.silk" />
-      <ComponentRef Id="mbelime_claire.silk" />
-      <ComponentRef Id="claire_mql_terms.txt" />
-      <ComponentRef Id="harflett_family_tree.silk" />
-      <ComponentRef Id="harflett_tree_gm.silk" />
-      <ComponentRef Id="test_adr_.thy" />
-      <ComponentRef Id="test.silk" />
-      <ComponentRef Id="test.thy" />
-      <ComponentRef Id="adam_and_eve_postxml.silk" />
-      <ComponentRef Id="adam_and_eve_adr_.thy" />
+      <ComponentRef Id="_.ds_store" />
       <ComponentRef Id="adam_and_eve.silk" />
-      <ComponentRef Id="adam_and_eve.thy" />
-      <ComponentRef Id="engtest_generated_14.silk" />
-      <ComponentRef Id="engtest_generated_16_1_distinct.silk" />
-      <ComponentRef Id="engtest_generated_16_1.silk" />
-      <ComponentRef Id="engtest_generated_16_2.silk" />
-      <ComponentRef Id="engtest_generated_16.silk" />
-      <ComponentRef Id="engtest_generated_thy_promoted.silk" />
-      <ComponentRef Id="engtest_generated_thy_promoted2.silk" />
-      <ComponentRef Id="engtest_synthetic_with_eip.silk" />
-      <ComponentRef Id="engtest_synthetic_3.silk" />
-      <ComponentRef Id="engtest_synthetic.silk" />
-      <ComponentRef Id="engtest_synthetic20_altered.silk" />
-      <ComponentRef Id="engtest_synthetic20.silk" />
-      <ComponentRef Id="engtest_synthetic20a.silk" />
-      <ComponentRef Id="engtest_with_processed.silk" />
-      <ComponentRef Id="engtest_with_suggestions___acc_defs.silk" />
-      <ComponentRef Id="engtest_with_suggestions_post_xml_2.silk" />
-      <ComponentRef Id="engtest_with_suggestions_post_xml_3.silk" />
-      <ComponentRef Id="engtest_with_suggestions_post_xml_4.silk" />
-      <ComponentRef Id="engtest_with_suggestions_post_xml.silk" />
-      <ComponentRef Id="engtest_with_suggestions_out.silk" />
-      <ComponentRef Id="engtest_with_suggestions2.silk" />
-      <ComponentRef Id="engtest.silk" />
-      <ComponentRef Id="engtest2.silk" />
-      <ComponentRef Id="engtest3.silk" />
-      <ComponentRef Id="engtest4.silk" />
-      <ComponentRef Id="eng_udp_demo.silk" />
-      <ComponentRef Id="guinea_pig_adr_.thy" />
-      <ComponentRef Id="guinea_pig.silk" />
-      <ComponentRef Id="guinea_pig.thy" />
-      <ComponentRef Id="silk_status_old.xsl" />
-      <ComponentRef Id="test_7_3.silk" />
-      <ComponentRef Id="test_7_3a.silk" />
-      <ComponentRef Id="test_7_3b.silk" />
-      <ComponentRef Id="test_7_3c.silk" />
-      <ComponentRef Id="test_7_3g.silk" />
-      <ComponentRef Id="test_7_4a.silk" />
-      <ComponentRef Id="test_7_4b_diff.silk" />
-      <ComponentRef Id="test_7_4b.silk" />
-      <ComponentRef Id="test_7_4c.silk" />
-      <ComponentRef Id="test_adr_.thy2" />
-      <ComponentRef Id="test_6_25a.silk" />
-      <ComponentRef Id="test_6_25b.silk" />
-      <ComponentRef Id="test_6_26a.silk" />
-      <ComponentRef Id="test_6_26b.silk" />
-      <ComponentRef Id="test_6_26c.silk" />
-      <ComponentRef Id="test_6_26d.silk" />
-      <ComponentRef Id="test_6_26e.silk" />
-      <ComponentRef Id="test_6_26f.silk" />
-      <ComponentRef Id="test_6_26g.silk" />
-      <ComponentRef Id="test_6_26h.silk" />
-      <ComponentRef Id="test_6_6b.silk" />
-      <ComponentRef Id="test_7_2.silk" />
-      <ComponentRef Id="test_7_2a.silk" />
-      <ComponentRef Id="test_a.silk" />
-      <ComponentRef Id="test_a2.silk" />
-      <ComponentRef Id="test_a3.silk" />
-      <ComponentRef Id="test.silk2" />
-      <ComponentRef Id="test.thy2" />
-      <ComponentRef Id="test12_2_adr_.thy" />
-      <ComponentRef Id="test12_2_trace_a.silk" />
-      <ComponentRef Id="test12_2_trace_b.silk" />
-      <ComponentRef Id="test12_2_trace_c.silk" />
-      <ComponentRef Id="test12_2_tracer_2.silk" />
-      <ComponentRef Id="test12_2_tracer_3.silk" />
-      <ComponentRef Id="test12_2_tracer_4.silk" />
-      <ComponentRef Id="test12_2_tracer.silk" />
-      <ComponentRef Id="test12_2.thy" />
-      <ComponentRef Id="testchars_1.silk" />
-      <ComponentRef Id="testchars.silk" />
-      <ComponentRef Id="testone_a_1.silk" />
-      <ComponentRef Id="testone_a_2.silk" />
-      <ComponentRef Id="testone_a_post_autodefs.silk" />
-      <ComponentRef Id="testone_a.silk" />
-      <ComponentRef Id="testone_b.silk" />
-      <ComponentRef Id="testone_c.silk" />
-      <ComponentRef Id="testone_d.silk" />
-      <ComponentRef Id="testone.silk" />
-      <ComponentRef Id="teststart.silk" />
-      <ComponentRef Id="testthree_a_1.silk" />
-      <ComponentRef Id="testthree_a_2.silk" />
-      <ComponentRef Id="testthree_a_3.silk" />
-      <ComponentRef Id="testthree_a.silk" />
-      <ComponentRef Id="testthree_b.silk" />
-      <ComponentRef Id="testtwo.silk" />
-      <ComponentRef Id="tracer_adr_.thy" />
-      <ComponentRef Id="tracer.silk" />
-      <ComponentRef Id="tracer.thy" />
-      <ComponentRef Id="crossgenmarriage_a.silk" />
-      <ComponentRef Id="crossgenmarriage_b.silk" />
-      <ComponentRef Id="crossgenmarriage.silk" />
-      <ComponentRef Id="engtest_synthetic_2.silk" />
-      <ComponentRef Id="engtest_synthetic_2a.silk" />
-      <ComponentRef Id="silk_status.xsl2" />
+      <ComponentRef Id="adoptiondemo.silk" />
+      <ComponentRef Id="clandemo.silk" />
+      <ComponentRef Id="multichart_example.silk" />
+      <ComponentRef Id="silk_status.xsl" />
+      <ComponentRef Id="_.ds_store2" />
+      <ComponentRef Id="adam_and_eve.ctxt" />
       <ComponentRef Id="agta.ctxt" />
       <ComponentRef Id="berik.ctxt" />
       <ComponentRef Id="cayuga.ctxt" />
-      <ComponentRef Id="claire_mql_.ctxt" />
       <ComponentRef Id="cogui.ctxt" />
       <ComponentRef Id="coreguaje.ctxt" />
-      <ComponentRef Id="crossgenmarriage.ctxt" />
       <ComponentRef Id="crow_1.ctxt" />
       <ComponentRef Id="crow_2.ctxt" />
       <ComponentRef Id="crow_27.ctxt" />
       <ComponentRef Id="cubeo.ctxt" />
       <ComponentRef Id="dravidian.ctxt" />
       <ComponentRef Id="english.ctxt" />
-      <ComponentRef Id="engtest.ctxt" />
-      <ComponentRef Id="engtest2.ctxt" />
-      <ComponentRef Id="eng_udp_demo.ctxt" />
       <ComponentRef Id="eskimo_baffin_bay.ctxt" />
       <ComponentRef Id="eskimo_greenland.ctxt" />
       <ComponentRef Id="guahibo.ctxt" />
@@ -7697,7 +6901,6 @@
       <ComponentRef Id="marathi.ctxt" />
       <ComponentRef Id="mer.ctxt" />
       <ComponentRef Id="mohawk.ctxt" />
-      <ComponentRef Id="morris_stout_reunion.ctxt" />
       <ComponentRef Id="omaha_1_partial.ctxt" />
       <ComponentRef Id="omaha_19.ctxt" />
       <ComponentRef Id="omaha_2.ctxt" />
@@ -7713,20 +6916,13 @@
       <ComponentRef Id="seneca.ctxt" />
       <ComponentRef Id="surui.ctxt" />
       <ComponentRef Id="tabla.ctxt" />
-      <ComponentRef Id="test_7_3.ctxt" />
-      <ComponentRef Id="test_7_3g.ctxt" />
-      <ComponentRef Id="test_7_4a.ctxt" />
-      <ComponentRef Id="test_7_4b.ctxt" />
-      <ComponentRef Id="test_6_4.ctxt" />
-      <ComponentRef Id="test_6_4b.ctxt" />
-      <ComponentRef Id="test_7_4b.ctxt2" />
       <ComponentRef Id="trobriand.ctxt" />
       <ComponentRef Id="tswana.ctxt" />
       <ComponentRef Id="tucano.ctxt" />
       <ComponentRef Id="tuscarora.ctxt" />
-      <ComponentRef Id="twintest.ctxt" />
       <ComponentRef Id="wandamen.ctxt" />
       <ComponentRef Id="zulu.ctxt" />
+      <ComponentRef Id="_.ds_store3" />
       <ComponentRef Id="agta.thy" />
       <ComponentRef Id="berik.thy" />
       <ComponentRef Id="cayuga.thy" />
@@ -7781,26 +6977,17 @@
       <ComponentRef Id="tuscarora.thy" />
       <ComponentRef Id="wandamen.thy" />
       <ComponentRef Id="zulu.thy" />
-      <ComponentRef Id="agta_test.fvect" />
+      <ComponentRef Id="_.ds_store4" />
       <ComponentRef Id="agta.fvect" />
-      <ComponentRef Id="berik_test.fvect" />
       <ComponentRef Id="berik.fvect" />
-      <ComponentRef Id="cayuga_test.fvect" />
       <ComponentRef Id="cayuga.fvect" />
-      <ComponentRef Id="cogui_adr__test.fvect" />
       <ComponentRef Id="cogui_adr_.fvect" />
-      <ComponentRef Id="cogui_test.fvect" />
       <ComponentRef Id="cogui.fvect" />
-      <ComponentRef Id="coreguaje_test.fvect" />
       <ComponentRef Id="coreguaje.fvect" />
-      <ComponentRef Id="crow_1_test.fvect" />
       <ComponentRef Id="crow_1.fvect" />
-      <ComponentRef Id="crow_2_test.fvect" />
       <ComponentRef Id="crow_2.fvect" />
-      <ComponentRef Id="crow_27_test.fvect" />
       <ComponentRef Id="crow_27.fvect" />
       <ComponentRef Id="cubeo_adr_.fvect" />
-      <ComponentRef Id="cubeo_test.fvect" />
       <ComponentRef Id="cubeo.fvect" />
       <ComponentRef Id="dravidian.fvect" />
       <ComponentRef Id="el_1.distn" />
@@ -7810,92 +6997,49 @@
       <ComponentRef Id="el_5.distn" />
       <ComponentRef Id="el_8.distn" />
       <ComponentRef Id="el_9.distn" />
-      <ComponentRef Id="english_test.fvect" />
       <ComponentRef Id="english.fvect" />
-      <ComponentRef Id="eskimo_baffin_bay_test.fvect" />
       <ComponentRef Id="eskimo_baffin_bay.fvect" />
-      <ComponentRef Id="eskimo_greenland_test.fvect" />
       <ComponentRef Id="eskimo_greenland.fvect" />
-      <ComponentRef Id="guahibo_test.fvect" />
       <ComponentRef Id="guahibo.fvect" />
-      <ComponentRef Id="guahibo_flawed.fvect" />
-      <ComponentRef Id="gujarati_test.fvect" />
       <ComponentRef Id="gujarati.fvect" />
-      <ComponentRef Id="hawaiian_pure_test.fvect" />
       <ComponentRef Id="hawaiian_pure.fvect" />
-      <ComponentRef Id="hawaiian_test.fvect" />
       <ComponentRef Id="hawaiian.fvect" />
-      <ComponentRef Id="hindi_test.fvect" />
       <ComponentRef Id="hindi.fvect" />
-      <ComponentRef Id="iau_test.fvect" />
       <ComponentRef Id="iau.fvect" />
-      <ComponentRef Id="iroquois_7_test.fvect" />
       <ComponentRef Id="iroquois_7.fvect" />
-      <ComponentRef Id="kayabi_test.fvect" />
       <ComponentRef Id="kayabi.fvect" />
-      <ComponentRef Id="keriera_australian_test.fvect" />
       <ComponentRef Id="keriera_australian.fvect" />
-      <ComponentRef Id="keriera_test.fvect" />
       <ComponentRef Id="keriera.fvect" />
-      <ComponentRef Id="magyar_test.fvect" />
       <ComponentRef Id="magyar.fvect" />
-      <ComponentRef Id="mairasi_test.fvect" />
       <ComponentRef Id="mairasi.fvect" />
-      <ComponentRef Id="majangir_test.fvect" />
       <ComponentRef Id="majangir.fvect" />
-      <ComponentRef Id="marathi_test.fvect" />
       <ComponentRef Id="marathi.fvect" />
-      <ComponentRef Id="mer_test.fvect" />
       <ComponentRef Id="mer.fvect" />
-      <ComponentRef Id="mohawk_test.fvect" />
       <ComponentRef Id="mohawk.fvect" />
-      <ComponentRef Id="omaha_1_partial_test.fvect" />
       <ComponentRef Id="omaha_1_partial.fvect" />
-      <ComponentRef Id="omaha_19_test.fvect" />
       <ComponentRef Id="omaha_19.fvect" />
-      <ComponentRef Id="omaha_2_test.fvect" />
       <ComponentRef Id="omaha_2.fvect" />
-      <ComponentRef Id="omaha_3_partial_test.fvect" />
       <ComponentRef Id="omaha_3_partial.fvect" />
-      <ComponentRef Id="omaha_69_test.fvect" />
       <ComponentRef Id="omaha_69.fvect" />
-      <ComponentRef Id="omaha_82_test.fvect" />
       <ComponentRef Id="omaha_82.fvect" />
-      <ComponentRef Id="oneida_test.fvect" />
       <ComponentRef Id="oneida.fvect" />
-      <ComponentRef Id="onondaga_test.fvect" />
       <ComponentRef Id="onondaga.fvect" />
-      <ComponentRef Id="osmanli_turk_test.fvect" />
       <ComponentRef Id="osmanli_turk.fvect" />
-      <ComponentRef Id="pagibete_test.fvect" />
       <ComponentRef Id="pagibete.fvect" />
-      <ComponentRef Id="paumari_adr__test.fvect" />
       <ComponentRef Id="paumari_adr_.fvect" />
-      <ComponentRef Id="paumari_test.fvect" />
       <ComponentRef Id="paumari.fvect" />
-      <ComponentRef Id="searchspace.fvect" />
-      <ComponentRef Id="seneca_1_test.fvect" />
       <ComponentRef Id="seneca_1.fvect" />
-      <ComponentRef Id="seneca_test.fvect" />
       <ComponentRef Id="seneca.fvect" />
-      <ComponentRef Id="surui_adr__test.fvect" />
       <ComponentRef Id="surui_adr_.fvect" />
-      <ComponentRef Id="surui_test.fvect" />
       <ComponentRef Id="surui.fvect" />
-      <ComponentRef Id="tabla_test.fvect" />
       <ComponentRef Id="tabla.fvect" />
-      <ComponentRef Id="trobriand_test.fvect" />
       <ComponentRef Id="trobriand.fvect" />
-      <ComponentRef Id="tswana_test.fvect" />
       <ComponentRef Id="tswana.fvect" />
-      <ComponentRef Id="tucano_test.fvect" />
       <ComponentRef Id="tucano.fvect" />
-      <ComponentRef Id="tuscarora_test.fvect" />
       <ComponentRef Id="tuscarora.fvect" />
-      <ComponentRef Id="wandamen_test.fvect" />
       <ComponentRef Id="wandamen.fvect" />
-      <ComponentRef Id="zulu_test.fvect" />
       <ComponentRef Id="zulu.fvect" />
+      <ComponentRef Id="_.ds_store5" />
       <ComponentRef Id="chart.html" />
       <ComponentRef Id="contextedit.html" />
       <ComponentRef Id="hornclause.html" />
@@ -7903,78 +7047,26 @@
       <ComponentRef Id="prefs.html" />
       <ComponentRef Id="start.html" />
       <ComponentRef Id="suggs.html" />
-      <ComponentRef Id="basecbindex_a" />
-      <ComponentRef Id="basecbindex_b" />
-      <ComponentRef Id="basecbindex_c" />
-      <ComponentRef Id="basecbindex_d" />
-      <ComponentRef Id="clausecounts_a" />
-      <ComponentRef Id="clausecounts_b" />
-      <ComponentRef Id="clausecounts_c" />
-      <ComponentRef Id="clausecounts_d" />
-      <ComponentRef Id="clauseindex_a" />
-      <ComponentRef Id="clauseindex_b" />
-      <ComponentRef Id="clauseindex_c" />
-      <ComponentRef Id="clauseindex_d" />
-      <ComponentRef Id="kintermsigtree_a" />
-      <ComponentRef Id="kintermsigtree_b" />
-      <ComponentRef Id="kintermsigtree_c" />
-      <ComponentRef Id="kintermsigtree_d" />
-      <ComponentRef Id="ktsigcompressed_a" />
-      <ComponentRef Id="ktsigcompressed_b" />
-      <ComponentRef Id="ktsigcompressed_c" />
-      <ComponentRef Id="ktsigcompressed_d" />
-      <ComponentRef Id="preddecodings_a" />
-      <ComponentRef Id="preddecodings_b" />
-      <ComponentRef Id="preddecodings_c" />
-      <ComponentRef Id="preddecodings_d" />
-      <ComponentRef Id="predencodings_a" />
-      <ComponentRef Id="predencodings_b" />
-      <ComponentRef Id="predencodings_c" />
-      <ComponentRef Id="predencodings_d" />
+      <ComponentRef Id="_.ds_store6" />
+      <ComponentRef Id="adam_and_eve.html" />
+      <ComponentRef Id="silk_status.xsl2" />
+      <ComponentRef Id="_.ds_store7" />
+      <ComponentRef Id="activitylog" />
       <ComponentRef Id="basecbindex" />
       <ComponentRef Id="clausecounts" />
       <ComponentRef Id="clauseindex" />
+      <ComponentRef Id="cluster_state" />
+      <ComponentRef Id="contexts.stub" />
+      <ComponentRef Id="gedcom_dfa" />
       <ComponentRef Id="kintermsigtree" />
+      <ComponentRef Id="kin_dfa" />
       <ComponentRef Id="ktsigcompressed" />
       <ComponentRef Id="preddecodings" />
       <ComponentRef Id="predencodings" />
-      <ComponentRef Id="engtest_generated_16_1.html" />
-      <ComponentRef Id="engtest_synthetic_15a.html" />
-      <ComponentRef Id="engtest_synthetic_15b.html" />
-      <ComponentRef Id="engtest_synthetic13.html" />
-      <ComponentRef Id="engtest_prior.html" />
-      <ComponentRef Id="claire_mql_4.html" />
-      <ComponentRef Id="claire_mql_download_1.html" />
-      <ComponentRef Id="claire_mql_download_2.html" />
-      <ComponentRef Id="claire_mql.html" />
-      <ComponentRef Id="engtest_synthetic.html" />
-      <ComponentRef Id="engtest.html" />
-      <ComponentRef Id="engtest3.html" />
-      <ComponentRef Id="scratchtest.html" />
-      <ComponentRef Id="silk_status.xsl3" />
-      <ComponentRef Id="test_7_17f.html" />
-      <ComponentRef Id="testone_a_1.html" />
-      <ComponentRef Id="testone_a_2.html" />
-      <ComponentRef Id="testthree_a.html" />
-      <ComponentRef Id="testthree_c.html" />
-      <ComponentRef Id="testthree.html" />
-      <ComponentRef Id="activitylog" />
-      <ComponentRef Id="basecbindex2" />
-      <ComponentRef Id="clausecount_summary_stats" />
-      <ComponentRef Id="clausecount_summary_stats_nov_11" />
-      <ComponentRef Id="clausecounts2" />
-      <ComponentRef Id="clauseindex2" />
-      <ComponentRef Id="cluster_state" />
-      <ComponentRef Id="contexts.stub" />
-      <ComponentRef Id="errorlog" />
-      <ComponentRef Id="gedcom_dfa" />
-      <ComponentRef Id="kintermsigtree2" />
-      <ComponentRef Id="kin_dfa" />
-      <ComponentRef Id="ktsigcompressed2" />
-      <ComponentRef Id="preddecodings2" />
-      <ComponentRef Id="predencodings2" />
       <ComponentRef Id="standard_macros" />
       <ComponentRef Id="weightvector" />
+      <ComponentRef Id="silkin.bat" />
+      <ComponentRef Id="silkinicon.ico" />
     </ComponentGroup>
   </Fragment>
 </Wix>

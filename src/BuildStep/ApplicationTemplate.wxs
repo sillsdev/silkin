@@ -12,6 +12,8 @@
         <ComponentGroup Id="Application">
             <ComponentRef Id="AddShortcutApp"/>
             <ComponentRef Id="RegistryEntries"/>
+            <ComponentRef Id="AddWhatsNewShortcut"/>
+            <ComponentRef Id="AddKnownBugsShortcut"/>
         </ComponentGroup>
     </Fragment>
 </Wix>
