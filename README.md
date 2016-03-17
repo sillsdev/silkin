@@ -4,6 +4,9 @@
 </li> <li>
 When invoked by User, apply a Machine Learning algorithm to the collected data (dyads) to induce definitions for each kin term and identify similarities to previously-analyzed kinship systems in the SILKin library. In addition to proposing definitions, also identify potential synonyms, umbrella terms, or anomalies in the data.<br>
 </li> </ol>
+<b>Release of SILKin 2.1</b>
+This release includes a number of fixes including support for right-to-left Scripts. There is a Windows installer available too. To get the released versions (rather than the source which is available on this site) got to http://www.sil.org/resources/software_fonts/silkin
+
 <b>INITIAL RELEASE OF SILKin 1.0</b>
 Our initial release was posted December 12, 2011. The file and brief instructions are in the "Downloads" area of this site.
 
