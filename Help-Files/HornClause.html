@@ -42,9 +42,12 @@ and open the template in the editor.
                 </li>
                 <li>A drop-down menu of '<span style="font-weight: bold">Auxiliary Terms</span>.' This menu is empty at first, but you define any 
                     auxiliary terms here. Auxiliaries are explained <a href="#auxiliaries">below.</a></li>
-                <li>Below these two drop-down menus is a text field. This is where definition are displayed and/or edited. If a definition is display-only, 
-                    the 'Display is editable' check box will be un-checked (to prevent unintentional changes). If you check that box, then you may edit
-                    the text in this area. </li>
+                <li>Below these two drop-down menus is a text field. This is where definition are displayed and/or edited. 
+                <ul>
+                <li>If the 'Display NOT Editable' button is chosen, you may browse definitions without any risk of inadvertently changing anything. </li>
+                <li>If the 'Edit Def' button is chosen, you may edit the definition in the display.</li>
+                <li>If the 'Edit Comments' button is chosen, you may edit or view the <a href="#edit-comments">comments</a>  associated with any <span style="font-weight: bold">accepted</span>  kin term. When no definition (or auxiliary definition) is selected for editing, choosing the 'Edit Comments' button will make the comments on the entire context visible and editable.
+                </li></ul></li>
                 <li>A drop-down menu of '<span style="font-weight: bold">Pre-Defined Terms</span>' contains all the relationship terms (or <span style="font-style: italic">predicates</span>)
                     that SILKin understands automatically. This is a fairly long list, with the most frequently used terms at the top of the list. When this menu is open, 
                     you can type the first few letters of a term and the list will scroll to that term. </li>
@@ -121,9 +124,10 @@ and open the template in the editor.
                 <li>Most of the Pre-Defined Terms (predicates like 'mother') require two arguments. For example: the literal 'mother(B, Ego)' specifies that B is the mother of Ego.
                     If you use the 'mother' predicate but only write one argument (e.g. 'mother(B)') this is a syntax error. </li>
                 <li>A few predicates take only one argument: 'dead(C)' or 'female(F)'. </li>
-                <li>The names of predicates must consist of letters, numbers, underscores ('_') and square brackets ('[' and ']'). The Pre-Defined Terms all
-                    follow this rule (e.g. 'half_brother'). When devising names for local kin terms, you must follow this rule also.
-                </li>
+                <li>The Pre-Defined Terms are all English words; they consist of letters, 
+                numbers, and underscores ('_').</li>
+                <li> Defined Local Terms are kin terms for which we have an accepted definition. These are in the native
+                language you are studying. They follow the <a href="Start.html#reserved">naming rules for kin terms.</a> </li>
             </ul>
         </p>
         <p>When there are multiple literals in a clause, they are separated by commas. There is a period after the final literal.             
@@ -225,9 +229,9 @@ OR  B is father of Ego, C is brother of B, and Alter is wife of C. </pre>
         <p>
             As soon as we provide the name, SILKin puts into the editing area <br/>
             <code>cross_cousin[aux](Alter, Ego) :- </code> <br/>
-            to start our definition. In the local
-            language, the only requirement is that a cross cousin must be the child of your parent's opposite-sex sibling.  The gender of neither Ego nor Alter matters.
-            So we write the following definition in the editing area:</p>
+            to start our definition. Let's assume that in the local language, the only requirement is that a cross cousin 
+            must be the child of your parent's opposite-sex sibling.  The gender of neither Ego nor Alter matters.
+            In that case, we would write the following definition in the editing area:</p>
             <code>parents(B, Ego), sibling(C, B), children(Alter, C), gender(D, B), gender(E, C), not(equal(D, E)).</code> 
         <p>By assigning separate variables to the genders of B and C, and then specifying that those gender variables (D and E) cannot be equal, we have expressed
             the local meaning of &quot;cross&quot;. As soon as we validate and accept the definition of this auxiliary term (as described 
@@ -250,7 +254,7 @@ OR  B is father of Ego, C is brother of B, and Alter is wife of C. </pre>
             The sample session below illustrates the kinds of syntax errors SILKin can detect. We have tried to anticipate the more common errors, but if
             you try you can probably make a creative mistake that will completely perplex the syntax checker. If you fail the syntax check but cannot
             see anything wrong with your definition, perhaps a colleague can focus fresh eyes on the clause and suggest a solution. If all else fails,
-            email your SILK file (your edits-in-progress are in it) to the support address shown on the site where you downloaded SILKin. The project team
+            save your SILK file (your edits-in-progress are in it) and email it to the support address shown on the site where you downloaded SILKin. The project team
             will inspect your definition and tell you why it failed the test.
         </p>
         <p> 

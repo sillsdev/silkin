@@ -50,10 +50,34 @@ In all these ways, an adoptive UDP is treated the same as the genealogical relat
 <span style="font-weight: bold">User</span> Defined Property.) Only you can decide if an adoptive UDP in some other kinship system is applicable to your context.
 </li>
 </ul>
+<a name="clans"></a>
+<h3>Clans Are A Different Kind of Special Relationship</h3>
+<p>Clans are a factor in kinship terminology for only a small percentage of contexts. When they are a factor they tend to be 'invisible links' among people, and may apply quite broadly within any group of people. In SILKin, clan-like ties are not displayed on the chart, but they are recognized.
+</p>
+<p>Like adoptions, clans are handled via <a href="ContextEdit.html#UDPs">UDPs.</a> When you create or edit a UDP there is a selection for &quot;Can Create Uncharted Connections?&quot;  This feature is valid only if:
+<ul><li>the UDP has values of type 'String,'  
+</li>
+<li>the UDP is single-valued, and
+</li>
+<li>it is restricted to certain values that you have have listed.
+</li>
+</ul>
+If the UDP meets these criteria and you select Uncharted Connections, SILKin assumes that this UDP represents a clan-like relationship. You will be presented with another selection: creating the invisible connection whenever two people have the <span style="font-style: italic">same</span> value, or when their values are <span style="font-style: italic">different</span>. 
+</p>
+<p><span style="font-weight: bold"">For example:</span> Your cultural context may have a concept of 'clan brother' that extends certain family kin terms to people with no genealogical connection but who belong to the same clan. In this case, you might 
+<a href="ContextEdit.html#UDPs">create a UDP</a> called '*clansib' that is single-valued, of type 'string' and restricted to 'elk', 'moose', or 'deer'. You would select 'Uncharted Connections' and 'Create Connections on Same Value.' Then every person in the population who has a value for their '*clansib' property will be linked automatically to every other person with that value. The chart will not show the links, but when computing the path between any two people SILKin will recognize a clan connection if there is no genealogical one. 
+</p>
+<p><span style="font-weight: bold"">Another example:</span> Your cultural context may define exogamy in terms of clan, i.e. one may marry anyone outside one's clan. If this concept affects kinship terminology, you might define a UDP (perhaps '*exoclan') restricted to 'elk', 'moose', or 'deer' and select 'Create Connections on Different Value.' Now SILKin will create an invisible connection whenever two people have values for *exoclan that are different.
+</p>
 <a name="delete"></a>
 <h3>Deleting A Special Relationship</h3>
-<p>You remove a Special Relationship (e.g. an adoption) similar to the way you remove a natural child from a family; 
-you 'Draw Special Relationship' again between the same parent/initiator and child/recipient. Doing it once creates the special relationship; doing it again removes it.
-</p>
+<ul>
+<li>You delete an adoption similar to the way you delete a natural child from a family; you 'Draw Special Relationship' again between the same parent/initiator and child/recipient. Doing it once creates the adoptive relationship; doing it again removes it.
+</li>
+<li>You delete a clan-like connection similar to the way you create it; you edit a person's value for the UDP. If someone had the value 'elk' and you change it to 'deer' SILKin will erase the prior invisible connections and create new ones.
+</li>
+<li>The two prior deletion methods affect the connections between specific people. If instead you want to get rid of <span style="font-style: italic">all</span> connections based on a UDP (i.e. you have changed your mind about whether this UDP creates special relationships) then you should 'Edit Context' and edit the UDP itself. Un-selecting the 'Display on Charts' or 'Uncharted Connections' feature will erase all such connections throughout your context
+</li>
+</ul>
 </body>
 </html>
