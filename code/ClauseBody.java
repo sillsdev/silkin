@@ -777,7 +777,7 @@ public class ClauseBody implements Serializable, Comparator {
     @throws ClassNotFoundException          if an invalid type name is found in a user-defined property
      */
     public void generateExamples(Context hypo, ArrayList<Object> egoBag, Dyad dyad, Oracle orca) throws KSInternalErrorException  {
-        Individual ego = null;
+        Individual ego = null, alter = null;
         boolean oKay = false;
         int loops = 0, spares = 2,
                 indivReset = hypo.indSerNumGen,
@@ -852,8 +852,7 @@ public class ClauseBody implements Serializable, Comparator {
                     System.out.println("With Ego = #" + ego.serialNmbr + ", generating " + ktd.kinTerm + ":" + seqNmbr);
                     Context.breakpoint();
                     }  */
-                    while (oKay && bodyIter.hasNext()) // if any literal specifies ego gender ...
-                    {
+                    while (oKay && bodyIter.hasNext())  {  // if any literal specifies ego gender ...                   
                         oKay = ((Literal) bodyIter.next()).constraintCheck(ego.gender, constraints, genderStuff, starStuff);
                     }
                     //  constraintCheck, by side-effect, builds all constraints
@@ -893,7 +892,7 @@ public class ClauseBody implements Serializable, Comparator {
                                     }
                                 }
                             }
-                        oKay = next.meetsStarSpecs(ego, egoVar, constraints, starBindings, bindings, "commit", this);
+                            oKay = next.meetsStarSpecs(ego, egoVar, constraints, starBindings, bindings, "commit", this);
                             if (oKay) {  //  3rd OK
                                 //  Find/Create will use level, pcCounter & sCounter.  Re-initialize them to start.
                                 resetCounters();
@@ -996,16 +995,16 @@ public class ClauseBody implements Serializable, Comparator {
             }  //  end of catch KSConstraintInconsistency
             // We're OK!!  By side-effect, findOrCreate bound all variables to example individuals.
             // Now label Alter, the person who illustrates the kinTerm.
-            Individual alter = null;
+            alter = null;
             Object boundVal = bindings.get("Alter");
             if (boundVal instanceof Individual) {
                 alter = (Individual) boundVal;
             } else if (boundVal instanceof ArrayList) {  //  i.e. if Alter is bound to a MathVar's value
-                alter = (Individual) ((ArrayList)boundVal).get(0);
+                alter = (Individual) ((ArrayList) boundVal).get(0);
                 if (alter.node == null) {
                     alter.node = new Node();
                 }
-            }            
+            }
             if (alter == null) {
                 throw new KSBadHornClauseException("Clause body in domain theory does not mention 'Alter.'\n" + lineBreaker(body));
             }
@@ -1034,7 +1033,6 @@ public class ClauseBody implements Serializable, Comparator {
                 ArrayList<Object> egosList = (ArrayList<Object>) orca.noiseFacts.get(egoNumInt);
                 egosList.add(rec);
             }  //  end of recording noise on orca
-            
             pcString = makePCString(ego, alter);
             if (pcString.isEmpty()) {
                 Context.breakpoint();
@@ -1050,23 +1048,23 @@ public class ClauseBody implements Serializable, Comparator {
                             + seqNmbr + " \t" + pcString + " \t" + expansionPath);
                 }
             }
-            pcStringStructural = structStr(pcString);
-            if (duplicative) {
-                dups++;		//  Count the duplications encountered
-            }		//  Make sure ego is in egoBag (could be new one)
-            if (!egoBag.contains(ego)) {
-                egoBag.add(ego);
-            }
-            if (dyad != null) {
-                dyad.ego = ego;
-                dyad.alter = alter;
-                dyad.pcString = pcString;  // 99.99% the same, but sometimes legitimately different.  We want the pcStr for actual example.
-            }
-        } catch (Exception exc) {
+        } catch (Exception exc) {  // Could be a syntax error, or just a super messy clause due to UDPs
             EditTheoryFrame.syntaxErrors.add(exc);
             hypo.resetTo(indivReset, famReset);
+            pcString = "**";  //  presuming it is due to UDPs
         }
-        return;
+        pcStringStructural = structStr(pcString);
+        if (duplicative) {
+            dups++;		//  Count the duplications encountered
+        }		//  Make sure ego is in egoBag (could be new one)
+        if (!egoBag.contains(ego)) {
+            egoBag.add(ego);
+        }
+        if (dyad != null) {
+            dyad.ego = ego;
+            dyad.alter = alter;
+            dyad.pcString = pcString;  // 99.99% the same, but sometimes legitimately different.  We want the pcStr for actual example.
+        }
     }  //  end of method generateExamples
 
     /** Return a string with line-breaks every 80 - 100 characters.  Place the line-breaks after a ")," pair if possible,
@@ -2916,8 +2914,10 @@ public class ClauseBody implements Serializable, Comparator {
     public static String structStr(String pcStr) throws KSInternalErrorException {
         //  Makes structural equivalent of expCB pcStrings and baseCB sigStrings
         //  Components of sigStrings, when generified, could duplicate; hence the check
-if (pcStr == null) Context.breakpoint();
-
+        if (pcStr == null) {
+            Context.breakpoint();
+            return "";
+        }
         int sz = pcStr.length();
         char ch;
         char[] symbol = new char[sz];

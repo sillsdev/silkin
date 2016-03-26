@@ -17,8 +17,8 @@ public class ProblemDyadFrame extends javax.swing.JFrame {
     /** Creates new form ProblemDyadFrame */
     public ProblemDyadFrame(EditTheoryFrame.DyadTestReport dtr) {
         initComponents();
-        kinTermLabel.setText(dtr.kinTerm);
-        dyadDisplayArea.setText(dtr.problemText());        
+        kinTermLabel.setText(PersonPanel.deSlashify(dtr.kinTerm));
+        dyadDisplayArea.setText(PersonPanel.deSlashify(dtr.problemText()));        
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 

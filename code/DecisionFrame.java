@@ -166,6 +166,10 @@ public class DecisionFrame extends JFrame  implements HyperlinkListener {
         pack();
         setVisible(true);
     }
+    
+    String deSlashify(String s) {
+        return PersonPanel.deSlashify(s);
+    }
 
     void makeComboModel() {
         Object[] suggArray = {"ERROR -- There are no suggestions!" };
@@ -177,7 +181,7 @@ public class DecisionFrame extends JFrame  implements HyperlinkListener {
                 Iterator suggIter = issues.entrySet().iterator();
                 while (suggIter.hasNext()) {
                     Map.Entry entry = (Map.Entry)suggIter.next();
-                    String kinTerm = (String)entry.getKey();
+                    String kinTerm = deSlashify((String)entry.getKey());
                     ArrayList<Issue> sugLst = (ArrayList<Issue>)entry.getValue();
                     for (Issue sug : sugLst) {
                         String dunMark = (sug.processed ? "DONE: " : "");

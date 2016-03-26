@@ -34,8 +34,7 @@ public class KinTermMatrix implements Serializable {
         KinTermMatrix clon = new KinTermMatrix();
         Iterator egoIter = matrix.keySet().iterator();
         while (egoIter.hasNext()) {
-            Integer egoNum = (Integer)egoIter.next();
-            
+            Integer egoNum = (Integer)egoIter.next();            
             TreeMap cloneRow = new TreeMap(getRow(egoNum));
             clon.matrix.put(egoNum, cloneRow);
         }
@@ -152,6 +151,27 @@ public class KinTermMatrix implements Serializable {
         return DomainTheory.countLeaves(matrix);
     }
 
+    /** Verify that each row has a self-node, and that an 'Ego' term of address  
+     *  appears only if this context has separate terms of address.
+     */
+    public void checkSelfNodes() {
+        boolean doublEgo = Context.current.distinctAdrTerms;
+        Node cell;
+        for (int n=0; n < matrix.size(); n++) {
+            cell = getCell(n,n);  //  this is the self node
+            if (cell == null) {
+                continue;
+            }
+            if (doublEgo) {  //  should be an address term
+                if (cell.kinTermsAddr.isEmpty()) {
+                    cell.kinTermsAddr.add("Ego");
+                }
+            }else {  //  no address terms allowed
+                cell.kinTermsAddr.clear();
+            }
+        }  //  end of loop thru the rows
+    }
+
     /** For every Node in the matrix, make terms of address that mimic the
      *  terms of reference.
      */
@@ -241,6 +261,32 @@ public class KinTermMatrix implements Serializable {
         }
         return image;
     }  
+
+    /**
+     * 
+     */
+    public String printMatrixSummary() {
+        String temp1, temp2, image = "\nSummary of Relationships in " + DomainTheory.current.languageName;
+        image += ".\nEgo\t   Alter\tTerms\n";
+        Iterator egoIter = matrix.entrySet().iterator(), altIter, ktIter;
+        Map.Entry egoEntry, altEntry;
+        Node cell;
+        while (egoIter.hasNext()) {
+            egoEntry = (Map.Entry) egoIter.next();
+            image += "\nRow " + egoEntry.getKey().toString();
+            altIter = ((TreeMap) egoEntry.getValue()).entrySet().iterator();
+            while (altIter.hasNext()) {
+                altEntry = (Map.Entry) altIter.next();
+                temp1 = "\n\t" + altEntry.getKey().toString() + "\t";
+                cell = (Node) altEntry.getValue();
+                temp2 = cell.printTerms();
+                if (! temp2.equals("0")) {
+                    image += temp1 + temp2;
+                }
+            }
+        }
+        return image;
+    }
 
     /** Return a printable String displaying the contents of this Matrix */
     public String printMatrix() {

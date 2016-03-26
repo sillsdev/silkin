@@ -670,6 +670,7 @@ public class EditPrefsWindow extends JFrame {
         Font demoFont = new Font(fontName, Font.PLAIN, demoSize);
         sampleTextLabel.setFont(demoFont);
         PrintChart.printFont = nuFont;
+        ChartPanel.chartFont = demoFont;
     }
     
     

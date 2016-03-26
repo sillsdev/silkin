@@ -31,7 +31,7 @@ following Java built-in types (where 'xx{}' means 'a list objects of type of xx'
 public class UserDefinedProperty implements Serializable {
 
     public String starName, typ;
-    public boolean singleValue, chartable = false;
+    public boolean singleValue, chartable = false, connects = false, sameVal = true;
     public ArrayList<Object> value = new ArrayList<Object>();
     public ArrayList<Object> validEntries;
     public Object defaultValue;
@@ -52,6 +52,8 @@ public class UserDefinedProperty implements Serializable {
         minVal = udp.minVal;
         maxVal = udp.maxVal;
         chartable = udp.chartable;
+        connects = udp.connects;
+        sameVal = udp.sameVal;
         if (useDefault && defaultValue != null) {
             value.add(defaultValue);
         }
@@ -147,6 +149,10 @@ public class UserDefinedProperty implements Serializable {
                             + chartColor.getGreen() + "\" B=\"" + chartColor.getBlue()
                             + "\"/>";
                 }
+            }
+            if (connects) {
+                result += "\n\t\t\t<connects type=\"" + 
+                        (sameVal ? "same" : "different") + "\"/>";                
             }
         }
         return result;

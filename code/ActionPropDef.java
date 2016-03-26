@@ -152,12 +152,11 @@ public class ActionPropDef extends JPanel {
         if (accepted) {  
             try {
                 String sourceContextName = propDef.ktd.domTh.languageName;
-                String fileName = Library.libraryDirectory + "Contexts/" + sourceContextName + ".ctxt";
-                Context sourceCtxt = Library.readContextFromDisk(fileName, false);
+                Context sourceCtxt = Library.findOrCreateContext(sourceContextName);
                 if (propDef.ktd.domTh.addressTerms) {
-                    sourceCtxt.domTheoryAdr(); // loads it on sourceCtxt
+                    sourceCtxt.updateDomTheoryAdr(); // loads it on sourceCtxt
                 } else {
-                    sourceCtxt.domTheoryRef();
+                    sourceCtxt.updateDomTheoryRef();
                 }
                 KinTermDef newDef = new KinTermDef(propDef.kinTerm);
                 newDef.comments = FamilyPanel.convertBannedCharacters(notesText.getText());
@@ -187,6 +186,7 @@ public class ActionPropDef extends JPanel {
                     ArrayList<Context.CB_Ptr> defList = autoDef.get(kinType);
                     defList.add(new Context.CB_Ptr(newDef.kinTerm, cb.seqNmbr));
                 }
+//                Context.current = currCtxt;  // It was reset by updates to SourceCtxt
                 String msg = "Would you like to apply this new definition to all\n" +
                             "Ego/Alter pairs that it fits?";
                 int decision = JOptionPane.showConfirmDialog(this, msg,

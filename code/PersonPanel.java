@@ -27,6 +27,13 @@ import java.beans.PropertyVetoException;
 public class PersonPanel extends javax.swing.JPanel {
 
     public static final int ADD = 2, DELETE = 1, CANCEL = 0;
+    public static final String[] reservedWords = { "father", "mother", "parent", 
+        "child", "husband", "wife", "spouse", "son", "daughter", "male", "female",
+        "elder", "younger", "equal", "not", "divorced", "dead", "gender", 
+        "lessThan", "greaterThan", "lessOrEql", "greaterOrEql", "contains", "allowCreation", 
+        "sibling", "siblings", "brother", "sister", "half_brother", "half_sister",
+        "step_brother", "step_sister", "parents", "step_father", "step_mother", "spice", 
+        "children", "step_son", "step_daughter"};
     /** Creates new form PersonPanel */
     public PersonPanel() {
         storing = true;
@@ -563,6 +570,10 @@ public class PersonPanel extends javax.swing.JPanel {
 //  But if the user takes some other action that does NOT fire a Focus_Lost
 //  event, the dirty bit will prevent loss of data.
 
+    public void fireAlterFirstNamesFocusLost() {
+        alterFirstNamesFocusLost(null);
+    }
+    
     private void alterFirstNamesFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_alterFirstNamesFocusLost
         String s = alterFirstNames.getText();
         if (parent.infoPerson != null) {
@@ -608,25 +619,51 @@ public class PersonPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_personDeathYearFocusLost
 
     private void alterRefTermFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_alterRefTermFocusLost
-        if (currentInd != null) {
-            String newTerm = alterRefTerm.getText();
+        String newTerm = alterRefTerm.getText();
+        if (newTerm.isEmpty()) {
+            return;
+        }
+        if (currentInd != null && !newTerm.equals("Ego") && !newTerm.equals("Not linked to Ego")) {
+            if (Character.isUpperCase(newTerm.charAt(0))
+                    || Character.isDigit(newTerm.charAt(0))
+                    || newTerm.startsWith("\"")) {
+                String msg = "'" + newTerm + "' is not a legal kin term.\n";
+                msg += "It may not start with a capital letter or a digit,";
+                msg += "\nnor may it contain a double-quote.";
+                MainPane.displayError(msg, "In 'Ego Calls Alter'", JOptionPane.ERROR_MESSAGE);
+                alterRefTerm.grabFocus();
+                return;
+            }
             JTextField temp = new JTextField();
             fillTextField(currentInd.node, temp, false);
             if (!temp.getText().equals(newTerm)) {
                 dirty = true;
             }
-        }        
+        }
     }//GEN-LAST:event_alterRefTermFocusLost
 
     private void recipRefTermFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_recipRefTermFocusLost
-        if (currentInd != null) {
+        String newTerm = recipRefTerm.getText();
+        if (newTerm.isEmpty()) {
+            return;
+        }
+        if (currentInd != null && !newTerm.equals("Ego") && !newTerm.equals("Not linked to Ego")) {
             TreeMap tmap = parent.ktm.getRow(currentInd.serialNmbr);
             Node altNode = null;
             if (tmap != null) {
                 altNode = (Node) tmap.get(parent.getCurrentEgo());
             }
             if (altNode != null) {
-                String newTerm = recipRefTerm.getText();
+                if (Character.isUpperCase(newTerm.charAt(0))
+                    || Character.isDigit(newTerm.charAt(0))
+                    || newTerm.startsWith("\"")) {
+                String msg = "'" + newTerm + "' is not a legal kin term.\n";
+                msg += "It may not start with a capital letter or a digit,";
+                msg += "\nnor may it contain a double-quote.";
+                MainPane.displayError(msg, "In 'Alter Calls Ego'", JOptionPane.ERROR_MESSAGE);
+                recipRefTerm.grabFocus();
+                return;
+            }
                 JTextField temp = new JTextField();
                 fillTextField(altNode, temp, false);
                 if (!temp.getText().equals(newTerm)) {
@@ -810,9 +847,11 @@ public class PersonPanel extends javax.swing.JPanel {
                 msg = "Delete the value '" + val + "'.\nRight?";
                 int confirm = JOptionPane.showConfirmDialog(this, msg, "Confirm Deletion",
                         JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.YES_OPTION) {
+                if (confirm == JOptionPane.YES_OPTION) {  //  Go ahead and delete it
                     udp.value.remove(index);
-                    parent.showInfo(parent.infoPerson);
+                    if (udp.connects) {
+                        Context.current.deleteConnectingUDPVal(currentInd, udp.starName, val, udp.sameVal);
+                    }
                 }
             } else {  //  choice = ADD
                 Object newObj;
@@ -846,15 +885,35 @@ public class PersonPanel extends javax.swing.JPanel {
                             "Invalid Input", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                udp.value.add(newObj);
-                parent.showInfo(parent.infoPerson);
+                if (udp.connects) {
+                    Context.current.addConnectingUDPVal(currentInd, udp.starName, newbie, udp.sameVal);
+                }
+                udp.value.add(newObj);                
             }
+            // Whether ADD or DELETE, must ck for changes in kin types
+            if (udp.connects) { 
+                parent.rebuildKTMatrixEtc();
+            }
+            parent.showInfo(parent.infoPerson);
         }
     }//GEN-LAST:event_udpEditButtonActionPerformed
 
     private void alterAdrTermFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_alterAdrTermFocusLost
+        String newTerm = alterAdrTerm.getText();
+        if (newTerm.isEmpty()) {
+            return;
+        }
         if (currentInd != null) {
-            String newTerm = alterAdrTerm.getText();
+            if (Character.isUpperCase(newTerm.charAt(0))
+                    || Character.isDigit(newTerm.charAt(0))
+                    || newTerm.startsWith("\"")) {
+                String msg = "'" + newTerm + "' is not a legal kin term.\n";
+                msg += "It may not start with a capital letter or a digit,";
+                msg += "\nnor may it contain a double-quote.";
+                MainPane.displayError(msg, "In 'Ego Calls Alter'", JOptionPane.ERROR_MESSAGE);
+                alterAdrTerm.grabFocus();
+                return;
+            }
             JTextField temp = new JTextField();
             fillTextField(currentInd.node, temp, true);
             if (!temp.getText().equals(newTerm)) {
@@ -864,6 +923,10 @@ public class PersonPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_alterAdrTermFocusLost
 
     private void recipAdrTermFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_recipAdrTermFocusLost
+        String newTerm = recipAdrTerm.getText();
+        if (newTerm.isEmpty()) {
+            return;
+        }
         if (currentInd != null) {
             TreeMap tmap = parent.ktm.getRow(currentInd.serialNmbr);
             Node altNode = null;
@@ -871,7 +934,16 @@ public class PersonPanel extends javax.swing.JPanel {
                 altNode = (Node) tmap.get(parent.getCurrentEgo());
             }
             if (altNode != null) {
-                String newTerm = recipAdrTerm.getText();
+                if (Character.isUpperCase(newTerm.charAt(0))
+                        || Character.isDigit(newTerm.charAt(0))
+                        || newTerm.startsWith("\"")) {
+                    String msg = "'" + newTerm + "' is not a legal kin term.\n";
+                    msg += "It may not start with a capital letter or a digit,";
+                    msg += "\nnor may it contain a double-quote.";
+                    MainPane.displayError(msg, "In 'Alter Calls Ego'", JOptionPane.ERROR_MESSAGE);
+                    recipAdrTerm.grabFocus();
+                    return;
+                }
                 JTextField temp = new JTextField();
                 fillTextField(altNode, temp, true);
                 if (!temp.getText().equals(newTerm)) {
@@ -995,7 +1067,8 @@ public class PersonPanel extends javax.swing.JPanel {
             alterAdrTerm.setEditable(false);
             recipAdrTerm.setEditable(false);
         } else if (ind.node != null) {
-        // There may be kin terms already recorded
+        // There may be kin terms already recorded.
+        // Terms on nodes are slashified. fillTextField de-slashifies. 
             Individual ego = Context.current.individualCensus.get(parent.getCurrentEgo());
             checkForAutoDefs(ind.node, ego);
             fillTextField(ind.node, alterRefTerm, false);
@@ -1169,7 +1242,8 @@ public class PersonPanel extends javax.swing.JPanel {
             String newText = "";
             int soFar = 0;
             for (String s : terms) {
-                newText += (soFar++ == 0 ? "" : ", ") + s;
+                String ds = deSlashify(s);
+                newText += (soFar++ == 0 ? "" : ", ") + ds;
             }
             field.setText(newText);
         }
@@ -1179,18 +1253,76 @@ public class PersonPanel extends javax.swing.JPanel {
         return nam.replace("\"", "'").replace('<', '[').replace('>', ']').trim();
     }
     
+    /** Finds all characters normally prohibited in a symbol, and precedes them with a backSlash.
+     *  This prepares them for writing to the SILK file.
+     * 
+     *   STRATEGY: Detect multiple terms separated by comma-space. For each term,
+     *             check for all the permissible types. Change all non-permissible characters to
+     *             backslash-char.  BUT replace any double-quote with a single-quote. 
+     * @param   c   window to which messages should be posted
+     * @param   k   the kinTerm to be slashified
+     * 
+     * @return  a set of slashified kin terms
+    */
+    public static String slashify(java.awt.Component c, String k) {
+        if (k.isEmpty()) {
+            return k;
+        }
+        String slashified = "";
+        ArrayList<String> terms = getKinTerms(k);
+        boolean quoteDetected = false;
+        for (String s : terms) {
+            String newS = "";
+            for (int n = 0; n < s.length(); n++) {
+                char ch = s.charAt(n);
+                if ((!Character.isJavaIdentifierPart(ch))
+                        || (n == 0 && (Character.isUpperCase(ch) || Character.isDigit(ch)))) {
+                    newS += '\\';
+                }
+                newS += Character.toString(ch);
+            }
+            if (slashified.length() > 0) {
+                slashified += ", ";
+            }
+            if (newS.contains("\"")) {
+                quoteDetected = true;
+            }
+            slashified += newS.replace("\"", "'");  //  double-quote strictly prohibited
+        }
+        if (quoteDetected) {
+            String msg = "Double-quotes are not allowed in kin terms.";
+            msg += "\nThey were replaced with single-quote.";
+            JOptionPane.showMessageDialog(c, msg,
+                    "Restrictions on Term Characters",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+        return slashified;
+    }
+    
+    
+    public static String deSlashify(String s) {
+        return s.replace("\\", "").trim();
+    }
+    
     public static String sanitizeKinTerms(java.awt.Component c, String k, String typ) throws KSParsingErrorException {
-        String sanitized = k.replace('-', '_').replace("\"", "'")
+        if (k.isEmpty()) {
+            return k;
+        }
+        String sanitized = k.replace('-', '_').replace("\"", "_").replace("'", "_")
                 .replace('<', '[').replace('>', ']').trim();
         ArrayList<String> badChars = new ArrayList<String>(), 
-                goodChars = new ArrayList<String>();
+                          goodChars = new ArrayList<String>();
         if (k.indexOf("-") > -1) {
             badChars.add("-");
             goodChars.add("_");
         }
         if (k.indexOf("\"") > -1) {
             badChars.add("dbl-quote");
-            goodChars.add("single-quote");
+            goodChars.add("underscore");
+        }
+        if (k.indexOf("\'") > -1) {
+            badChars.add("single-quote");
+            goodChars.add("underscore");
         }
         if (k.indexOf("<") > -1) {
             badChars.add("<");
@@ -1214,7 +1346,7 @@ public class PersonPanel extends javax.swing.JPanel {
         }
         if (!allBlanksPrecededByCommas(sanitized)) {
             msg = "In '" + typ + "'\n";
-            msg += "Kin terms  & UDPs may not contain embedded blanks. If you intended\n";
+            msg += "Kin terms & UDPs may not contain embedded blanks. If you intended\n";
             msg += "to separate multiple terms, use a comma to separate. If a single\n";
             msg += "term has multiple components, join them with an underscore.";
             JOptionPane.showMessageDialog(c, msg, 
@@ -1225,7 +1357,8 @@ public class PersonPanel extends javax.swing.JPanel {
         char[] letters = sanitized.toCharArray();
         ArrayList<Character> baddies = new ArrayList<Character>();
         for (char ch : letters) {
-            if (!Character.isJavaIdentifierPart(ch) && ch != ',' && ch != ' ') {
+            if (!Character.isJavaIdentifierPart(ch) && ch != ',' && ch != ' '
+                    && ch != '[' && ch != ']' && ch != '{' && ch != '}') {
                 baddies.add(ch);
             }
         }
@@ -1237,6 +1370,25 @@ public class PersonPanel extends javax.swing.JPanel {
                     "Restrictions on Term Characters", 
                     JOptionPane.ERROR_MESSAGE);
             throw new KSParsingErrorException("Must replace illegal characters");
+        }
+        char ch = sanitized.charAt(0);
+        if (!Character.isLetter(ch)) {
+            msg = "First character of a kin term must be a letter. ";
+            JOptionPane.showMessageDialog(c, msg, 
+                    "Restrictions on Term Characters", 
+                    JOptionPane.ERROR_MESSAGE);
+            throw new KSParsingErrorException("Must replace first character");
+        }
+        ArrayList<String> words = getKinTerms(sanitized);
+        for (String word : words) {
+            if (wordFound(reservedWords, word)) {
+                // Tsk Tsk. A reserved word was used
+                msg = "'" + word + "' is a reserved word. Cannot be used as a kin term.";
+                JOptionPane.showMessageDialog(c, msg,
+                        "Restrictions on Term Characters",
+                        JOptionPane.ERROR_MESSAGE);
+                throw new KSParsingErrorException("Can't Use Reserved Word");
+            }
         }        
         return sanitized;
     }
@@ -1255,6 +1407,15 @@ public class PersonPanel extends javax.swing.JPanel {
             bl = s.indexOf(" ", start);
         }
         return true;
+    }
+    
+    static boolean wordFound(String[] words, String st) {
+        for(String word : words) {
+            if (word.equals(st)) {
+                return true;
+            }
+        }
+        return false;
     }
     
 
@@ -1310,22 +1471,25 @@ public class PersonPanel extends javax.swing.JPanel {
         //  The comments field is handled by a DocumentListner
         ArrayList<String> oldTerms, newTerms;
         if (infoPerson.node != null && infoPerson.serialNmbr != currEgoNum) {
-            a = sanitizeKinTerms(parent, alterRefTerm.getText(), "Ego Refers to Alter");
-            if (!a.equals(alterKinTermRefImg.trim())) { // alterKinTermRefImg = before User editing
+            a = slashify(parent, alterRefTerm.getText());
+            alterRefTerm.setText(deSlashify(a));  //  assures text field holds cannonical form.
+            if (!a.equals(alterKinTermRefImg.trim())) { 
                 oldTerms = getKinTerms(alterKinTermRefImg);
                 newTerms = getKinTerms(a);
                 updateKinTerms(currEgo, infoPerson, infoPerson.node, oldTerms, newTerms, "Ref");
             } // end of User must have edited alterKinTermsRef
             if (parent.chart.distinctAdrTerms) {
                 // Must pick up the term of address, if any
-                a = sanitizeKinTerms(parent, alterAdrTerm.getText(), "Ego Addresses Alter");
+                a = slashify(parent, alterAdrTerm.getText());
+                alterAdrTerm.setText(deSlashify(a));
                 if (!a.equals(alterKinTermAdrImg.trim())) {
                     oldTerms = getKinTerms(alterKinTermAdrImg);
                     newTerms = getKinTerms(a);
                     updateKinTerms(currEgo, infoPerson, infoPerson.node, oldTerms, newTerms, "Adr");
                 }
             }  // end of there-were-distinct-address-terms
-            a = sanitizeKinTerms(parent, recipRefTerm.getText(), "Alter Refers to Ego");
+            a = slashify(parent, recipRefTerm.getText());
+            recipRefTerm.setText(deSlashify(a));
             TreeMap tmap = parent.ktm.getRow(infoPerson.serialNmbr);
             Node recipNode = (Node) tmap.get(currEgoNum);
             if (!a.equals(recipKinTermRefImg.trim())) {
@@ -1345,7 +1509,8 @@ public class PersonPanel extends javax.swing.JPanel {
             } //  end of recip-ref-terms-were-edited
             if (parent.chart.distinctAdrTerms) {
                 // Must pick up the reciprocal term of address, if any
-                a = sanitizeKinTerms(parent, recipAdrTerm.getText(), "Alter Addresses Ego");
+                a = slashify(parent, recipAdrTerm.getText());
+                recipAdrTerm.setText(deSlashify(a));
                 if (!a.equals(recipKinTermAdrImg.trim())) {
                     oldTerms = getKinTerms(recipKinTermAdrImg);
                     newTerms = getKinTerms(a);
@@ -1373,12 +1538,12 @@ public class PersonPanel extends javax.swing.JPanel {
         int comma = s.indexOf(","), start = 0, stop;
         while(comma > 0) {
             stop = (comma > 0 ? comma : s.length());
-            list1.add(s.substring(start, stop));
-            start = stop +2;
+            list1.add(s.substring(start, stop).trim());
+            start = stop +1;
             comma = s.indexOf(",", start);
         }
         if ((s.length() - start) > 0) {
-            list1.add(s.substring(start, s.length()));
+            list1.add(s.substring(start, s.length()).trim());
         }  
         //  Now check for duplicates
         for (String str : list1) {
@@ -1389,7 +1554,7 @@ public class PersonPanel extends javax.swing.JPanel {
         if (list1.size() != list2.size()) {
             String msg = "Removed duplicates from your entry\n'" + s + "'.";
             JOptionPane.showMessageDialog(SIL_Edit.edWin, msg, 
-                    "Restrictions on Kin Term Characters", 
+                    "Error Detection in Kin Terms", 
                     JOptionPane.ERROR_MESSAGE);
         }
         return list2;
@@ -1532,6 +1697,7 @@ public class PersonPanel extends javax.swing.JPanel {
     
     static boolean ktMatrixInBalance(boolean giveUp) {
         int ktmSz = 0, ktmCells = 0, mult = 0, popSz = 0, refSz = 0, adrSz = 0;
+        Context.current.ktm.checkSelfNodes();
         try {
             ktmSz = Context.current.ktm.numberOfKinTerms();
             ktmCells = Context.current.ktm.numberOfCells();
@@ -1550,6 +1716,14 @@ public class PersonPanel extends javax.swing.JPanel {
                     + ktmSz + " - " + (mult * popSz) + " = " + (ktmSz - (mult * popSz)) + "\tktmCells: " + ktmCells;
             MainPane.displayError(msg, "Data Loss Monitoring", JOptionPane.WARNING_MESSAGE);
             System.out.println(msg);
+            System.out.println(Context.current.ktm.printMatrixSummary());
+            try {
+                System.out.println("\nUndefined Dyads");
+                System.out.println(Context.current.domTheoryRef().dyadsUndefined.summaryString());
+                System.out.println("\n\nDefined Dyads");
+                System.out.println(Context.current.domTheoryRef().dyadsDefined.summaryString());
+            }catch(Exception exc) {
+            }
             Context.breakpoint();
             return false;
         }else {

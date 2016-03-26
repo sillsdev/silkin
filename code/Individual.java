@@ -661,9 +661,9 @@ public boolean hasDoD() {
         }  //  end of optional UDPs               
         if (starLinks != null && starLinks.size() > 0) {
             result += "  <starLinks>";
-            result += "\"#" + ((Individual) starLinks.get(0)).serialNmbr + "\"";
+            result += "#" + ((Individual) starLinks.get(0)).serialNmbr;
             for (int i = 1; i < starLinks.size(); i++) {
-                result += "\", #" + ((Individual) starLinks.get(i)).serialNmbr + "\"";
+                result += ", #" + ((Individual) starLinks.get(i)).serialNmbr;
             }  //  end of loop thru starLinks
             result += "</starLinks>\n";
         }

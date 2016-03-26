@@ -34,7 +34,7 @@ public class ParserDomainTheory {
         this.filePath = tok.filePath;
     }
 
-    /** Construct a Parserfrom a DomainTheory file and a Standard_Macros file.
+    /** Construct a Parser from a DomainTheory file and a Standard_Macros file.
 
     @param	dtTokens	a <code>Tokenizer</code> which parses tokens from a DomainTheory file on demand.
     @param	macroTokens	a <code>Tokenizer</code> which parses tokens from a Macro file on demand.

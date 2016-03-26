@@ -192,7 +192,6 @@ public class ActionDONEorUnDo extends javax.swing.JPanel {
             msg += "\nThe issue was " + issue.toThyString();
             MainPane.displayError(msg, "Internal Error", JOptionPane.ERROR_MESSAGE);
         }
-//        revalidate();
     }
 
     /** This method is called from within the constructor to

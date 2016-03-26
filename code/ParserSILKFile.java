@@ -89,6 +89,7 @@ public class ParserSILKFile extends ParserDomainTheory {
         }
         doInd_Link_FamSerialSwaps();
         doDyadSwaps();
+        buildConnectionLists();
         newCtxt.currentEgo = (Individual) newCtxt.individualCensus.get(currentEgoSerialNmbr);
         if (!starTable.isEmpty()) {
             doStarSwaps();
@@ -608,7 +609,7 @@ public class ParserSILKFile extends ParserDomainTheory {
                 String[] components = readAttributes("eip", tags, "parseDomTheoryComponents");
                 String kt = components[0];
                 EditTheoryFrame.EditInProgress eip = new EditTheoryFrame.EditInProgress(kt);
-                eip.currentText = components[1];
+                eip.currentText = PersonPanel.deSlashify(components[1]);
                 eip.indent = Integer.parseInt(components[2]);
                 eip.lastVar = components[3];
                 eip.nextVar = Integer.parseInt(components[4]);
@@ -865,6 +866,12 @@ public class ParserSILKFile extends ParserDomainTheory {
             parseMinVal(udp);
             parseMaxVal(udp);
             parseChartProps(udp);
+            current = scanner.lookAhead();
+            if (current.lexeme.startsWith("<connects")) {
+                String s = readOneAttribute("connects", "value", "parseUDP");
+                udp.connects = true;
+                udp.sameVal = s.equals("same");
+            } // default is connects = false
             if (udp.validEntries.isEmpty()) {
                 udp.validEntries = null;
             }
@@ -1488,13 +1495,20 @@ public class ParserSILKFile extends ParserDomainTheory {
             newCtxt.birthDateNormallyCaptured = b;
             current = scanner.lookAhead();
         }
+        if (current.lexeme.startsWith("<chartFont")) {
+            String[] fields = {"name", "size"};
+            values = readAttributes("chartFont", fields, "parseKAESParameters");
+            String faceName = values[0];
+            int sz = Integer.parseInt(values[1]);
+            ChartPanel.chartFont = new Font(faceName, Font.PLAIN, sz);
+            current = scanner.lookAhead();
+        }
         if (current.lexeme.startsWith("<printFont")) {
             String[] fields = {"name", "size"};
             values = readAttributes("printFont", fields, "parseKAESParameters");
             String faceName = values[0];
             int sz = Integer.parseInt(values[1]);
-            Font nuFont = new Font(faceName, Font.PLAIN, sz);
-            PrintChart.printFont = nuFont;
+            PrintChart.printFont = new Font(faceName, Font.PLAIN, sz);
             current = scanner.lookAhead();
         }
         if (current.lexeme.startsWith("<printOrientation")) {
@@ -2011,6 +2025,7 @@ public class ParserSILKFile extends ParserDomainTheory {
             if (!current.lexeme.equals("</starLinks>")) {
                 error("parseStarLinks seeking flag '</starLinks>'.");
             }
+            return;
         } else if (current.lexeme.equals("</individual>") || 
                 current.lexeme.startsWith("<gedcomItems")) {
             return;
@@ -4318,6 +4333,49 @@ public class ParserSILKFile extends ParserDomainTheory {
             }
         }
     }  //  end of method doDyadSwaps
+    
+    void buildConnectionLists() {
+        if (newCtxt.userDefinedProperties == null) {
+            return;
+        }
+        ArrayList<UserDefinedProperty> connectors = new ArrayList<UserDefinedProperty>();
+        Iterator iter = newCtxt.userDefinedProperties.values().iterator();
+        while (iter.hasNext()) {
+            UserDefinedProperty udp = (UserDefinedProperty)iter.next();
+            if (udp.connects) {
+                connectors.add(udp);
+            }
+        }
+        if (connectors.isEmpty()) {
+            return;
+        }
+        newCtxt.connectingUDPValueLists = new 
+                TreeMap<String, TreeMap<String, ArrayList<Individual>>>();
+        TreeMap<String, TreeMap<String, ArrayList<Individual>>> lst = 
+                newCtxt.connectingUDPValueLists;
+        for (UserDefinedProperty udp : connectors) {
+            lst.put(udp.starName, new 
+                    TreeMap<String, ArrayList<Individual>>());
+            iter = udp.validEntries.iterator();
+            while (iter.hasNext()) {
+                String val = (String)iter.next();
+                lst.get(udp.starName).put(val, new ArrayList<Individual>());
+            }
+        }
+        for (Individual ind : newCtxt.individualCensus) {
+            if (ind.deleted) {
+                continue;
+            }
+            for (UserDefinedProperty udp : connectors) {
+                UserDefinedProperty indUDP = 
+                        (UserDefinedProperty)ind.userDefinedProperties.get(udp.starName);
+                if (! indUDP.value.isEmpty()) {
+                    String indVal = (String)indUDP.value.get(0);
+                    lst.get(udp.starName).get(indVal).add(ind);
+                }
+            }
+        }
+    }
 
     void doStarSwaps() {
         //  The starTable is a TMap: Integer -> ArrayList<Integer>.

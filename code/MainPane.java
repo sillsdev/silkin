@@ -34,7 +34,7 @@ public class MainPane extends JFrame implements ActionListener {
     public static JDesktopPane desktop;
     public static MainPane topPane;
     public static int testSerialNmbr;
-    public static int buildNmbr = 287;
+    public static int buildNmbr = 409;
     public static int NUMBER_OF_EGOS = 4;
     public static boolean fill_In_Flag = false;
     private JMenuBar menuBar = new JMenuBar();
@@ -372,19 +372,23 @@ public class MainPane extends JFrame implements ActionListener {
                 String vict;
                 Library.ContextStub cs1;
                 File aboutToDi;
-                try {
-                    for (int k = 1; k < langs.length; k++) {
-                        vict = langs[k];
-                        cs1 = Library.retrieveOrCreateStub(vict);
-                        Library.removeContextStub(cs1);
-                        aboutToDi = new File(Library.libraryCtxtDirectory + vict + ".ctxt");
+                for (int k = 1; k < langs.length; k++) {
+                    vict = langs[k];
+                    cs1 = Library.retrieveOrCreateStub(vict);
+                    Library.removeContextStub(cs1);
+                    aboutToDi = new File(Library.libraryCtxtDirectory + vict + ".ctxt");
+                    try {
                         aboutToDi.delete();
-                    }
-                    Library.cbIndex = null;
+                    } catch (Exception exc) {
+                        //  Exception means already deleted. That's fine.
+                    }  //  end of catch block
+                }
+                Library.cbIndex = null;
+                try {
                     Library.writeStubFile();
-                } catch (Exception exc) {
-                    activity.log.append("While deleting Library files:\n" + exc + "\n\n");
-                }  //  end of catch block
+                } catch (JavaSystemException exc) {
+                    activity.log.append("While writing Library stub file:\n" + exc + "\n\n");
+                }
             } //  end of delete-All
             else {
                 Library.ContextStub cs = Library.retrieveOrCreateStub(victim);
@@ -2387,7 +2391,7 @@ public class MainPane extends JFrame implements ActionListener {
         activity.log = log;
         String logDate = UDate.today();
         log.append("########### Log of activity, errors, and warnings encountered on " + logDate + ".\n");
-        log.append("########### Version 1.2, build # " + buildNmbr + ".\n");
+        log.append("########### Version 2.1, build # " + buildNmbr + ".\n");
         JScrollPane logroll = new JScrollPane(log);
         logroll.setMinimumSize(new Dimension(250, 45));
         logroll.setMaximumSize(new Dimension(850, 500));

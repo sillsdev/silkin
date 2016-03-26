@@ -23,6 +23,8 @@ public class UDPEditor extends KSJInternalFrame {
                    name1Changed = false,
                    certainTextChanged = false,
                    defaultTextChanged = false,
+                   newConnects = false,
+                   newSameVal = true,
                    reName = false;
     public UserDefinedProperty theUDP;	//  The various newxxx fields are holders for the
     public String newStarName, newType; //  new values entered into this editor.
@@ -32,13 +34,14 @@ public class UDPEditor extends KSJInternalFrame {
     Object newDefaultValue;
     UDPListener listener;
     JComboBox typePick;
-    JRadioButton nocertain, yescertain, yesdefault, nodefault, nomulti, yesmulti, chartYes, chartNo;
+    JRadioButton nocertain, yescertain, yesdefault, nodefault, nomulti, yesmulti, 
+                 chartYes, chartNo, connectYes, connectNo, sameVal, differentVal;
     JTextField minText, maxText;
     JTextArea certainText, name_1, defaultText;      
     JLabel certainEditLabel, defeditLabel, colorSample;
     JButton udpCheckSave, edColorBtn;
 //  This element of the editor GUI is accessed by the Listener
-    JPanel progBox, colorBox;
+    JPanel progBox, colorBox, connectOnBox;
 
     public UDPEditor(Context cntxt, KSJInternalFrame ctEd, String title, boolean newUDPee,
             UserDefinedProperty theUDPee) {
@@ -137,6 +140,52 @@ public class UDPEditor extends KSJInternalFrame {
             colorSample.setText("_None_");
             colorBox.setVisible(false);
         }
+        
+                //  CONNECTS?
+        JPanel connectBox = new JPanel();
+        connectBox.setLayout(new BoxLayout(connectBox, BoxLayout.LINE_AXIS));
+        JLabel connectLabel = new JLabel("Can Create Uncharted Connections?");
+        connectYes = new JRadioButton("Yes");
+        connectYes.setActionCommand("connect yes");
+        connectYes.addActionListener(listener);
+        connectNo = new JRadioButton("No");
+        connectNo.setActionCommand("connect no");
+        connectNo.addActionListener(listener);
+        ButtonGroup connectBtns = new ButtonGroup();
+        connectBtns.add(connectYes);
+        connectBtns.add(connectNo);
+        connectYes.setSelected(true);
+        connectBox.add(connectLabel);
+        connectBox.add(connectYes);
+        connectBox.add(connectNo);
+        editor.add(Box.createRigidArea(new Dimension(0, 4)));
+        editor.add(connectBox);
+        
+        connectOnBox = new JPanel();
+        connectOnBox.setLayout(new BoxLayout(connectOnBox, BoxLayout.LINE_AXIS));
+        JLabel connectOnLabel = new JLabel("Create Connections on:");
+        sameVal = new JRadioButton("Same Value");
+        sameVal.setActionCommand("same value");
+        sameVal.addActionListener(listener);
+        differentVal = new JRadioButton("Different Value");
+        differentVal.setActionCommand("different value");
+        differentVal.addActionListener(listener);
+        ButtonGroup connectOnBtns = new ButtonGroup();
+        connectOnBtns.add(sameVal);
+        connectOnBtns.add(differentVal);
+        connectOnBox.add(connectOnLabel);
+        connectOnBox.add(sameVal);
+        connectOnBox.add(differentVal);
+        if (theUDP.connects) {
+            connectYes.setSelected(true);
+            sameVal.setSelected(theUDP.sameVal);
+            differentVal.setSelected(!theUDP.sameVal);
+            connectOnBox.setVisible(true);
+        } else {
+            connectNo.setSelected(true);
+            connectOnBox.setVisible(false);
+        }        
+        editor.add(connectOnBox);
 
         //  DATA TYPE
         JPanel dTypeBox = new JPanel();
@@ -384,9 +433,12 @@ public class UDPEditor extends KSJInternalFrame {
     }  //  end of method flipFinalBtn
 
     public void validateCertainVals() {
-        //  Can't get here if typ = indiv or boolean
-        validValsChanged = true;
         String theVals = certainText.getText();
+        if (theVals.isEmpty()) {
+            newValidEntries.clear();
+            return;  //  nothing to validate
+        }
+        validValsChanged = true;
         ArrayList<Object> safetyNet = new ArrayList<Object>(newValidEntries);  // in case the edits were bad
         newValidEntries.clear();
         int start = 0, nextComma = 0, length = theVals.length();
@@ -450,6 +502,7 @@ public class UDPEditor extends KSJInternalFrame {
                     + "Your entries can't be accepted as that type.\nPlease try again.";
             MainPane.activity.log.append("While parsing 'int' Valid Entries:\n" + nfe + "\n" + eMsg);
             JOptionPane.showMessageDialog(this, eMsg, "Type Violation", JOptionPane.INFORMATION_MESSAGE);
+            newValidEntries = safetyNet;
             return;
         } catch (Exception exc) {
             if (MainPane.activity == null) {
@@ -459,6 +512,7 @@ public class UDPEditor extends KSJInternalFrame {
                     + "Your entries can't be accepted as that type.\nPlease try again.";
             MainPane.activity.log.append(eMsg + "\n" + exc);
             JOptionPane.showMessageDialog(this, eMsg, "Type Violation", JOptionPane.INFORMATION_MESSAGE);
+            newValidEntries = safetyNet;
             return;
         }  //  end of catch blocks
         flipFinalBtn("check");
@@ -710,7 +764,7 @@ public class UDPEditor extends KSJInternalFrame {
             }
             
             if (e.getActionCommand().equals("chart yes")) {
-                String s = newStarName, msg;
+                String msg;
                 int count = 0;
                 if (ctxt.userDefinedProperties != null) {
                     Iterator udpIter = ctxt.userDefinedProperties.values().iterator();
@@ -765,12 +819,60 @@ public class UDPEditor extends KSJInternalFrame {
                 colorBox.setVisible(true);
             }
             
-            if (e.getActionCommand().equals("chart no")) {
+            else if (e.getActionCommand().equals("chart no")) {
                 newChartColor = null ;
                 colorBox.setVisible(false);
             }
             
-            if (e.getActionCommand().equals("change color")) {
+            else if (e.getActionCommand().equals("connect yes")) {
+                String msg;
+                if (!newSingleValue || newType == null
+                        || !newType.equals("string") || nocertain.isSelected()) {
+                    msg = "A UDP that can connect people with no visible link\n";
+                    msg += "must take a single value of type 'String' and be";
+                    msg += "\nrestricted to certain values (that you must specify).";
+                    msg += "\nShall I make those settings for you?";
+                    int ch = JOptionPane.showConfirmDialog(ctxtEd, msg, "Illegal Combination",
+                            JOptionPane.YES_NO_OPTION);
+                    if (ch == JOptionPane.YES_OPTION) {
+                        typePick.setSelectedItem("String");
+                        nomulti.setSelected(true);
+                        if ((newUDP) || (theUDP.validEntries == null)) {
+                            newValidEntries = new ArrayList<Object>();
+                            certainText.setText("");
+                            certainEditLabel.setText("Enter values separated by commas.");
+                        } else {
+                            newValidEntries = theUDP.validEntries;
+                            certainText.setText(theUDP.getValidEntriesString());
+                            certainEditLabel.setText("Edit list of values, separated by commas.");
+                        }
+                        newSingleValue = true;
+                        certainText.setEditable(true);
+                        yescertain.setSelected(true);
+                        certainText.getDocument().addDocumentListener(new CertainTextListener());
+                    } else {  // She declined our offer to make settings
+                        connectNo.setSelected(true);
+                        return;
+                    }
+                }  //  end of check for illegal combinations
+                newConnects = true;
+                connectOnBox.setVisible(true);
+            }
+            
+            else if (e.getActionCommand().equals("connect no")) {
+                newConnects = false;
+                connectOnBox.setVisible(false);
+            }
+            
+            else if (e.getActionCommand().equals("same value")) {
+                newSameVal = true;
+            }
+            
+            else if (e.getActionCommand().equals("different value")) {
+                newSameVal = false;
+            }
+            
+            else if (e.getActionCommand().equals("change color")) {
                 newChartColor = JColorChooser.showDialog(ed,
                         "Color of Connecting Lines on a Chart",
                         colorSample.getBackground());
@@ -779,7 +881,7 @@ public class UDPEditor extends KSJInternalFrame {
                 edColorBtn.setText("Change Color");
             }
             
-            if (e.getActionCommand().equals("data type")) {
+            else if (e.getActionCommand().equals("data type")) {
                 String priorType = newType;  //  prior value
                 String typ = (String) typePick.getSelectedItem();
                 if (typ.equals("String")) {
@@ -812,6 +914,7 @@ public class UDPEditor extends KSJInternalFrame {
                     }
                     minText.setEditable(true);
                     maxText.setEditable(true);
+                    connectNo.setSelected(true);
                     if (yescertain.isSelected()) {
                         certainEditLabel.setText("Edit list of values.");
                         certainText.setEditable(true);
@@ -833,6 +936,7 @@ public class UDPEditor extends KSJInternalFrame {
                     }
                     minText.setEditable(true);
                     maxText.setEditable(true);
+                    connectNo.setSelected(true);
                     if (yescertain.isSelected()) {
                         certainEditLabel.setText("Edit list of values.");
                         certainText.setEditable(true);
@@ -863,6 +967,7 @@ public class UDPEditor extends KSJInternalFrame {
                     certainEditLabel.setText("");
                     certainText.setEditable(false);
                     newValidEntries = null;
+                    connectNo.setSelected(true);
                 } else if (typ.equals("Person")) {
                     newType = "individual";
                     if (priorType.equals(newType)) {
@@ -880,6 +985,7 @@ public class UDPEditor extends KSJInternalFrame {
                     nodefault.setSelected(true);
                     defaultText.setEditable(false);
                     defeditLabel.setText("");
+                    connectNo.setSelected(true);
                 }
                 if ((newValidEntries != null) && (newValidEntries.size() > 0)) {
                     //  Changed type after specifying valid entries
@@ -892,7 +998,7 @@ public class UDPEditor extends KSJInternalFrame {
                 flipFinalBtn("check");
                 return;
             }
-            if (e.getActionCommand().equals("multiVal yes")) {
+            else if (e.getActionCommand().equals("multiVal yes")) {
                 if (newType.equals("boolean")) {
                     newSingleValue = true;
                     nomulti.setSelected(true);
@@ -905,11 +1011,11 @@ public class UDPEditor extends KSJInternalFrame {
                 }
                 return;
             }
-            if (e.getActionCommand().equals("multiVal no")) {
+            else if (e.getActionCommand().equals("multiVal no")) {
                 newSingleValue = true;
                 return;
             }
-            if (e.getActionCommand().equals("certainVal yes")) {
+            else if (e.getActionCommand().equals("certainVal yes")) {
                 if (newType.equals("individual")) {
                     JOptionPane.showMessageDialog(ed, "Sorry.  When Data Type is 'Person' you\n"
                             + "cannot Restrict to Certain Values",
@@ -940,7 +1046,7 @@ public class UDPEditor extends KSJInternalFrame {
                 flipFinalBtn("check");
                 return;
             }
-            if (e.getActionCommand().equals("certainVal no")) {
+            else if (e.getActionCommand().equals("certainVal no")) {
                 newValidEntries = null;
                 certainText.setText("");
                 certainEditLabel.setText("");
@@ -948,7 +1054,7 @@ public class UDPEditor extends KSJInternalFrame {
                 flipFinalBtn("check");
                 return;
             }
-            if (e.getActionCommand().equals("defaultVal yes")) {
+            else if (e.getActionCommand().equals("defaultVal yes")) {
                 if (newType.equals("individual")) {
                     JOptionPane.showMessageDialog(ed, "Sorry.  When Data Type is 'Person' you\n"
                             + "cannot have a Default Value",
@@ -968,7 +1074,7 @@ public class UDPEditor extends KSJInternalFrame {
                 flipFinalBtn("check");
                 return;
             }
-            if (e.getActionCommand().equals("defaultVal no")) {
+            else if (e.getActionCommand().equals("defaultVal no")) {
                 newDefaultValue = null;
                 defaultText.setText("");
                 defeditLabel.setText("");
@@ -977,15 +1083,15 @@ public class UDPEditor extends KSJInternalFrame {
                 flipFinalBtn("check");
                 return;
             }
-            if (e.getActionCommand().equals("minText edit")) {
+            else if (e.getActionCommand().equals("minText edit")) {
                 validateMinText();
                 return;
             }
-            if (e.getActionCommand().equals("maxText edit")) {
+            else if (e.getActionCommand().equals("maxText edit")) {
                 validateMaxText();
                 return;
             }
-            if (e.getActionCommand().equals("cancel")) {
+            else if (e.getActionCommand().equals("cancel")) {
                 theUDP = null;
                 try {
                     ed.setClosed(true);  //  by not writing & saving, we cancel
@@ -998,7 +1104,7 @@ public class UDPEditor extends KSJInternalFrame {
                 }
                 return;
             }
-            if (e.getActionCommand().equals("delete")) {
+            else if (e.getActionCommand().equals("delete")) {
                 int numWithProp = ctxt.individualCensus.size(),
                         numWithVals = 0;
                 Iterator indIter = ctxt.individualCensus.iterator();
@@ -1051,7 +1157,7 @@ public class UDPEditor extends KSJInternalFrame {
                 }
                 return;
             }
-            if (e.getActionCommand().equals("check")) {
+            else if (e.getActionCommand().equals("check")) {
                 //  Run consistency checks again, just to be sure.
                 // CAUTION:  code copied from above.
                 boolean errorFlag = false;
@@ -1093,6 +1199,7 @@ public class UDPEditor extends KSJInternalFrame {
                     newValidEntries = null;
                     errorFlag = true;
                 }  //  re-checked consistency
+                
                 if ((newValidEntries != null) && (newValidEntries.size() < 1)) {
                     JOptionPane.showMessageDialog(ed, "Error -- You chose to Restrict to Certain Values\n"
                             + "but did not provide a valid list of allowable values.\n"
@@ -1142,14 +1249,28 @@ public class UDPEditor extends KSJInternalFrame {
                             JOptionPane.ERROR_MESSAGE);
                     errorFlag = true;
                 }
+                if (connectYes.isSelected() && 
+                        (!newSingleValue || newValidEntries == null || newValidEntries.isEmpty()
+                        || newValidEntries.size() == 1 || !newType.equals("string"))) {
+                    msg = "A UDP that can connect people with no visible link\n";
+                    msg += "must take a single value of type 'String' and be";
+                    msg += "\nrestricted to certain values (that you must specify).";
+                    JOptionPane.showMessageDialog(ctxtEd, msg, "Illegal Combination",
+                            JOptionPane.ERROR_MESSAGE);
+                    errorFlag = true;
+                }
+                
                 if (!errorFlag) {
                     flipFinalBtn("save");
                 }
                 return;
             }
-            if (e.getActionCommand().equals("save")) {
+            else if (e.getActionCommand().equals("save")) {
                 ctxt.saveState = true;
-                String oldName = theUDP.starName, oldType = theUDP.typ;
+                String oldName = theUDP.starName, 
+                       oldType = theUDP.typ;
+                boolean retroactive = false, cancellation = false,
+                        oldSame = theUDP.sameVal;
                 theUDP.starName = newStarName;
                 theUDP.typ = newType;
                 theUDP.validEntries = newValidEntries;
@@ -1159,6 +1280,14 @@ public class UDPEditor extends KSJInternalFrame {
                 theUDP.maxVal = newMaxVal;
                 theUDP.chartable = chartYes.isSelected();
                 theUDP.chartColor = newChartColor;
+                if (!newUDP && newConnects && !theUDP.connects) {
+                    retroactive = true;
+                }
+                if (theUDP.connects && !newConnects) {
+                    cancellation = true;
+                }
+                theUDP.connects = newConnects;
+                theUDP.sameVal = newSameVal;
                 if (newUDP || reName) {
                     if (ctxt.userDefinedProperties == null) {
                         ctxt.userDefinedProperties = new TreeMap();
@@ -1254,6 +1383,13 @@ public class UDPEditor extends KSJInternalFrame {
                         }  //  end of loop thru individuals
                     }
                 }
+                if (retroactive) {  // retroactive designation of connection
+                    ctxt.addConnectionLists(theUDP);
+                } else if (cancellation) {
+                    UserDefinedProperty udCopy = new UserDefinedProperty(theUDP, false);
+                    udCopy.sameVal = oldSame;
+                    ctxt.deleteConnectionList(udCopy);
+                }
                 ArrayList<String> udpsToBeAdded = new ArrayList<String>();
                 Iterator udpIter = ctxt.userDefinedProperties.entrySet().iterator();
                 while (udpIter.hasNext()) {
@@ -1276,6 +1412,10 @@ public class UDPEditor extends KSJInternalFrame {
                         ctxt.insertAdoptionPriority(udName);
                     }
                 }
+            Individual indy =  SIL_Edit.edWin.getPPanel().currentInd;
+            if (indy != null) {  //  Refresh display with any new properties
+                SIL_Edit.edWin.getPPanel().showInfo(indy);
+            }
                 try {
                     ed.setClosed(true);
                     ContextEditor newCtxtEd = new ContextEditor(ctxt);
@@ -1297,7 +1437,7 @@ public class UDPEditor extends KSJInternalFrame {
                     MainPane.activity.log.append("While closing UDP editor & re-building a context editor, " + ex + "\n\n");
                 }
             }  //  end of action = save
-            if (e.getActionCommand().equals("delete")) {
+            else if (e.getActionCommand().equals("delete")) {
                 String msg = "Are you sure you want to DELETE this UDP?";
                 if (!ctxt.individualCensus.isEmpty()) {
                     msg += "\nAll individuals in this context will lose any\nvalues they had for this UDP.";

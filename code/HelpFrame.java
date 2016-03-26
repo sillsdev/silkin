@@ -330,6 +330,7 @@ public class HelpFrame extends JFrame implements HyperlinkListener {
             detailDisplayItem = new JMenuItem();
             refAdrItem = new JMenuItem();
             dyadsItem = new JMenuItem();
+            multiplesItem = new JMenuItem();
             reservedItem = new JMenuItem();
             commentsItem = new JMenuItem();
 //          Chart Sub-Menus
@@ -380,6 +381,7 @@ public class HelpFrame extends JFrame implements HyperlinkListener {
 //          Adoption Sub-Menus
             adoptionIntroItem = new JMenuItem();
             adoptionItem = new JMenuItem();
+            clansItem = new JMenuItem();
             adoptionRulesItem = new JMenuItem();
             adoptionDeleteItem = new JMenuItem();
 
@@ -440,6 +442,15 @@ public class HelpFrame extends JFrame implements HyperlinkListener {
                 }
             });
             startSubMenu.add(dyadsItem);
+            
+            multiplesItem.setText("Multiple Kin Terms or None");
+            multiplesItem.addActionListener(new ActionListener() {
+
+                public void actionPerformed(ActionEvent evt) {
+                    window.displayPage(START, "multiples");
+                }
+            });
+            startSubMenu.add(multiplesItem);
             
             reservedItem.setText("Reserved Words & Characters");
             reservedItem.addActionListener(new ActionListener() {
@@ -841,14 +852,6 @@ public class HelpFrame extends JFrame implements HyperlinkListener {
             });
             nonGenSubMenu.add(adoptionItem);
 
-           adoptionDeleteItem.setText("Deleting Special Relationships");
-            adoptionDeleteItem.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    window.displayPage(NON_GEN, "delete");
-                }
-            });
-            nonGenSubMenu.add(adoptionDeleteItem);
-
            adoptionRulesItem.setText("Adoption Procedure");
             adoptionRulesItem.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {
@@ -856,6 +859,22 @@ public class HelpFrame extends JFrame implements HyperlinkListener {
                 }
             });
             nonGenSubMenu.add(adoptionRulesItem);
+
+            clansItem.setText("Clans");
+            clansItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    window.displayPage(NON_GEN, "clans");
+                }
+            });
+            nonGenSubMenu.add(clansItem);
+
+           adoptionDeleteItem.setText("Deleting Special Relationships");
+            adoptionDeleteItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    window.displayPage(NON_GEN, "delete");
+                }
+            });
+            nonGenSubMenu.add(adoptionDeleteItem);
         }
         
         private JMenu startSubMenu;
@@ -871,6 +890,7 @@ public class HelpFrame extends JFrame implements HyperlinkListener {
         private JMenuItem detailDisplayItem;
         private JMenuItem refAdrItem;
         private JMenuItem dyadsItem;
+        private JMenuItem multiplesItem;
         private JMenuItem reservedItem;
         private JMenuItem commentsItem;       
         private JMenuItem datesItem;
@@ -915,6 +935,7 @@ public class HelpFrame extends JFrame implements HyperlinkListener {
         private JMenuItem editTheoryItem;
         private JMenuItem adoptionIntroItem;
         private JMenuItem adoptionItem;
+        private JMenuItem clansItem;
         private JMenuItem adoptionDeleteItem;
         private JMenuItem adoptionRulesItem;
     }

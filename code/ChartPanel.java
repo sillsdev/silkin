@@ -50,7 +50,6 @@ public class ChartPanel extends JPanel implements MouseInputListener {
     int lastFolk = -1;
     int lastKnot = -1;
     Image theImage = null;
-    int jpegs = 0;
     boolean editable = true,
             dragged = false,
             resize = false,
@@ -73,6 +72,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
     ArrayList<Link> reSizLinks = new ArrayList<Link>();
     Individual parent_Initiator = null, child_Recipient = null;
     UserDefinedProperty chosenUDP = null;
+    static Font chartFont = new Font("Dialog", Font.PLAIN, 12);  // Default font
 
     public void init(SIL_Edit k) {
         edWin = k;
@@ -229,6 +229,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             }
             try {
                 if (editable) {
+                    edWin.getPPanel().fireAlterFirstNamesFocusLost();
                     edWin.storeInfo();
                 }
                 repaint();
@@ -283,6 +284,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         }
         //  CLICKED ON A BLANK AREA
         try {
+            edWin.getPPanel().fireAlterFirstNamesFocusLost();
             edWin.clearInfo();
         } catch (Exception pe) {
             displayError(pe);
@@ -360,7 +362,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
                 child_Recipient = lk.personPointedTo;
                 theSpecRel.child = lk;
             } else {  //  Nothing useful was clicked
-                String msg = "You are designating the adoptee/rcipient.";
+                String msg = "You are designating the adoptee/recipient.";
                 msg += "\nYou must click on a Person or a Link (or cancel).";
                 int answer = JOptionPane.showConfirmDialog(edWin, msg, "Invalid Designation",
                         JOptionPane.OK_CANCEL_OPTION);
@@ -395,8 +397,10 @@ public class ChartPanel extends JPanel implements MouseInputListener {
                     keepLooping = false;
                 }
             } else {
-                String msg3 = "Your project name must have 2 or more characters.";
-                msg3 += "\nUse letters, dashes, numbers -- but NO spaces.";
+                String msg3 = "Your project name must have 2 to 28 characters.";
+                msg3 += "\nYou may not use BackSlash, ForwardSlash, Colon, DoubleQuote";
+                msg3 += "\nAsterisk, QuestionMark, LeftAngleBracket, RightAngleBracket,";
+                msg3 += "\nor the VerticalBar in a name";
                 JOptionPane.showMessageDialog(edWin, msg3, "Try Again", JOptionPane.PLAIN_MESSAGE);
             }
         }
@@ -1008,6 +1012,9 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         if (Context.current == null) {
             return;
         }
+        if (edWin.chartComboBox.isPopupVisible()) {
+            return;
+        }
         if (selectLine != null) {
             selectLine.paint(g);
         }
@@ -1032,7 +1039,9 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         }
         if (chart == null) {
             chart = "A";
-        }
+        }   
+        g.setFont(chartFont);
+        int tempSerial = -1;
         for (Link lk : Context.current.linkCensus) {
             if (!lk.deleted && lk.homeChart.equals(chart)) {
                 Individual p = lk.personPointedTo;
@@ -1041,8 +1050,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
                 }  // If we clicked on Ego, he'll be blue (Alter)
                 if (lk.serialNmbr == whichLink) { // clicked on Link
                     lk.drawSymbol(g, myRect, Color.blue);
-                    whichFolk = p.serialNmbr; // makes original blue also
-                    showInfo(p);
+                    tempSerial = p.serialNmbr;
                 } else if (p.serialNmbr == whichFolk) {
                     lk.drawSymbol(g, myRect, Color.blue);
                 } else if (path.contains(p.serialNmbr)) {
@@ -1056,7 +1064,10 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             if (p != null && !p.deleted && p.homeChart.equals(chart)) {
                 if (p.serialNmbr == whichFolk) {
                     p.drawSymbol(g, myRect, Color.blue);                    
-                } else if (p.serialNmbr == edWin.getCurrentEgo()) {
+                } else if (p.serialNmbr == tempSerial) {
+                    p.drawSymbol(g, myRect, Color.blue); 
+                }
+                else if (p.serialNmbr == edWin.getCurrentEgo()) {
                     p.drawSymbol(g, myRect, Color.red);
                 } else if (path.contains(p.serialNmbr)) {
                     p.drawSymbol(g, myRect, Color.orange);
@@ -1067,7 +1078,10 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         }  //  end of loop thru Individuals
         if (lastFolk != whichFolk && whichFolk >= 0) {
             showInfo(Context.current.individualCensus.get(whichFolk));
+        } else if (lastFolk != tempSerial && tempSerial >= 0) {
+            showInfo(Context.current.individualCensus.get(tempSerial));
         }
+        
         whichFolk = oldFolk;
         lastFolk = whichFolk;  // lastFolk == person previously displayed
         whichHalf = -1;
@@ -1457,9 +1471,9 @@ public class ChartPanel extends JPanel implements MouseInputListener {
                     //  deletion refused. It's OK.
                 }
             }
-            whichLink = -1;            
-        }
-        repaint();
+            whichLink = -1; 
+            repaint();
+        }        
     }
     
     Rectangle makeRect(Family fx) {
@@ -1498,9 +1512,9 @@ public class ChartPanel extends JPanel implements MouseInputListener {
                         HelpFrame.window.displayPage(HelpFrame.NON_GEN, "delete");
                     } else {
                         HelpFrame.window.displayPage(HelpFrame.CHART, "del-rel");
-                    }
-                    throw new KinshipSystemException("");
+                    }                    
                 }
+                throw new KinshipSystemException("");
             }
         }
         ind.delPerson();
@@ -2049,6 +2063,17 @@ public class ChartPanel extends JPanel implements MouseInputListener {
     
     XFile sFile = null;  // Used for KAES-format files
     File saveFile = null; // Used for SILKin files
+    
+    public void changeFileName(String newName) {
+        Context currCtxt = Library.contextUnderConstruction;
+        if (! newName.equals(currCtxt.languageName)) {
+            return;
+        }
+        String filePath = (currCtxt.editDirectory != null
+                            ? currCtxt.editDirectory + "/" : "");
+        filePath += currCtxt.languageName + ".silk";
+        saveFile = new File(filePath);
+    }
 
     public void saveAsFile() {
         Context currCtxt = Library.contextUnderConstruction;
@@ -2070,17 +2095,38 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         //  Now get user's desired location
         int returnVal = fc.showSaveDialog(edWin);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            saveFile = fc.getSelectedFile();
+            File temp = fc.getSelectedFile();
+            String tempName = temp.getName();
+            if (! Library.validateFileName(tempName, false)){
+                String msg3 = "Your proposed file name '" + tempName + "' is invalid.";
+                msg3 += "\nIt must have between 2 and 28 letters.";
+                msg3 += "\nYou may not use BackSlash, ForwardSlash, Colon, DoubleQuote";
+                msg3 += "\nAsterisk, QuestionMark, LeftAngleBracket, RightAngleBracket,";
+                msg3 += "\nor the VerticalBar in a file name";
+                JOptionPane.showMessageDialog(edWin, msg3, "Try Again", JOptionPane.PLAIN_MESSAGE);
+                return;
+            }
+            saveFile = temp;
             String pathName = saveFile.getPath(),
                     extension = "";
             int dot = pathName.lastIndexOf(".");
             if (dot > -1) {
-                extension = pathName.substring(dot);
+                extension = pathName.substring(dot);  //  if it is ".silk" we're good
             }
-            if (!extension.equalsIgnoreCase(".silk")) {
-                pathName += ".silk";
-                saveFile = new File(pathName);
+            if (!extension.equalsIgnoreCase(".silk")) {  //  User specified directory only
+                String fileBaseName = saveFile.getName();
+                String fileDirName = saveFile.getParent();
+                int start = fileDirName.length() - fileBaseName.length();
+                File parent;
+                if (fileBaseName.equals(fileDirName.substring(start))) {
+                    parent = new File(fileDirName);  //  Macintosh case
+                } else {
+                    parent = new File(pathName);  //  Windows case
+                }
+                saveFile = new File(parent, currCtxt.languageName + ".silk");
             }
+            Library.addRecentFile(saveFile);
+            edWin.rebuildRecentSubMenu();
             saveSILKFile();
         }
     }
@@ -2115,13 +2161,12 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             System.err.println(msg);
             MainPane.displayError(msg, "Internal Problem", JOptionPane.PLAIN_MESSAGE);
         }
-        edWin.edWin.setTitle("Editing: " + saveFile.getName() + ".");
+        edWin.setTitle("Editing: " + saveFile.getName() + ".");
         dirty = false;
     }
 
     public String editParameters(Context ctxt) {
-        String params = "";
-        params += "  <origin x=\"" + originX + "\" y=\"" + originY + "\"/>" + EOL;
+        String params = "  <origin x=\"" + originX + "\" y=\"" + originY + "\"/>" + EOL;
         params += "  <area W=\"" + area.width + "\" H=\"" + area.height + "\"/>" + EOL;
         params += "  <infoPerson>" + whichFolk + "</infoPerson>" + EOL;
         params += "  <infoMarriage>" + whichKnot + "</infoMarriage>" + EOL;
@@ -2135,9 +2180,12 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         params += "  <doInduction value=\"" + ctxt.doInduction + "\"/>" + EOL;
         params += "  <surnameCapture value=\"" +   ctxt.surnameNormallyCaptured + "\"/>" + EOL;
         params += "  <birthdateCapture value=\"" +   ctxt.birthDateNormallyCaptured + "\"/>";
+        String logicalName = ChartPanel.chartFont.getName();
+        int size = ChartPanel.chartFont.getSize();
+        params += EOL + "  <chartFont name=\"" + logicalName + "\" size=\"" + size + "\"/>"; 
         if (PrintChart.printFont != null) {
-            String logicalName = PrintChart.printFont.getName();
-            int size = PrintChart.printFont.getSize();
+             logicalName = PrintChart.printFont.getName();
+             size = PrintChart.printFont.getSize();
             params += EOL + "  <printFont name=\"" + logicalName + "\" size=\"" + size + "\"/>";            
         }
         if (PrintChart.pgFormat != null) {
@@ -2218,6 +2266,8 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         edWin.ktm = null;
         edWin.suggestionsRef = null;
         edWin.suggestionsAdr = null;
+        edWin.rebuildChartCombo();
+        edWin.setTitle("");
         repaint();
     }
 
@@ -2371,9 +2421,8 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         return true;
     }
 
-    public void loadSILKFile() {  // Loads integrated record for SIL_Edit
+    public void pickSILKFile() {  // Loads integrated record for SIL_Edit
         loading = true;
-        Context ctxt = null;
         if (Library.fc == null) {
             Library.fc = new JFileChooser();
         }
@@ -2393,84 +2442,91 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             deleteAll();
             setOrigin(0, 0);
             saveFile = fc.getSelectedFile();
-            try {
-                Library.loadSILKFile(saveFile);  // makes a new Context.current from SILK file
-                Library.userDirectory = fc.getCurrentDirectory().getName();
-                ctxt = Context.current;
-                edWin.ktm = ctxt.ktm;
-                DomainTheory dt = ctxt.domTheoryRef();
-                if (!dt.theory.containsKey("step_brother")) {
-                    Linus macroLineServer = new Linus(Library.libraryDirectory + "Standard_Macros");
-                    Tokenizer tok = new Tokenizer(Library.getDFA(), macroLineServer);
-                    ParserDomainTheory parzer = new ParserDomainTheory(tok, tok);
-                    parzer.parseStandardMacros(dt);
-                }
-                if (ctxt.kinTypeOrder == null) {
-                    ctxt.loadDefaultKinTypeStuff();
-                }
-                ctxt.rebuildLinkMethods();
-                edWin.suggestionsRef = dt.issuesForUser;
-                if (ctxt.domTheoryAdrExists()) {
-                    edWin.suggestionsAdr = ctxt.domTheoryAdr().issuesForUser;
-                }
-                int egoNum = ctxt.currentEgo.serialNmbr;
-                edWin.setCurrentEgo(egoNum);
-                originX = ctxt.origin.x;
-                originY = ctxt.origin.y;
-                area = ctxt.area;
-                nameLabel = ctxt.labelChoice;
-                kinTermLabel = ctxt.ktLabelChoice;
-                edWin.synchronizeLabelParams(nameLabel, kinTermLabel);
-                editable = ctxt.editable;
-                edWin.getPPanel().setDistinctAdrTerms(ctxt.distinctAdrTerms);
-                edWin.setSnap(Library.snapToGrid);
-                whichFolk = ctxt.infoPerson;
-                whichKnot = ctxt.infoMarriage;
-                boolean empty = ctxt.infoPerson == -1;
-                edWin.infoPerson = (empty ? null : ctxt.individualCensus.get(ctxt.infoPerson));
-                empty = ctxt.infoMarriage == -1;
-                edWin.infoMarriage = (empty ? null : ctxt.familyCensus.get(ctxt.infoMarriage));
-                if (edWin.ktm.getRow(egoNum) != null) {
-                    Iterator nodeIter = edWin.ktm.getRow(egoNum).values().iterator();
-                    while (nodeIter.hasNext()) {
-                        Node n = (Node) nodeIter.next();
-                        if (n.indiv != null) {
-                            n.indiv.node = n;
-                        }
+            Library.userDirectory = saveFile.getName();
+            loadSILKFile();
+        }
+    }
+    
+    public void loadSILKFile() {
+        Context ctxt = null;
+        try {
+            Library.loadSILKFile(saveFile);  // makes a new Context.current from SILK file
+            ctxt = Context.current;
+            edWin.ktm = ctxt.ktm;
+            DomainTheory dt = ctxt.domTheoryRef();
+            if (!dt.theory.containsKey("step_brother")) {
+                Linus macroLineServer = new Linus(Library.libraryDirectory + "Standard_Macros");
+                Tokenizer tok = new Tokenizer(Library.getDFA(), macroLineServer);
+                ParserDomainTheory parzer = new ParserDomainTheory(tok, tok);
+                parzer.parseStandardMacros(dt);
+            }
+            if (ctxt.kinTypeOrder == null) {
+                ctxt.loadDefaultKinTypeStuff();
+            }
+            ctxt.rebuildLinkMethods();
+            edWin.suggestionsRef = dt.issuesForUser;
+            if (ctxt.domTheoryAdrExists()) {
+                edWin.suggestionsAdr = ctxt.domTheoryAdr().issuesForUser;
+            }
+            int egoNum = ctxt.currentEgo.serialNmbr;
+            edWin.setCurrentEgo(egoNum);
+            originX = ctxt.origin.x;
+            originY = ctxt.origin.y;
+            area = ctxt.area;
+            nameLabel = ctxt.labelChoice;
+            kinTermLabel = ctxt.ktLabelChoice;
+            edWin.synchronizeLabelParams(nameLabel, kinTermLabel);
+            editable = ctxt.editable;
+            edWin.getPPanel().setDistinctAdrTerms(ctxt.distinctAdrTerms);
+            edWin.setSnap(Library.snapToGrid);
+            whichFolk = ctxt.infoPerson;
+            whichKnot = ctxt.infoMarriage;
+            boolean empty = ctxt.infoPerson == -1;
+            edWin.infoPerson = (empty ? null : ctxt.individualCensus.get(ctxt.infoPerson));
+            empty = ctxt.infoMarriage == -1;
+            edWin.infoMarriage = (empty ? null : ctxt.familyCensus.get(ctxt.infoMarriage));
+            if (edWin.ktm.getRow(egoNum) != null) {
+                Iterator nodeIter = edWin.ktm.getRow(egoNum).values().iterator();
+                while (nodeIter.hasNext()) {
+                    Node n = (Node) nodeIter.next();
+                    if (n.indiv != null) {
+                        n.indiv.node = n;
                     }
                 }
-                Library.currDataAuthor = getCurrentUser(edWin, "Register Current User");
-                edWin.setActOnSuggsEnabled(ctxt.hasIssues());
-            } catch (Exception e) {
-                String msg = "While reading " + saveFile.getName() + "\n" + e;
-                StackTraceElement[] bad = e.getStackTrace();
-                for (int i=0; i < 5; i++) {
-                    msg += "\n" + bad[i];
-                }
-                System.err.println(msg);
-                MainPane.displayError(msg, "Internal Problem", JOptionPane.WARNING_MESSAGE);
             }
-            Person.folks = ctxt.individualCensus;
-            Marriage.knots = ctxt.familyCensus;
-            if (ctxt.chartDescriptions.isEmpty()) {
-                ctxt.chartDescriptions.add("Default Chart");
+            Library.currDataAuthor = getCurrentUser(edWin, "Register Current User");
+            edWin.setActOnSuggsEnabled(ctxt.hasIssues());
+        } catch (Exception e) {
+            String msg = "While reading " + saveFile.getName() + "\n" + e;
+            StackTraceElement[] bad = e.getStackTrace();
+            for (int i = 0; i < 5; i++) {
+                msg += "\n" + bad[i];
             }
-            edWin.rebuildChartCombo();
-            String frameTitle = fc.getName(saveFile);
-            edWin.setTitle("Editing: " + frameTitle);
-            boolean gedSetting = (ctxt.gedcomHeaderItems != null);
-            edWin.displayGEDCOM.setVisible(gedSetting);
-            ctxt.displayGEDCOM = gedSetting;
-            //  We read in some people, so update egoChoiceBox
-            edWin.getPPanel().rebuildEgoBox();
-            //  May have some UDPs, so update udpComboBox
-            edWin.getPPanel().initUDPCombo();
-            checkSizeOfChart(ctxt);
-            edWin.getPPanel().dirty = false;
-            edWin.getFPanel().dirty = false;
-            loading = false;
-            resizeAndRepaint();
+            System.err.println(msg);
+            MainPane.displayError(msg, "Internal Problem", JOptionPane.WARNING_MESSAGE);
         }
+        Person.folks = ctxt.individualCensus;
+        Marriage.knots = ctxt.familyCensus;
+        if (ctxt.chartDescriptions.isEmpty()) {
+            ctxt.chartDescriptions.add("Default Chart");
+        }
+        edWin.rebuildChartCombo();
+        String frameTitle = saveFile.getName();
+        edWin.setTitle("Editing: " + frameTitle);
+        Library.addRecentFile(saveFile);
+        edWin.rebuildRecentSubMenu();
+        boolean gedSetting = (ctxt.gedcomHeaderItems != null);
+        edWin.displayGEDCOM.setVisible(gedSetting);
+        ctxt.displayGEDCOM = gedSetting;
+        //  We read in some people, so update egoChoiceBox
+        edWin.getPPanel().rebuildEgoBox();
+        //  May have some UDPs, so update udpComboBox
+        edWin.getPPanel().initUDPCombo();
+        checkSizeOfChart(ctxt);
+        edWin.getPPanel().dirty = false;
+        edWin.getFPanel().dirty = false;
+        loading = false;
+        resizeAndRepaint();
     }
     
     void resizeAndRepaint() {
@@ -2518,7 +2574,14 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             adjustY = idealTopLeft.y - minY,
             idealWidth = maxX - minX + (3 * idealTopLeft.x),
             idealHeight = maxY - minY + (3 * idealTopLeft.y);
-        
+        int scrollHeight = edWin.chartScrollPane.getHeight(),
+            scrollWidth = edWin.chartScrollPane.getWidth();
+        if (maxX <= scrollWidth) {
+            adjustX = 0;
+        }
+        if (maxY <= scrollHeight) {
+            adjustY = 0;
+        }
         if (adjustX != 0 || adjustY != 0) {
             for (Individual ind : ctxt.individualCensus) {
                 if (ind.homeChart.equals(ctxt.currentChart)) {

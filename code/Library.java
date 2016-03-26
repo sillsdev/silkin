@@ -33,6 +33,7 @@ public class Library {
     public static ArrayList<ContextStub> stubs = new ArrayList<ContextStub>();
     /** The name of the current User's target culture. */
     public static Context contextUnderConstruction;
+    public static File[] recentFiles = new File[5];
     static ClauseIndex cbIndex, baseCBIndex;
     static ClauseCounts cbCounts;
     private static DFA theDFA, gedcomDFA;
@@ -201,7 +202,6 @@ public class Library {
                 throw new JavaSystemException("ContextStub File Corrupted: EqualSign not Found.");
             }
             if (line.length() > ++start) {
-
                 userDirectory = line.substring(start);
             }
             line = file.readLine();
@@ -223,8 +223,18 @@ public class Library {
             line = file.readLine();
             num = Integer.parseInt(line);
             MainPane.testSerialNmbr = num;
-            line = file.readLine();
-            SIL_Edit.helpScreenOnStartUp = Boolean.parseBoolean(line);
+            line = file.readLine();  // either a boolean or start of recent files
+            if (!line.equals("true") && !line.equals("false")) {
+                for (int i=0; i < 5; i++) {
+                    if (line.equals("null")) {
+                        recentFiles[i] = null;
+                    } else {
+                        recentFiles[i] = new File(line);
+                    }
+                    line = file.readLine();
+                }
+            }
+            SIL_Edit.helpScreenOnStartUp = Boolean.parseBoolean(line);            
             for (int i = 0; i < size; i++) {
                 ContextStub cs = new ContextStub();
                 line = file.readLine();
@@ -253,6 +263,22 @@ public class Library {
         }
         stubs = stubSort(stubs);
     }  //  end of method readStubFile()
+    
+    public static void addRecentFile(File recent) {
+        int old, nu = 1;
+        File[] newRecents = new File[5];
+        newRecents[0] = recent;
+        for (old = 0; old < 5 && nu < 5; old++) {
+            File oldRecent = recentFiles[old];
+            if (oldRecent == null) {
+                continue;
+            }
+            if (!oldRecent.getPath().equals(recent.getPath())) {
+                newRecents[nu++] = oldRecent;
+            }
+        }
+        recentFiles = newRecents;
+    }
 
     /** Read in the User's ContextUnderConstruction from disk.
 
@@ -360,15 +386,16 @@ public class Library {
             }
         }
         String msg = "What is the name of the culture/language for which you'll be gathering kinship terms?\n"
-                + "The name must start with a letter.\n"
-                + "Use up to 28 letters, numbers, or dashes (-) but NO spaces.";
+                + "The name must start with a letter and contain 2 to 28 characters.";
         String langName, author, date, fileName = "<empty>", oldUserDir = userDirectory;
         langName = JOptionPane.showInputDialog(msg);
         while (!validateFileName(langName, false)) {
             msg = "What is the name of the culture/language for which you'll be gathering kinship terms?\n"
                     + "The name '" + langName + "' violates the rules for names:\n"
-                    + "The name MUST start with a letter.\n"
-                    + "Use up to 28 LETTERS, NUMBERS, or DASHES (-) but NO SPACES.";
+                    + "The name must start with a letter and contain 2 to 28 characters.";
+            msg += "\nYou may not use BackSlash, ForwardSlash, Colon, DoubleQuote";
+            msg += "\nAsterisk, QuestionMark, LeftAngleBracket, RightAngleBracket,";
+            msg += "\nor the VerticalBar in a name";
             langName = JOptionPane.showInputDialog(msg);
         }  //  end of harrass-em-until-they-give-a-good-name
         msg = "Please enter the name of the researcher or author of this data (presumably you).\n"
@@ -466,8 +493,8 @@ public class Library {
     }  //  end of method chooseDirectory
 
     static boolean validateFileName(String name, boolean starName) {
-        if ((name == null) || (name.length() < 1)
-                || (starName && (name.length() < 2))) {
+        if ((name == null) || (name.length() < 2)
+                || (starName && (name.length() < 3))) {
             return false;
         }
         name = name.trim();
@@ -480,19 +507,28 @@ public class Library {
         if (name.length() > 28) {
             return false;
         }
-        char[] characters = name.toCharArray();
-        if (!((JavaLex.check(characters[0], "SmLtr"))
-                || (JavaLex.check(characters[0], "CapLtr")))) {
+        //  These are the restrictions on file names from Windows 7. Mac allows all
+        //  except colon. But to ease file transfers across platforms, we will
+        //  enforce the Windows rules on all.
+        if (name.contains("\\") || name.contains("/") || name.contains(":")
+                || name.contains("*") || name.contains("?") || name.contains("\"")
+                || name.contains("<") || name.contains(">") || name.contains("|")) {
             return false;
         }
-        for (int i = 1; i < characters.length; i++) {
-            if (!((JavaLex.check(characters[i], "SmLtr"))
-                    || (JavaLex.check(characters[i], "CapLtr"))
-                    || (JavaLex.check(characters[i], "Digit"))
-                    || (JavaLex.check(characters[i], "Dash")))) {
-                return false;
-            }
-        }  //  end of loop thru characters in the fileName
+//     THE OLD RULES BEFORE SILKIN 2.1
+//        char[] characters = name.toCharArray();
+//        if (!((JavaLex.check(characters[0], "SmLtr"))
+//                || (JavaLex.check(characters[0], "CapLtr")))) {
+//            return false;
+//        }
+//        for (int i = 1; i < characters.length; i++) {
+//            if (!((JavaLex.check(characters[i], "SmLtr"))
+//                    || (JavaLex.check(characters[i], "CapLtr"))
+//                    || (JavaLex.check(characters[i], "Digit"))
+//                    || (JavaLex.check(characters[i], "Dash")))) {
+//                return false;
+//            }
+//        }  //  end of loop thru characters in the fileName
         return true;
     }  //  end of method validateFileName
 
@@ -694,6 +730,15 @@ public class Library {
             outFile.println("userCtxt=" + userContextName);
             outFile.println("editDir=" + editDirectory);
             outFile.println(MainPane.testSerialNmbr);
+            if (recentFiles[0] != null) {
+                for (File rf : recentFiles) {
+                    if (rf == null) {
+                        outFile.println("null");
+                    } else {
+                        outFile.println(rf.getPath());
+                    }
+                }
+            }
             outFile.println(SIL_Edit.helpScreenOnStartUp);
             for (ContextStub stub : stubs) {
                 outFile.println(stub);
@@ -1472,6 +1517,13 @@ public class Library {
         String toSILKString(String bacer) {
             String dblSpacer = "\t\t";
             String s = bacer + "<kin-term-context>\n ";
+            if (ktd == null) {
+                try {
+                    ktd = getKTD();
+                } catch(Exception exc) {
+                    return "";
+                }
+            }
             s += ktd.toSILKString(bacer + "\t", true);
             s += bacer + "</kin-term-context>\n ";
             return s;
@@ -2951,8 +3003,9 @@ public class Library {
             return weightVector;
         }  //  end of method getWtVect
     }  //  end of inner class ClusterState
-
-    /** Read in a DomainTheory file (in .thy format) from disk.
+    
+    
+       /** Read in a DomainTheory file (in .thy format) from disk.
 
     @param	fileName	name of file holding the domain theory
 
@@ -2961,6 +3014,21 @@ public class Library {
     @throws		KSBadHornClauseException	if file contains a troublesome Horn clauses.
     @throws		KSConstraintInconsistency	if constraints in a Horn clause are contradictory.	*/
     public static DomainTheory readThyFile(String fileName)
+            throws KSParsingErrorException, JavaSystemException, KSBadHornClauseException,
+            KSInternalErrorException, KSConstraintInconsistency {
+        return readThyFile(fileName, false);
+    }
+
+    /** Read in a DomainTheory file (in .thy format) from disk.
+
+    @param	fileName	name of file holding the domain theory
+    * @param    allowOverWrite  true when we are looking for a possible update
+
+    @throws		JavaSystemException	if file is corrupted or missing.
+    @throws		KSParsingErrorException	if .thy file cannot be parsed cleanly.
+    @throws		KSBadHornClauseException	if file contains a troublesome Horn clauses.
+    @throws		KSConstraintInconsistency	if constraints in a Horn clause are contradictory.	*/
+    public static DomainTheory readThyFile(String fileName, boolean allowOverWrite)
             throws KSParsingErrorException, JavaSystemException, KSBadHornClauseException,
             KSInternalErrorException, KSConstraintInconsistency {
         //  Read in a domain theory stored in a .thy file.
@@ -2973,12 +3041,14 @@ public class Library {
             langName = langName.substring(0, end);
         }
         Context actxt = (Context) activeContexts.get(langName);
-        if (actxt != null) {
+        if (actxt != null && ! allowOverWrite) {
             if (((actxt.domTheoryRefLoaded()) && (!dt.addressTerms))
                     || ((actxt.domTheoryAdrLoaded()) && (dt.addressTerms))) {
                 throw new KSInternalErrorException("This will over-write an already-active domain theory.");
             }
             actxt.addDomainTheory(dt);
+            Context.current = actxt;
+        }else if (actxt != null && allowOverWrite) {
             Context.current = actxt;
         } else {
             actxt = new Context(dt); // new context automatically is current & active
@@ -3019,9 +3089,9 @@ public class Library {
     
     @param	ctxt    a Context containing the current state of Data_Gathering
     
-    @throws    a NotSerializableException   if any part of the Context is not serializable.
-    @throws    a FileNotFoundException      if the file name is messed up.
-    @throws    an IOException               if there is a generic read/write failure.
+    @throws     NotSerializableException   if any part of the Context is not serializable.
+    @throws     FileNotFoundException      if the file name is messed up.
+    @throws     IOException               if there is a generic read/write failure.
      */
     public static String saveContextToDisk(Context ctxt) throws NotSerializableException,
             IOException, FileNotFoundException, KSInternalErrorException {
@@ -3051,9 +3121,9 @@ public class Library {
 
     @param	fileName    a Context containing the current state of Data_Gathering
 
-    @throws    a FileNotFoundException  if the named file does not exist.
-    @throws    an IOException           if there is a generic read/write failure.
-    @throws    a ClassNotFoundException if a constructor cannot be found for a class stored in the file .
+    @throws    FileNotFoundException  if the named file does not exist.
+    @throws    IOException           if there is a generic read/write failure.
+    @throws    ClassNotFoundException if a constructor cannot be found for a class stored in the file .
      */
     public static Context readContextFromDisk(String fileName) throws IOException,
             FileNotFoundException, ClassNotFoundException {
@@ -3067,9 +3137,9 @@ public class Library {
     @param	fileName    a Context containing the current state of Data_Gathering
     @param	makeStub    true = add this context to the ContextStub file; false = don't
 
-    @throws    a FileNotFoundException  if the named file does not exist.
-    @throws    an IOException           if there is a generic read/write failure.
-    @throws    a ClassNotFoundException if a constructor cannot be found for a class stored in the file .
+    @throws    FileNotFoundException  if the named file does not exist.
+    @throws    IOException           if there is a generic read/write failure.
+    @throws    ClassNotFoundException if a constructor cannot be found for a class stored in the file .
      */
     public static Context readContextFromDisk(String fileName, boolean makeStub) throws IOException,
             FileNotFoundException, ClassNotFoundException {
@@ -3082,13 +3152,38 @@ public class Library {
         }
         return ctxt;
     }  //  end of method readContextFromDisk(context, boolean)
+    
+    /** Returns a context if already loaded; otherwise retrieves from disk.
+     * 
+     * @param ctxtName  name of the context
+     * @return          the requested context
+     * @throws FileNotFoundException if no such context is found in the Contexts folder of current Library.
+     */
+    public static Context findOrCreateContext(String ctxtName) throws FileNotFoundException {
+        int left = ctxtName.indexOf("(");
+        if (left > -1) {
+            ctxtName = ctxtName.substring(0, left);
+        }
+        Context ctxt = (Context)activeContexts.get(ctxtName);
+        if (ctxt != null) {
+            return ctxt;
+        }
+        String fileName = libraryDirectory + "Contexts/" + ctxtName + ".ctxt";
+        try {
+            ctxt = readContextFromDisk(fileName, false);
+        } catch(Exception exc) {
+            throw new FileNotFoundException("Context '" + ctxtName + "' not found.");
+        }
+        activeContexts.put(ctxtName, ctxt);
+        return ctxt;
+    }
 
     /**
     Write an output stream to disk that saves the state of FV Clustering = Library.clSt.
     
-    @throws    a NotSerializableException   if any part of the ClusterState is not serializable.
-    @throws    a FileNotFoundException      if the file name is messed up.
-    @throws    an IOException               if there is a generic read/write failure.
+    @throws     NotSerializableException   if any part of the ClusterState is not serializable.
+    @throws     FileNotFoundException      if the file name is messed up.
+    @throws     IOException               if there is a generic read/write failure.
      */
     public static void saveClusterStateToDisk() throws NotSerializableException, IOException {
         String fileName = libraryDirectory + "Cluster_State";
@@ -3101,9 +3196,9 @@ public class Library {
     /** 
     Read an input stream from disk, reconstruct FV Clustering, and store to Library.clSt
 
-    @throws    a FileNotFoundException  if the named file does not exist.
-    @throws    an IOException           if there is a generic read/write failure.
-    @throws    a ClassNotFoundException if a constructor cannot be found for a class stored in the file .
+    @throws     FileNotFoundException  if the named file does not exist.
+    @throws     IOException           if there is a generic read/write failure.
+    @throws     ClassNotFoundException if a constructor cannot be found for a class stored in the file .
      */
     public static void readClusterStateFromDisk() throws IOException, FileNotFoundException, ClassNotFoundException {
         String fileName = libraryDirectory + "Cluster_State";
@@ -3132,10 +3227,10 @@ public class Library {
 
     @param	file    a text file containing Horn Clauses expressing a Domain Theory
 
-    @throws    a {@link KSInternalErrorException} if <code>dt</code>  would over-write an existing domain theory.
-    @throws    a {@link KSBadHornClauseException} if the theory contains an illegal or contradictory clause.
-    @throws    a {@link JavaSystemException} if writing the final *.thy file gets an IO Exception
-    @throws    a {@link KSParsingErrorException} if the file cannot be parsed.
+    @throws     {@link KSInternalErrorException} if <code>dt</code>  would over-write an existing domain theory.
+    @throws     {@link KSBadHornClauseException} if the theory contains an illegal or contradictory clause.
+    @throws     {@link JavaSystemException} if writing the final *.thy file gets an IO Exception
+    @throws     {@link KSParsingErrorException} if the file cannot be parsed.
      */
     public static void loadNewDomTh(File file) throws KSParsingErrorException, JavaSystemException, KSConstraintInconsistency,
             NotSerializableException, KSBadHornClauseException, KSInternalErrorException, IOException {
@@ -3153,7 +3248,7 @@ public class Library {
 
     @param	file  the  .silk file
 
-    @throws    a {@link JavaSystemException} if reading any file gets an IO Exception
+    @throws     {@link JavaSystemException} if reading any file gets an IO Exception
      */
     public static void loadSILKFile(File file) throws KSParsingErrorException, JavaSystemException,
             KSBadHornClauseException, KSInternalErrorException, KSConstraintInconsistency, KSDateParseException {
@@ -3179,10 +3274,10 @@ public class Library {
 
     @param	pathName  full pathname to a text file containing Horn Clauses expressing a Domain Theory
 
-    @throws    a {@link KSInternalErrorException} if <code>dt</code>  would over-write an existing domain theory.
-    @throws    a {@link KSBadHornClauseException} if the theory contains an illegal or contradictory clause.
-    @throws    a {@link JavaSystemException} if writing the final *.thy file gets an IO Exception
-    @throws    a {@link KSParsingErrorException} if the file cannot be parsed.
+    @throws     {@link KSInternalErrorException} if <code>dt</code>  would over-write an existing domain theory.
+    @throws     {@link KSBadHornClauseException} if the theory contains an illegal or contradictory clause.
+    @throws     {@link JavaSystemException} if writing the final *.thy file gets an IO Exception
+    @throws     {@link KSParsingErrorException} if the file cannot be parsed.
      */
     public static void loadNewDomTh(String pathName) throws KSInternalErrorException, KSBadHornClauseException,
             KSParsingErrorException, JavaSystemException, NotSerializableException, IOException, KSConstraintInconsistency {
@@ -3199,9 +3294,9 @@ public class Library {
 
     @param	dt  a Domain Theory to be loaded
 
-    @throws    a {@link KSInternalErrorException} if <code>dt</code>  would over-write an existing domain theory.
-    @throws    a {@link KSBadHornClauseException} if the theory contains an illegal or contradictory clause.
-    @throws    a {@link JavaSystemException} if writing the final *.thy file gets an IO Exception
+    @throws     {@link KSInternalErrorException} if <code>dt</code>  would over-write an existing domain theory.
+    @throws     {@link KSBadHornClauseException} if the theory contains an illegal or contradictory clause.
+    @throws     {@link JavaSystemException} if writing the final *.thy file gets an IO Exception
      */
     public static void addDomainTheory(DomainTheory dt) throws KSInternalErrorException, KSBadHornClauseException,
             KSParsingErrorException, JavaSystemException, NotSerializableException, IOException {
@@ -3225,14 +3320,16 @@ public class Library {
         DomainTheory.current = dt;
         // Now update kinTypeOrder etc. if needed.
         ctxt.userDefinedProperties = dt.userDefinedProperties;
-        Iterator udpIter = dt.userDefinedProperties.values().iterator();
-        while (udpIter.hasNext()) {
-            UserDefinedProperty udp = (UserDefinedProperty) udpIter.next();
-            if (udp.chartable) {
-                if (ctxt.kinTypeOrder == null) {
-                    ctxt.loadDefaultKinTypeStuff();
+        if (dt.userDefinedProperties != null) {
+            Iterator udpIter = dt.userDefinedProperties.values().iterator();
+            while (udpIter.hasNext()) {
+                UserDefinedProperty udp = (UserDefinedProperty) udpIter.next();
+                if (udp.chartable) {
+                    if (ctxt.kinTypeOrder == null) {
+                        ctxt.loadDefaultKinTypeStuff();
+                    }
+                    ctxt.insertAdoptionPriority(udp.starName);
                 }
-                ctxt.insertAdoptionPriority(udp.starName);
             }
         }
         KinTermDef ktd;
@@ -3341,13 +3438,13 @@ public class Library {
 
     public static String[] genCtxtMenu(String topChoice) {
         //  Generate a string array for use in a Menu.  
-        int adder = (topChoice == null ? 0 : 1);
-        String[] langs = new String[stubs.size() + adder];
+        int n = (topChoice == null ? 0 : 1);
+        String[] langs = new String[stubs.size() + n];
         if (topChoice != null && !topChoice.isEmpty()) {
             langs[0] = topChoice;
         }        
-        for (int i = adder; i < stubs.size(); i++) {
-            langs[i] = stubs.get(i).languageName;
+        for (int i = 0; i < stubs.size(); i++) {
+            langs[n++] = stubs.get(i).languageName;
         }
         return langs;
     }  //  end of method genCtxtMenu

@@ -164,6 +164,7 @@ public abstract class DT_Abstract1 implements Serializable {
     }	// end of method for adding a term to the theory
 
     public void toThyFile(PrintWriter file) throws KSInternalErrorException {
+        //  All kin terms will be printed in 'slashified' form becuase all DTs in memory are slashified.
         file.println(";;  Horn Clause Representation of " + languageName
                 + " Kinship Term-of-" + (addressTerms ? "Address" : "Reference") + " Rules");
         file.println("\n;;  The following 'header' gives some basic parameters of this kinship system:");

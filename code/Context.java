@@ -60,6 +60,8 @@ public class Context implements Serializable {
     /**	Optional extra fields, defined by user.  Stored as a TreeMap of pairs:
     property-name (must begin with '*') -> UserDefinedProperty-object.	*/
     public TreeMap userDefinedProperties;
+    // connectingUDPValueLists = UDP_Name -> UDP_Value -> AList of individuals with that value
+    public TreeMap<String, TreeMap<String, ArrayList<Individual>>> connectingUDPValueLists;
     /** The <code>saveState</code> boolean flag determines whether this instance of Context has its complete state
     saved to disk at shut-down.  The context in which Data_Gathering is done (the 'target culture') MUST be
     saved between sessions.  Other contexts can be saved by the User's explicit menu choice.  */
@@ -207,6 +209,60 @@ public class Context implements Serializable {
             }  //  end iteration over all entries in new theory's TMap
         }  //  end of 2 non-null TreeMaps of userDefinedProperties
     }  // end of method addDomainTheory
+    
+    /** This method is intended for use only on contexts already in the Library;
+     *  use on a context under construction may have harmful effects.
+     * 
+     * @return  the full theory of reference terms as stored on disk
+     * @throws KSParsingErrorException
+     * @throws JavaSystemException
+     * @throws KSBadHornClauseException
+     * @throws KSInternalErrorException
+     * @throws KSConstraintInconsistency 
+     */
+    public DomainTheory updateDomTheoryRef()  throws KSParsingErrorException, JavaSystemException, KSBadHornClauseException,
+            KSInternalErrorException, KSConstraintInconsistency {
+        Context originalCtxt = current;
+        if (domTheoryRef == null) {
+            DomainTheory dt = domTheoryRef();
+            current = originalCtxt; 
+            return dt;
+        }
+        String fileName = Library.thyDirectory + languageName + ".thy";
+        DomainTheory newDT = Library.readThyFile(fileName, true);
+        if (newDT.theory.size() >= domTheoryRef.theory.size()) {
+            domTheoryRef = newDT;
+        }
+        current = originalCtxt; 
+        return domTheoryRef;
+    } 
+
+    /** This method is intended for use only on contexts already in the Library;
+     *  use on a context under construction may have harmful effects.
+     * 
+     * @return  the full theory of address terms as stored on disk
+     * @throws KSParsingErrorException
+     * @throws JavaSystemException
+     * @throws KSBadHornClauseException
+     * @throws KSInternalErrorException
+     * @throws KSConstraintInconsistency 
+     */
+    public DomainTheory updateDomTheoryAdr()  throws KSParsingErrorException, JavaSystemException, KSBadHornClauseException,
+            KSInternalErrorException, KSConstraintInconsistency {
+        Context originalCtxt = current;
+        if (domTheoryAdr == null) {
+            DomainTheory dt = domTheoryAdr();
+            current = originalCtxt; 
+            return dt;
+        }
+        String fileName = Library.thyDirectory + languageName + "(Adr).thy";
+        DomainTheory newDT = Library.readThyFile(fileName, true);
+        if (newDT.theory.size() >= domTheoryAdr.theory.size()) {
+            domTheoryAdr = newDT;
+        }
+        current = originalCtxt;
+        return domTheoryAdr;
+    } 
 
     /** Returns the Domain Theory for Terms of Reference in this context.	*/
     public DomainTheory domTheoryRef() throws KSParsingErrorException, JavaSystemException, KSBadHornClauseException,
@@ -863,6 +919,179 @@ public class Context implements Serializable {
         }
     }
     
+    void deleteConnectingUDPVal(Individual ind, String starName, String val, boolean sameVal) {
+        if (connectingUDPValueLists == null || connectingUDPValueLists.get(starName) == null
+                || connectingUDPValueLists.get(starName).get(val) == null) {
+            return;
+        }
+        if (sameVal) {  //  disconnect on equal values
+            ArrayList<Individual> sameList = connectingUDPValueLists.get(starName).get(val);
+            sameList.remove(ind);
+            for (Individual other : sameList) {
+                other.starLinks.remove(ind);
+                ind.starLinks.remove(other);
+            }
+        } else {  //  disconnect on different values
+            TreeMap<String, ArrayList<Individual>> tree = connectingUDPValueLists.get(starName);
+            Iterator iter = tree.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry entry = (Map.Entry) iter.next();
+                String value = (String) entry.getKey();
+                ArrayList<Individual> list = (ArrayList<Individual>) entry.getValue();
+                if (value.equals(val)) {
+                    list.remove(ind);
+                } else {  //  a different value
+                    for (Individual other : list) {
+                        other.starLinks.remove(ind);
+                        ind.starLinks.remove(other);
+                    }
+                }
+            }
+        }
+    }
+    
+    void addConnectingUDPVal(Individual ind, String starName, String val, boolean sameVal) {
+        if (connectingUDPValueLists == null) {
+            connectingUDPValueLists = new TreeMap<String, TreeMap<String, ArrayList<Individual>>>();
+        }
+        if (connectingUDPValueLists.get(starName) == null) {
+            connectingUDPValueLists.put(starName, new TreeMap<String, ArrayList<Individual>>());
+        }
+        if (connectingUDPValueLists.get(starName).get(val) == null) {
+            connectingUDPValueLists.get(starName).put(val, new ArrayList<Individual>());
+        }
+        if (ind.starLinks == null) {
+            ind.starLinks = new ArrayList();
+        }
+        if (sameVal) {  //  connect on equal values
+            //  make a StarLink between ind and every other person who shares this value
+            ArrayList<Individual> sameList = connectingUDPValueLists.get(starName).get(val);
+            for (Individual other : sameList) {
+                if (other.starLinks == null) {
+                    other.starLinks = new ArrayList();
+                }
+                other.starLinks.add(ind);
+                ind.starLinks.add(other);
+            }
+            sameList.add(ind);
+        } else {  //  connect on different values
+            TreeMap<String, ArrayList<Individual>> tree = connectingUDPValueLists.get(starName);
+            Iterator iter = tree.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry entry = (Map.Entry) iter.next();
+                String value = (String) entry.getKey();
+                ArrayList<Individual> list = (ArrayList<Individual>) entry.getValue();
+                if (value.equals(val)) {
+                    list.add(ind);
+                } else {  //  a different value
+                    for (Individual other : list) {
+                        if (other.starLinks == null) {
+                            other.starLinks = new ArrayList();
+                        }
+                        other.starLinks.add(ind);
+                        ind.starLinks.add(other);
+                    }
+                }
+            }
+        }
+    }
+    
+    void addConnectionLists(UserDefinedProperty udp) {
+        if (connectingUDPValueLists == null) {
+            connectingUDPValueLists = new TreeMap<String, TreeMap<String, ArrayList<Individual>>>();
+        }
+        TreeMap<String, ArrayList<Individual>> connecTree = new TreeMap<String, ArrayList<Individual>>();
+        connectingUDPValueLists.put(udp.starName, connecTree);
+        for (Object o : udp.validEntries) {
+            String valid = (String) o;  //  Connecting UDPs must have type = string
+            connecTree.put(valid, new ArrayList<Individual>());  //  1 branch for each valid value
+        }
+        for (Individual ind : individualCensus) {
+            UserDefinedProperty indUDP = (UserDefinedProperty) ind.userDefinedProperties.get(udp.starName);
+            if (ind.deleted || indUDP.value.isEmpty()) {
+                continue;
+            }
+            if (ind.starLinks == null) {
+                ind.starLinks = new ArrayList();
+            }
+            String indVal = (String) indUDP.value.get(0);
+            if (udp.sameVal) {  //  connect on equal values
+                //  make a StarLink between ind and every other person who shares this value
+                ArrayList<Individual> sameList = connecTree.get(indVal);
+                for (Individual other : sameList) {
+                    if (other.starLinks == null) {
+                        other.starLinks = new ArrayList();
+                    }
+                    other.starLinks.add(ind);
+                    ind.starLinks.add(other);
+                }
+                sameList.add(ind);
+            } else {  //  connect on different values
+                Iterator iter = connecTree.entrySet().iterator();
+                while (iter.hasNext()) {
+                    Map.Entry entry = (Map.Entry) iter.next();
+                    String value = (String) entry.getKey();
+                    ArrayList<Individual> list = (ArrayList<Individual>) entry.getValue();
+                    if (value.equals(indVal)) {
+                        list.add(ind);
+                    } else {  //  a different value
+                        for (Individual other : list) {
+                            if (other.starLinks == null) {
+                                other.starLinks = new ArrayList();
+                            }
+                            other.starLinks.add(ind);
+                            ind.starLinks.add(other);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    void deleteConnectionList(UserDefinedProperty udp) {
+        if (connectingUDPValueLists == null || 
+                connectingUDPValueLists.get(udp.starName) == null) {
+            return;
+        }
+        TreeMap<String, ArrayList<Individual>> connecTree = 
+                connectingUDPValueLists.remove(udp.starName);
+        if (udp.sameVal) {
+            Iterator iter1 = connecTree.values().iterator();
+            while (iter1.hasNext()) {
+                ArrayList<Individual> valTree = (ArrayList<Individual>)iter1.next();
+                while (!valTree.isEmpty()) {
+                    Individual ind = valTree.remove(0);
+                    for (Individual other : valTree) {
+                        ind.starLinks.remove(other);
+                        other.starLinks.remove(ind);
+                    }
+                }                
+            }
+        } else {  //  different values
+            Iterator iter1 = connecTree.entrySet().iterator();
+            while (iter1.hasNext()) {
+                Map.Entry entry1 = (Map.Entry)iter1.next();
+                String thisVal = (String)entry1.getKey();
+                ArrayList<Individual> thisValHolders = (ArrayList<Individual>)entry1.getValue();
+                for (Individual ind : thisValHolders) {
+                    Iterator iter2 = connecTree.entrySet().iterator();
+                    while (iter2.hasNext()) {
+                        Map.Entry entry2 = (Map.Entry)iter2.next();
+                        String otherVal = (String)entry2.getKey();
+                        if (thisVal.equals(otherVal)) {
+                            continue;
+                        }
+                        ArrayList<Individual> otherValHolders = 
+                                (ArrayList<Individual>)entry2.getValue();
+                        for (Individual other : otherValHolders) {
+                            other.starLinks.remove(ind);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     public boolean hasNonChartables(ArrayList miniPreds) {
         for (Object o : miniPreds) {
             String s = (String)o;
@@ -874,6 +1103,18 @@ public class Context implements Serializable {
                     && ! kinTypeOrder.contains(s.substring(0, paren))) {
                 return true;
             }
+        }
+        return false;
+    }
+    
+    public boolean isNonChartable(String pred) {
+        if (pred.startsWith("*inverse") && 
+                !kinTypeOrder.contains("*" + pred.substring(8))) {
+            return true;
+        }
+        if (pred.startsWith("*") && !pred.startsWith("*inverse")
+                && !kinTypeOrder.contains(pred)) {
+            return true;
         }
         return false;
     }
@@ -1485,17 +1726,18 @@ public class Context implements Serializable {
             familyCensus.remove(i);
         }  //  end of Family purge
         try {
-            domTheoryRef().dyadsDefined.purgeDyads(nmbrIndivs);
-            domTheoryRef().dyadsUndefined.purgeDyads(nmbrIndivs);
+            if (domTheoryRefExists()) {
+                //  Sometimes the Context Stub says the Ref exists because it is under construction
+                domTheoryRef().dyadsDefined.purgeDyads(nmbrIndivs);
+                domTheoryRef().dyadsUndefined.purgeDyads(nmbrIndivs);
+            }
+        }catch(Exception exc) {}  // if FileNotFound, don't worry about it.
+        try {
             if (domTheoryAdrExists()) {
                 domTheoryAdr().dyadsDefined.purgeDyads(nmbrIndivs);
                 domTheoryAdr().dyadsUndefined.purgeDyads(nmbrIndivs);
             }
-        }catch(Exception exc) {
-            String msg = "Undexpected error while purging DyadTMaps of\n" +
-                    "persons created for examples:\n" + exc;
-            System.err.println(msg);
-        }
+        }catch(Exception exc) { }  // if FileNotFound, don't worry about it.
 
         if ((familyCensus.size() != nmbrFams) || (individualCensus.size() != nmbrIndivs)) {
             throw new KSInternalErrorException("Population counts after reset-purge don't balance.");
