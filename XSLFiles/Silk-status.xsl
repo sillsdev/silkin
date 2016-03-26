@@ -4,7 +4,7 @@
       
       Generates status report from a Silk file
       Gary Simons, 23 Jan 2011
-      Last updated: 11 July 2011
+      Last updated: 7 December 2015
 -->
 <xsl:stylesheet version="1.0"
    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -87,7 +87,7 @@
             <ol>
                <xsl:for-each select="silkin-issues/*">
                   <li><a href="#{count(preceding-sibling::*)+1}">
-                        <xsl:value-of select="@kinTerm"/>
+                        <xsl:value-of select="translate(@kinTerm,'\','')"/>
                      </a> (<xsl:apply-templates mode="label"
                         select="."/>)</li>
                </xsl:for-each>
@@ -263,7 +263,7 @@
 
    <xsl:template match="proposed-def" mode="accepted">
       <tr>
-         <td><b><xsl:value-of select="@kinTerm"/></b>&#160;</td>
+         <td><b><xsl:value-of select="translate(@kinTerm,'\','')"/></b>&#160;</td>
          <td>
             <xsl:for-each select="kin-term-def/definitions/clause">
                <xsl:if test="position() != 1"> or </xsl:if>
@@ -295,7 +295,7 @@
    <xsl:template match="dyadKinTerm">
       <tr>
          <td>
-            <xsl:value-of select="@kinTerm"/>
+            <xsl:value-of select="translate(@kinTerm,'\','')"/>
          </td>
          <td align="center">
             <xsl:value-of select="count(.//dyad)"/>
@@ -323,7 +323,7 @@
          <ul>
             <xsl:for-each select="where/cultural-pred">
                <li>
-                  <i><xsl:value-of select="@kinTerm"/></i> = 
+                  <i><xsl:value-of select="translate(@kinTerm,'\','')"/></i> = 
                   <xsl:for-each select="element">
                      <xsl:value-of select="@text"/>
                      <xsl:if test="following-sibling::element"> or </xsl:if>
@@ -337,7 +337,7 @@
    <xsl:template match="proposed-def">
       <xsl:variable name="number"
          select="count(preceding-sibling::*)+1"/>
-      <xsl:variable name="term" select="@kinTerm"/>
+      <xsl:variable name="term" select="translate(@kinTerm,'\','')"/>
       <a name="{$number}"/>
       <h3><xsl:value-of select="$number"/>. <i>
             <xsl:value-of select="$term"/>
@@ -404,13 +404,13 @@
          select="count(preceding-sibling::*)+1"/>
       <a name="{$number}"/>
       <h3><xsl:value-of select="$number"/>. <i>
-            <xsl:value-of select="@kinTerm"/>
+            <xsl:value-of select="translate(@kinTerm,'\','')"/>
          </i> (<xsl:apply-templates mode="label" select="."/>)</h3>
       <p>The following two terms (covering kintype "<xsl:value-of
          select="normalize-space(pc-strings-covered)"/>") appear to be synonyms: </p>
       <dl>
          <dd><i>
-               <xsl:value-of select="@kinTerm"/>
+               <xsl:value-of select="translate(@kinTerm,'\','')"/>
             </i>&#160; (<xsl:apply-templates select="kinTerm-dyads"
             />) </dd>
          <dd><i>
@@ -445,7 +445,7 @@
          select="count(preceding-sibling::*)+1"/>
       <a name="{$number}"/>
       <h3><xsl:value-of select="$number"/>. <i>
-         <xsl:value-of select="@kinTerm"/>
+         <xsl:value-of select="translate(@kinTerm,'\','')"/>
       </i> (<xsl:apply-templates mode="label" select="."/>)</h3>
       <p>The following two terms seem to have distinct 
          meanings, but their coverage overlaps in a few 
@@ -453,7 +453,7 @@
             select="normalize-space(pc-strings-overlap)"/>"): </p>
       <dl>
          <dd><i>
-            <xsl:value-of select="@kinTerm"/>
+            <xsl:value-of select="translate(@kinTerm,'\','')"/>
          </i>&#160; (<xsl:apply-templates select="kinTerm-dyads"
          />) </dd>
          <dd><i>
@@ -498,10 +498,10 @@
          select="count(preceding-sibling::*)+1"/>
       <a name="{$number}"/>
       <h3><xsl:value-of select="$number"/>. <i>
-            <xsl:value-of select="@kinTerm"/>
+            <xsl:value-of select="translate(@kinTerm,'\','')"/>
          </i> (<xsl:apply-templates mode="label" select="."/>)</h3>
       <p>The term <i>
-            <xsl:value-of select="@kinTerm"/>
+            <xsl:value-of select="translate(@kinTerm,'\','')"/>
          </i> appears to be an umbrella term covering: </p>
       <blockquote>
          <xsl:for-each select=".//sub-kin-term">
@@ -519,7 +519,7 @@
                <!--<li>If it is the other way around (namely, that 
                   <i><xsl:value-of select=".//sub-kin-term"/></i> is the
                   broader term
-                  and <i><xsl:value-of select="@kinTerm"/></i> is the
+                  and <i><xsl:value-of select="translate(@kinTerm,'\','')"/></i> is the
                   narrower), ... do this ...
                </li>-->
                <li>If the two terms are really synonyms, choose "Make
@@ -539,11 +539,11 @@
             <xsl:otherwise>
                <li>If the listed sub-terms do not fall completely
                   within the range of <i>
-                     <xsl:value-of select="@kinTerm"/>
+                     <xsl:value-of select="translate(@kinTerm,'\','')"/>
                   </i>, go to the genealogy editor and add examples of
                   relationships that will illustrate that the other
                   terms fall outside the range of <i>
-                     <xsl:value-of select="@kinTerm"/>
+                     <xsl:value-of select="translate(@kinTerm,'\','')"/>
                   </i>. The umbrella-term proposal will then go away
                   the next time you "Get New Suggestions". You may
                   also specify Reject now in order to remove this item
@@ -562,13 +562,13 @@
          select="count(preceding-sibling::*)+1"/>
       <a name="{$number}"/>
       <h3><xsl:value-of select="$number"/>. <i>
-            <xsl:value-of select="@kinTerm"/>
+            <xsl:value-of select="translate(@kinTerm,'\','')"/>
          </i> (<xsl:apply-templates mode="label" select="."/>)</h3>
       <xsl:if
          test="(basis-type='definition' or basis-type='clause')">
          <p>There is a definition in the library of known kinship
             systems that looks like a close fit for <i><xsl:value-of
-                  select="@kinTerm"/></i>. That definition is as
+                  select="translate(@kinTerm,'\','')"/></i>. That definition is as
             follows: </p>
          <blockquote>
             <xsl:apply-templates select="basis/kin-term-def/gloss"/>
@@ -582,16 +582,16 @@
 
          <xsl:if test="anomaly-type='falseNeg'">
             <p>All of the dyads labelled as 
-               <i><xsl:value-of select="@kinTerm"/></i> fit the above
+               <i><xsl:value-of select="translate(@kinTerm,'\','')"/></i> fit the above
                definition. However, there are one or more dyads that fit 
                and are not  labeled as
-                     <i><xsl:value-of select="@kinTerm"/></i>;
+                     <i><xsl:value-of select="translate(@kinTerm,'\','')"/></i>;
                   <xsl:apply-templates select="misfits"/>.
             </p>
          </xsl:if>
          <xsl:if test="anomaly-type='falsePos'">
             <p>However, there are one or more dyads that have been
-               labeled as <i><xsl:value-of select="@kinTerm"/></i>
+               labeled as <i><xsl:value-of select="translate(@kinTerm,'\','')"/></i>
                that do not fit the above definition;
                   <xsl:apply-templates select="misfits"/>.
             </p>
@@ -644,10 +644,10 @@
          select="count(preceding-sibling::*)+1"/>
       <a name="{$number}"/>
       <h3><xsl:value-of select="$number"/>. <i>
-            <xsl:value-of select="@kinTerm"/>
+            <xsl:value-of select="translate(@kinTerm,'\','')"/>
          </i> (<xsl:apply-templates mode="label" select="."/>)</h3>
       <p>To resolve a conflict between several possible definitions
-         for <i><xsl:value-of select="@kinTerm"/></i>, we need to
+         for <i><xsl:value-of select="translate(@kinTerm,'\','')"/></i>, we need to
          provide some dyads that are not yet in the data. Please
          provide at least one of the following:</p>
       <ol>
@@ -690,7 +690,7 @@
          <xsl:if test="preceding-sibling::dyad">, </xsl:if>
          <xsl:value-of select="concat(@ego, '-', @alter)"/>
          <xsl:if test="$with-term='yes'"> (<i><xsl:value-of
-                  select="@kinTerm"/></i>) </xsl:if>
+                  select="translate(@kinTerm,'\','')"/></i>) </xsl:if>
       </xsl:for-each>
    </xsl:template>
 
