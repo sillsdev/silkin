@@ -1345,6 +1345,7 @@ public class SIL_Edit extends JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        //  This is the start point for GitSILKin
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {

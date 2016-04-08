@@ -85,8 +85,8 @@ public class DomainTheory extends DT_Abstract2 {
     }	// end of minimal constructor
 
     public TreeMap<String, String> getKTSymbols() {
-        Set<String> kTerms = dyadsUndefined.keySet();
-        kTerms.addAll(dyadsDefined.keySet());
+        ArrayList<String> kTerms = new ArrayList<String>(dyadsUndefined.keySet());
+        kTerms.addAll(dyadsDefined.keySet());        
         int DTMsize = kTerms.size(), n = 0;
         // If there are no kin terms yet, punt.
         if (DTMsize == 0) {

@@ -322,9 +322,9 @@ public class Person  {
             } catch (Exception e) { }  // Nothing can go wrong....
             if (terms.isEmpty()) {
                 outKTerm = "";
-            }else if (kinTermLabel < LETTERREF) {  // want actual kin terms
+            } else if (kinTermLabel < LETTERREF) {  // want actual kin terms
                 if (terms != null && terms.size() > 0) {
-                    outKTerm = (String)terms.get(0);
+                    outKTerm = (String) terms.get(0);
                 }
             } else {  // want a letter
                 if (terms.contains("Ego")) {

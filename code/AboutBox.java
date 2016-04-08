@@ -55,7 +55,7 @@ public class AboutBox extends Frame
         aboutText = new Label ("About SILKin 2.1");
         Panel textPanel = new Panel(new FlowLayout(FlowLayout.CENTER, 15, 15));
         textPanel.add(aboutText);
-        Label history1 = new Label("Developed by Dr. Gary Morris for the Summer Institute of Linguistics.");
+        Label history1 = new Label("Developed by Dr. Gary Morris for the Summer Institute of Linguistics (SIL).");
         Label history2 = new Label("SIL Users may request support through regional Anthropology Coordinators.");
         add (textPanel, BorderLayout.NORTH);
 	add(history1, BorderLayout.CENTER);
