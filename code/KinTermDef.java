@@ -1058,11 +1058,7 @@ public class KinTermDef implements Serializable, Comparable {
         int serial = 0;
         while (cbIter.hasNext()) {
             cb = (ClauseBody) cbIter.next();
-//     if (kinTerm.equals("daddy")) {
-//         Context.breakpoint();
-//     }
             cb.generateExamples(ctxt, egoBag, null, orca);
-
             if (cb.duplicative && !ctxt.simDataGen) {
                 cbIter.remove();
             } else {

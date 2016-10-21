@@ -197,15 +197,18 @@ public class ActionAnomaly extends JPanel {
         }
     }
     
+    String deSlashify(String s) {
+        return s.replace("\\", "");
+    }
+    
     void resetOddballComboBox() {
         String[] dyStrings = new String[oddballs.size()];
-        String pad1, pad2;
         for (int i = 0; i < oddballs.size(); i++) {
             Dyad d = oddballs.get(i);
             String done = (dyadsProcessed.contains(d) ? "DONE: " : "");
             String s = done + "Ego: " + d.ego.serialNmbr;
             s += "  Alter: " + d.alter.serialNmbr;
-            s += "  Kin Term: " + d.kinTerm;
+            s += "  Kin Term: " + deSlashify(d.kinTerm);
             dyStrings[i] = s;
         }
         oddballDyadsCombo.setModel(new DefaultComboBoxModel(dyStrings));
@@ -215,9 +218,10 @@ public class ActionAnomaly extends JPanel {
         Dyad before = oddballs.get(oldNDX);
         Dyad after = getDyad(before);
         // after == null means 'before' has been modified or deleted
-        // otherwise, it is unchanged
-        if (after == null) {
-            dyadsProcessed.add(before);
+        // otherwise, it is unchanged.
+        // If dyad changed or 'CORRECT" button chosen, dyad is processed.
+        if (after == null || dyadCorrectBtn.isSelected()) {
+            addToDyadsProcessed(before);
         }
     }
 
@@ -266,10 +270,6 @@ public class ActionAnomaly extends JPanel {
         if (chartEditPending) {
             chartEditPending = false;
             reviewBeforeDyad();
-            resetOddballComboBox();
-            oddballDyadsCombo.setSelectedIndex(oldNDX);
-            oldNDX = 0;
-            return;
         }
         Dyad dy = (Dyad)oddballs.get(oddballDyadsCombo.getSelectedIndex());
         if (editBtn.isSelected()) {            
@@ -277,40 +277,43 @@ public class ActionAnomaly extends JPanel {
                 altNum = dy.alter.serialNmbr;
             boolean distinct = dt.addressTerms;
             String oldTerm = dy.kinTerm,
-                   newTerm = correctedKinTerm.getText();
+                   newTerm = PersonPanel.slashify(this, correctedKinTerm.getText());
             Dyad dy2 = new Dyad(dy);
             dy2.kinTerm = newTerm;
             dy2.confirmed = true;
             Context.current.deleteDyad(dt, oldTerm, dy.pcString, egoNum, altNum);
             Context.current.addDyad(dt, dy2);
             Context.current.ktm.correctKinTerm(egoNum, altNum, oldTerm, newTerm, distinct);
-            if (!dyadsProcessed.contains(dy)) {
-               dyadsProcessed.add(dy); 
-            }
+            addToDyadsProcessed(dy);
             dy.kinTerm = newTerm;
-            resetOddballComboBox();
         }else if (dyadCorrectBtn.isSelected()) {
             dy.confirmed = true;
             dy.challenged = false;
-            dyadsProcessed.add(dy);
-            resetOddballComboBox();
+            addToDyadsProcessed(dy);
         }else if (dyadDeleteBtn.isSelected()) {
             int egoNum = dy.ego.serialNmbr,
                 altNum = dy.alter.serialNmbr;
             boolean distinct = dt.addressTerms;
             Context.current.deleteDyad(dt, dy.kinTerm, dy.pcString, egoNum, altNum);
             Context.current.ktm.deleteKinTerm(egoNum, altNum, dy.kinTerm, distinct);
-            dyadsProcessed.add(dy);
+            addToDyadsProcessed(dy);
             dy.kinTerm = "DELETED";
-            resetOddballComboBox();
         }
         // Check to see if last oddball has been processed.
         if (dyadsProcessed.size() == oddballs.size()) {
             papa.markProcessed(suggNmbr);
             papa.reset();
         }
+        resetOddballComboBox();
+        oldNDX = 0;
     }//GEN-LAST:event_recordBtnActionPerformed
 
+    void addToDyadsProcessed(Dyad d) {
+        if (!dyadsProcessed.contains(d)) {
+            dyadsProcessed.add(d);
+        }
+    }
+    
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
         correctedKinTerm.setEditable(true);
     }//GEN-LAST:event_editBtnActionPerformed
@@ -326,7 +329,9 @@ public class ActionAnomaly extends JPanel {
         Dyad before = oddballs.get(oldNDX);
         String[] pendingModel = { "After viewing/editing chart, choose action, then 'Record'." };
         oddballDyadsCombo.setModel(new DefaultComboBoxModel(pendingModel));
-        dyadCorrectBtn.setSelected(true);      
+        dyadCorrectBtn.setSelected(true);   
+        String ch = SIL_Edit.findMutualChart(before.ego, before.alter);
+        SIL_Edit.edWin.goToChart(ch);        
         SIL_Edit.edWin.changeEgo(before.ego.serialNmbr);
         SIL_Edit.edWin.getPPanel().resetEgoBox(before.ego.serialNmbr);
         SIL_Edit.edWin.chart.setAlter(before.alter.serialNmbr);  

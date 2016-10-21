@@ -224,6 +224,49 @@ public class Node implements Serializable {
     public int getLevel() {
         return treelevel;
     }
+    
+    public String printTerms() {
+        String out = "";
+        int num = 0;
+        for (Object o : kinTermsRef) {
+            String term = (String) o;
+            if (!term.equals("Ego")) {
+                out += term + ", ";
+                num++;
+            }
+        }
+        for (Object o : kinTermsAddr) {
+            String term = (String) o;
+            if (!term.equals("Ego")) {
+                out += term + ", ";
+                num++;
+            }
+        }
+        for (Object o : extKinTermsRef) {
+            String term = (String) o;
+            if (!term.equals("Ego")) {
+                out += term + ", ";
+                num++;
+            }
+        }
+        for (Object o : extKinTermsAddr) {
+            String term = (String) o;
+            if (!term.equals("Ego")) {
+                out += term + ", ";
+                num++;
+            }
+        }
+        if (num > 0) {
+            return "" + num +"\t" + out.substring(0, out.length() -2);
+        }else {
+            return "" + num;
+        }
+        
+    }
+    
+    public String toString() {
+        return toSILKString();
+    }
 
     public String toSILKString() {
         String image = "";
@@ -511,6 +554,8 @@ public class Node implements Serializable {
             revPred = (male1 ? "Stbro" : "Stsis");
         }else if (rel.equals("Hbro") || rel.equals("Hsis")) {
             revPred = (male1 ? "Hbro" : "Hsis");
+        }else if (rel.equals("**")) {
+            revPred = "**";
         }else {
             System.out.println("Failed to reverse relationship: " + rel);
         }

@@ -85,8 +85,8 @@ public class DomainTheory extends DT_Abstract2 {
     }	// end of minimal constructor
 
     public TreeMap<String, String> getKTSymbols() {
-        Set<String> kTerms = dyadsUndefined.keySet();
-        kTerms.addAll(dyadsDefined.keySet());
+        ArrayList<String> kTerms = new ArrayList<String>(dyadsUndefined.keySet());
+        kTerms.addAll(dyadsDefined.keySet());        
         int DTMsize = kTerms.size(), n = 0;
         // If there are no kin terms yet, punt.
         if (DTMsize == 0) {
@@ -340,7 +340,7 @@ public class DomainTheory extends DT_Abstract2 {
                         vb = (posMisses.size() == 1 ? " does" : " do"),
                         phr = (posMisses.size() == 1 ? "Is this " : "Are these ");
                 String question = defArt + posMisses.size() + " dyad" + pl + vb + " not match the accepted definition of "
-                        + kinTerm + ".\n\t\t" + phr
+                        + kinTerm +   ". " + phr
                         + "dyad" + pl + " wrongly labeled, or is the accepted definition wrong?";
                 Anomaly oops = new Anomaly(ktd, kinTerm, question, "falseNeg", posHits, posMisses, null, null);
                 validationIssues.add(oops);
@@ -390,10 +390,10 @@ public class DomainTheory extends DT_Abstract2 {
                         vb = (bogusDyads.size() == 1 ? " does" : " do"),
                         ha = (bogusDyads.size() == 1 ? " has" : " have"),
                         phr = (bogusDyads.size() == 1 ? "Is this " : "Are these "),
-                        confirmed = (confirmedBogies.isEmpty() ? "" : "\nNOTE: You previously confirmed "
+                        confirmed = (confirmedBogies.isEmpty() ? "" : "  NOTE: You previously confirmed "
                         + confirmedBogies.size() + " such.");
                 String question = defArt + bogusDyads.size() + " dyad" + pl + vb + " match the accepted definition of "
-                        + kinTerm + " but " + ha + " been given other kin term" + pl + ".\n\t\t" + phr
+                        + kinTerm + " but " + ha + " been given other kin term" + pl + ".  " + phr
                         + "dyad" + pl + " wrongly labeled, or should the accepted definition be revised?" + confirmed;
                 Anomaly oops = new Anomaly(ktd, kinTerm, question, "falsePos", bogusDyads, posHits, null, null);
                 validationIssues.add(oops);
@@ -746,7 +746,7 @@ public class DomainTheory extends DT_Abstract2 {
                     && !allTermsDefined(umbTerm, subTerms)) {
                 ArrayList<Object> umbPCStrings = (ArrayList<Object>) quads.remove(0),
                         questions = new ArrayList<Object>();
-                questions.add("The term '" + umbTerm + "' seems to be an umbrella term that covers other terms.\n"
+                questions.add("The term '" + umbTerm + "' seems to be an umbrella term that covers other terms. "
                         + "Is this correct?");
                 if (issuesForUser.get(umbTerm) == null) {
                     issuesForUser.put(umbTerm, new ArrayList<Issue>());
@@ -1132,7 +1132,7 @@ public class DomainTheory extends DT_Abstract2 {
             questions.add("This definition seems a perfect fit.  Is it correct for '" + kinTerm + "'?");
         } else {
             questions.add("This definition is a good fit, except for a few 'noise' dyads that could be"
-                    + "\n errors or exceptions to the rule.  Is it correct for '" + kinTerm + "'?");
+                    + " errors or exceptions to the rule.  Is it correct for '" + kinTerm + "'?");
         }
         questions.add("Is there anyone else who is called '" + kinTerm + "' that does not fit this definition?");
         ComposedDef suggestion = new ComposedDef(kinTerm, questions, octuple);
@@ -1162,9 +1162,9 @@ public class DomainTheory extends DT_Abstract2 {
         }  //  end of Bingo
         if (eqc.misFits.isEmpty()) {	//	Nearly Bingo!
             questions.add("This definition is a good fit, except for a few 'noise' dyads that could be"
-                    + "\n exceptions to the rule.  Is it correct for '" + kinTerm + "'?");
+                    + " exceptions to the rule.  Is it correct for '" + kinTerm + "'?");
             questions.add("Is there any other relative called '" + kinTerm
-                    + "'\nwho does not fit this definition?");
+                    + "'who does not fit this definition?");
             ProposedDef suggestion = new ProposedDef(kinTerm, "noisyDef", questions, eqc);
             if (issuesForUser.get(kinTerm) == null) {
                 issuesForUser.put(kinTerm, new ArrayList<Issue>());
@@ -1539,7 +1539,7 @@ public class DomainTheory extends DT_Abstract2 {
                             String art = (nmbr == 1 ? "This " : "These "),
                                     pl = (nmbr == 1 ? "" : "s"),
                                     lp = (nmbr == 1 ? "s" : ""),
-                                    confirmed = (confirmedProblems.isEmpty() ? "" : "\nNOTE: You previously confirmed "
+                                    confirmed = (confirmedProblems.isEmpty() ? "" : "  NOTE: You previously confirmed "
                                     + confirmedProblems.size() + " such."),
                                     question = art + nmbr + " dyad" + pl + " seem" + lp
                                     + " to break a pattern.  Could the dyad" + pl + " be wrong?" + confirmed;
@@ -1554,7 +1554,7 @@ public class DomainTheory extends DT_Abstract2 {
                             String art = (nmbr == 1 ? "This " : "These "),
                                     pl = (nmbr == 1 ? "" : "s"),
                                     lp = (nmbr == 1 ? "s" : ""),
-                                    confirmed = (confirmedProblems.isEmpty() ? "" : "\nNOTE: You previously confirmed "
+                                    confirmed = (confirmedProblems.isEmpty() ? "" : "  NOTE: You previously confirmed "
                                     + confirmedProblems.size() + " such."),
                                     question = art + nmbr + " dyad" + pl + " seem" + lp
                                     + " to break a pattern.  Could the dyad" + pl + " be wrong?" + confirmed;
@@ -1625,7 +1625,7 @@ public class DomainTheory extends DT_Abstract2 {
                         String art = (noisyNeg == 1 ? "This " : "These "),
                                 pl = (noisyNeg == 1 ? "" : "s"),
                                 lp = (noisyNeg == 1 ? "s" : ""),
-                                confirmed = (confirmedProblems.isEmpty() ? "" : "\nNOTE: You previously confirmed "
+                                confirmed = (confirmedProblems.isEmpty() ? "" : "  NOTE: You previously confirmed "
                                 + confirmedProblems.size() + " such."),
                                 question = art + noisyNeg + " dyad" + pl + " seem" + lp
                                 + " to break a pattern.  Could the dyad" + pl + " be wrong?" + confirmed;
@@ -1689,7 +1689,7 @@ public class DomainTheory extends DT_Abstract2 {
                         String art = (noisyPos == 1 ? "This " : "These "),
                                 pl = (noisyPos == 1 ? "" : "s"),
                                 lp = (noisyPos == 1 ? "s" : ""),
-                                confirmed = (confirmedProblems.isEmpty() ? "" : "\nNOTE: You previously confirmed "
+                                confirmed = (confirmedProblems.isEmpty() ? "" : "  NOTE: You previously confirmed "
                                 + confirmedProblems.size() + " such."),
                                 question = art + noisyPos + " dyad" + pl + " seem" + lp
                                 + " to break a pattern.  Could the dyad" + pl + " be wrong?" + confirmed;
@@ -3894,7 +3894,7 @@ public class DomainTheory extends DT_Abstract2 {
         String art = (nmbr == 1 ? "This " : "These "),
                 pl = (nmbr == 1 ? "" : "s"),
                 lp = (nmbr == 1 ? "s" : ""),
-                confirmed = (confirmedProblems.isEmpty() ? "" : "\nNOTE: You previously confirmed "
+                confirmed = (confirmedProblems.isEmpty() ? "" : "  NOTE: You previously confirmed "
                 + confirmedProblems.size() + " such."),
                 question = art + nmbr + " dyad" + pl + " seem" + lp
                 + " to break a (composed) pattern.  Could the dyad" + pl + " be wrong?" + confirmed;
@@ -3935,11 +3935,11 @@ public class DomainTheory extends DT_Abstract2 {
         String art = (nmbr == 1 ? "This " : "These "),
                 pl = (nmbr == 1 ? "" : "s"),
                 lp = (nmbr == 1 ? "s" : ""),
-                confirmed = (confirmedProblems.isEmpty() ? "" : "\nNOTE: You previously confirmed "
+                confirmed = (confirmedProblems.isEmpty() ? "" : "  NOTE: You previously confirmed "
                 + confirmedProblems.size() + " such."),
                 question = art + nmbr + " dyad" + pl + " seem" + lp
                 + " to be part of a contradiction: other identical dyads had different kin terms."
-                + "\nCould the dyad" + pl + " be wrong?" + confirmed;
+                + " Could the dyad" + pl + " be wrong?" + confirmed;
         return new Anomaly(barriers, kinTerm, question, "contradictions", posUncovered, negsCovered, null, null);
     }  //  end of method makeLGGAnomaly
 

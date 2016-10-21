@@ -221,21 +221,24 @@ public abstract class LiteralAbstract1 extends Argument  {
         return null;
     }  //  end of method mergeWith
 	
-	
-	public void countArgs(ArrayList<Object> firstMention, ArrayList<Object> otherMentions)  {
-		//  Count the args in this Literal, using the passed in lists of previously-seen args.
-		Argument thisArg;
-		for (int i=0; i < args.size(); i++)  {
-			thisArg = (Argument)args.get(i);
-			if (thisArg instanceof Literal) ((Literal)thisArg).countArgs(firstMention, otherMentions);
-			else if (thisArg instanceof Variable) {  //  includes Variables and MathVariables
-				String nam = thisArg.argName;
-				if (! firstMention.contains(nam)) firstMention.add(nam);  //  a first mention
-				else if (! otherMentions.contains(nam)) otherMentions.add(nam);  // subsequent mention
-				}  //  end of thisArg is a Variable
-			}  //  end of loop thru args
-		}  //  end of method countArgs()
-	
+    public void countArgs(ArrayList<Object> firstMention, ArrayList<Object> otherMentions) {
+        //  Count the args in this Literal, using the passed in lists of previously-seen args.
+        Argument thisArg;
+        for (int i = 0; i < args.size(); i++) {
+            thisArg = (Argument) args.get(i);
+            if (thisArg instanceof Literal) {
+                ((Literal) thisArg).countArgs(firstMention, otherMentions);
+            } else if (thisArg instanceof Variable) {  //  includes Variables and MathVariables
+                String nam = thisArg.argName;
+                if (!firstMention.contains(nam)) {
+                    firstMention.add(nam);  //  a first mention
+                } else if (!otherMentions.contains(nam)) {
+                    otherMentions.add(nam);  // subsequent mention
+                }
+            }  //  end of thisArg is a Variable
+        }  //  end of loop thru args
+    }  //  end of method countArgs()
+
 	
 	public ArrayList<Object> lits2MiniStrings(ArrayList<Object> clauseSoFar)  throws KSInternalErrorException  {
 		ArrayList<Object> miniLits = new ArrayList<Object>();

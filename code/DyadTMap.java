@@ -41,18 +41,22 @@ public class DyadTMap extends TreeMap implements Serializable {
         String result = "";
         for (String symbol : symbols) {
             if (symbol.startsWith("*")) {
-                String predicate = symbol;            
+                String predicate = symbol;
                 if (symbol.startsWith("*inverse")) {
-                    predicate = "*" +  symbol.substring(8);
+                    predicate = "*" + symbol.substring(8);
                 }
-                UserDefinedProperty udp = 
-                        (UserDefinedProperty)ctxt.userDefinedProperties.get(predicate);
-                result += (udp.chartable ? "+" : "*");
+                UserDefinedProperty udp
+                        = (UserDefinedProperty) ctxt.userDefinedProperties.get(predicate);
+                if (udp == null) {
+                    result += "*";
+                } else {
+                    result += (udp.chartable ? "+" : "*");
+                }
             } else {
                 result += symbol;
             }
         }
-        return result;        
+        return result;       
     }
     
     static String truncate(String symbol, Context ctxt) {

@@ -41,7 +41,7 @@ public class Person  {
     public static int id_no = 0;
     public static int size = 16; // default size;
     public static String refYear = ""; // reference year for drawing genealology
-    public static ArrayList<Individual> folks = null; // upgraded from an array of 1000
+    public static ArrayList<Individual> folks = new ArrayList<Individual>();
     //  public static int folkIndex = -1;	//  used in array
     public static int maxx = -20000, maxy = -20000, minx = 20000, miny = 20000;
     int lsize = 0; // if not zero use this one - local to this entity
@@ -322,9 +322,9 @@ public class Person  {
             } catch (Exception e) { }  // Nothing can go wrong....
             if (terms.isEmpty()) {
                 outKTerm = "";
-            }else if (kinTermLabel < LETTERREF) {  // want actual kin terms
+            } else if (kinTermLabel < LETTERREF) {  // want actual kin terms
                 if (terms != null && terms.size() > 0) {
-                    outKTerm = (String)terms.get(0);
+                    outKTerm = (String) terms.get(0);
                 }
             } else {  // want a letter
                 if (terms.contains("Ego")) {
@@ -338,6 +338,7 @@ public class Person  {
                     }
                 }
             }  // end of want-a-letter
+            outKTerm = PersonPanel.deSlashify(outKTerm);
         }  // end of kin term label picker
 
         if (out.equals("")) {  // don't print blank over a kin term

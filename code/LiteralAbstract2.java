@@ -1845,7 +1845,7 @@ public abstract class LiteralAbstract2 extends LiteralAbstract1  {
 
     boolean meetsDivReqStrictly(Family fam, boolean divReq) {
         //  divReq = true means divorce required; false means divorce prohibited
-        if ((divReq && fam.hasDivorceDate()) || (!divReq && fam.hasNoDivorceDate())) {
+        if ((divReq && fam.divorced()) || (!divReq && !fam.divorced())) {
             return true;
         } else {
             return false;

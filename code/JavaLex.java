@@ -1,6 +1,6 @@
 
 /**  This class encodes an Alphabet to support the DFA used in parsing 
-Horn Clauses.  The class-method <code>check</code> recognizes the
+Horn Clauses.  The static method <code>check</code> recognizes the
 following alphabet:
 <ul>
 <li>	SmLtr		any lower-case letter   </li>
@@ -25,6 +25,7 @@ following alphabet:
 <li>	SemiColon	';'   </li>
 <li>	Bar             '|'   </li>
 <li>    Slash		'/'   </li>
+<li>    BackSlash       '\'   </li>
 <li>    NonSlash	anything but '/'   </li>
 <li>    AtSign		'@'   </li>
 <li>    NonAtSign	anything but '@'   </li>
@@ -61,10 +62,18 @@ public class JavaLex {
         }
 
     }
+    
+    static int uniCode(char ch) {
+        char[] test = new char[1];
+        test[0] = ch;
+        String s = new String(test);
+        return s.codePointAt(0);
+    }
 
     /** Return true if the character <code>ch</code> is the character described
     by the Alphabet string.  For example: if <code>ch</code> = 'a' and <code>target</code> = 'SmLtr'
-    then return true.
+    then return true. For all the categorical targets (e.g. "LtrOrDigit") we check for a 
+    non-Latin alphabet character that meets the definition.
 
     @param	ch        the character to be checked
     @param	target	  a String containing one of the Alphabet terms recognized (see above).
@@ -74,9 +83,11 @@ public class JavaLex {
         boolean answer;	// grind through the possible matches, hopefully in descending order of likelihood.
         if (target.equals("SmLtr")) {
             answer = (Character.isJavaIdentifierStart(ch)
-                    && Character.isLowerCase(ch));
+                    && Character.isLowerCase(ch)) ||
+                    (Character.isUnicodeIdentifierStart(uniCode(ch)));
         } else if (target.equals("LtrOrDig")) {
-            answer = Character.isJavaIdentifierPart(ch);
+            answer = Character.isJavaIdentifierPart(ch) ||
+                    Character.isUnicodeIdentifierPart(uniCode(ch));
         } else if (target.equals("CapLtr")) {
             answer = (Character.isJavaIdentifierStart(ch)
                     && Character.isUpperCase(ch));
@@ -126,6 +137,8 @@ public class JavaLex {
             answer = (ch == '/');
         } else if (target.equals("NonSlash")) {
             answer = (ch != '/');
+        } else if (target.equals("BackSlash")) {
+            answer = (ch == '\\');
         } else if (target.equals("AtSign")) {
             answer = (ch == '@');
         } else if (target.equals("NonAtSign")) {

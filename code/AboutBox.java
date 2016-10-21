@@ -49,19 +49,22 @@ public class AboutBox extends Frame
     public AboutBox()
     {
         super();
-        this.setLayout(new BorderLayout(15, 15));
-        this.setFont(new Font ("SansSerif", Font.BOLD, 14));
+        setLayout(new BorderLayout(15, 15));
+        setFont(new Font ("SansSerif", Font.BOLD, 14));
 
-        aboutText = new Label ("About SILKin Editor 1.0");
+        aboutText = new Label ("About SILKin 2.1");
         Panel textPanel = new Panel(new FlowLayout(FlowLayout.CENTER, 15, 15));
         textPanel.add(aboutText);
-        this.add (textPanel, BorderLayout.NORTH);
-		
+        Label history1 = new Label("Developed by Dr. Gary Morris for the Summer Institute of Linguistics (SIL).");
+        Label history2 = new Label("SIL Users may request support through regional Anthropology Coordinators.");
+        add (textPanel, BorderLayout.NORTH);
+	add(history1, BorderLayout.CENTER);
+	add(history2, BorderLayout.CENTER);	
         okButton = new Button("OK");
         Panel buttonPanel = new Panel(new FlowLayout(FlowLayout.CENTER, 15, 15));
         buttonPanel.add (okButton);
         okButton.addActionListener(this);
-        this.add(buttonPanel, BorderLayout.SOUTH);
+        add(buttonPanel, BorderLayout.SOUTH);
     }
 	
 

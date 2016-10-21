@@ -247,8 +247,8 @@ public class ActionOverlap extends javax.swing.JPanel {
         }else {
             learningHistory = dt.ctxt.learningHistoryRef;
         }
-        term1Text.setText(oc.kinTerm);
-        term2Text.setText(oc.otherTerm);
+        term1Text.setText(PersonPanel.deSlashify(oc.kinTerm));
+        term2Text.setText(PersonPanel.deSlashify(oc.otherTerm));
         olapNoActionBtn.setSelected(true);
         dyadComboBox.setModel(new DefaultComboBoxModel(emptyModel));
         setDyadBtnGroupEnabled(false);
@@ -311,7 +311,7 @@ public class ActionOverlap extends javax.swing.JPanel {
             line = (oc.dyadsProcessed.contains(d) ? "DONE " : "");
             line += "Ego: #" + d.ego.serialNmbr;
             line += "   Alter: #" + d.alter.serialNmbr;
-            line += "   kin term: " + d.kinTerm;
+            line += "   kin term: " + PersonPanel.deSlashify(d.kinTerm);
             line += "   kin type: " + d.pcString;
             model[cntr++] = line;
         }
@@ -405,7 +405,7 @@ public class ActionOverlap extends javax.swing.JPanel {
                 altNum = dad.alter.serialNmbr;
             boolean distinct = dt.addressTerms;
             String oldTerm = dad.kinTerm,
-                   newTerm = correctKinTermText.getText();
+                   newTerm = PersonPanel.slashify(this, correctKinTermText.getText());
             Dyad dad2 = new Dyad(dad);
             dad2.kinTerm = newTerm;
             Context.current.deleteDyad(dt, oldTerm, dad.pcString, egoNum, altNum);

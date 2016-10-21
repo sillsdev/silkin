@@ -3,7 +3,7 @@ import java.util.*;
 
 /** This class creates the Action Box for a Proposed Definition in the
  * {@link DecisionFrame} whenever the suggestion chosen by User is a
- * ProposedDef.
+ * Proposed Umbrella term.
  *
  * @author  Gary Morris, Northern Virginia Community College		garymorris2245@verizon.net
  *
@@ -184,11 +184,11 @@ public class ActionUmbrella extends JPanel {
             learningHistory = dt.ctxt.learningHistoryRef;
         }
         // fill in primary term and subTerms
-        umbTerm.setText(umb.kinTerm);
+        umbTerm.setText(PersonPanel.deSlashify(umb.kinTerm));
         Iterator subTmIter = umb.subTerms.keySet().iterator();
-        String subText = (String)subTmIter.next();
+        String subText = PersonPanel.deSlashify((String)subTmIter.next());
         while (subTmIter.hasNext()) {
-            subText += ", " + (String)subTmIter.next();
+            subText += ", " + PersonPanel.deSlashify((String)subTmIter.next());
         }
         subTerms.setText(subText);
         priorSubTerms = PersonPanel.getKinTerms(subText);
@@ -223,20 +223,28 @@ public class ActionUmbrella extends JPanel {
             return;
         }
         Context.HistoryItem item;
+        ArrayList<String> reSlashedPriors = new ArrayList<String>(),
+                          reSlashedNew = new ArrayList<String>();
+        for (String s : priorSubTerms) {
+            reSlashedPriors.add(PersonPanel.slashify(this, s));
+        }
+        for (String s : newSubTerms) {
+            reSlashedNew.add(PersonPanel.slashify(this, s));
+        }
         if (acceptBtn.isSelected()) {
             item = new Context.AcceptedUmbrella(umb.kinTerm, UDate.today(), "false",
                    FamilyPanel.convertBannedCharacters(comments.getText()),
-                   priorSubTerms, newSubTerms);
+                   reSlashedPriors, reSlashedNew);
             ((Context.AcceptedUmbrella)item).addedSubTerms = postToDT();
         }else if (rejectBtn.isSelected()) {
             item = new Context.RejectedUmbrella(umb.kinTerm, UDate.today(), "false",
                    FamilyPanel.convertBannedCharacters(comments.getText()),
-                   priorSubTerms);
+                   reSlashedPriors);
             postToDT();
         }else if (synonymBtn.isSelected()) {
             Object[] terms = new Object[newSubTerms.size() +1];
             int cntr = 1;
-            terms[0] = umb.kinTerm;
+            terms[0] = umbTerm.getText();
             for (String term : newSubTerms) {
                 terms[cntr++] = term;
             }
@@ -252,13 +260,13 @@ public class ActionUmbrella extends JPanel {
             if (ch == JOptionPane.CLOSED_OPTION) {
                 return;
             }
-            String keyTerm = (String)terms[ch];
-            ArrayList<String> newSubs = new ArrayList<String>(newSubTerms);
+            String keyTerm = PersonPanel.slashify(this, ((String)terms[ch]));
+            ArrayList<String> newSubs = new ArrayList<String>(reSlashedNew);
             newSubs.add(umb.kinTerm);
             newSubs.remove(keyTerm);
             item = new Context.UmbrellaIntoSyns(umb.kinTerm, UDate.today(), "false",
                    FamilyPanel.convertBannedCharacters(comments.getText()),
-                   priorSubTerms, newSubs, keyTerm);
+                   reSlashedPriors, newSubs, keyTerm);
             for (String sub : newSubs) {
                 dt.synonyms.put(sub, keyTerm);
             }
@@ -272,18 +280,22 @@ public class ActionUmbrella extends JPanel {
     ArrayList<String> postToDT() {
         TreeMap theMap = null;
         ArrayList<String> subs = null, newAdds = new ArrayList<String>();
+        ArrayList<String> reSlashedPriors = new ArrayList<String>();
+        for (String s : priorSubTerms) {
+            reSlashedPriors.add(PersonPanel.slashify(this, s));
+        }        
         if (acceptBtn.isSelected()) {
             if (dt.umbrellas == null) {
                 dt.umbrellas = new TreeMap();
             }
             theMap = dt.umbrellas;
-            subs = PersonPanel.getKinTerms(subTerms.getText());
+            subs = PersonPanel.getKinTerms(PersonPanel.slashify(this, subTerms.getText()));
         }else if (rejectBtn.isSelected()) {
             if (dt.nonUmbrellas == null) {
                 dt.nonUmbrellas = new TreeMap();
             }
             theMap = dt.nonUmbrellas;
-            subs = priorSubTerms;
+            subs = reSlashedPriors;
         }
         if (theMap.get(umb.kinTerm) == null) {
             theMap.put(umb.kinTerm, new ArrayList<String>());

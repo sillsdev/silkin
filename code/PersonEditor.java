@@ -22,7 +22,7 @@ public class PersonEditor extends KSJInternalFrame implements ListSelectionListe
     public KSJInternalFrame genericEd;
     public PEdListener listener;
     public Individual ind;
-    private int resetInd, resetFam, selectedUDP = 0;
+    private int selectedUDP = 0;
     public JTextField dataAuth, firstNames, lastName, birthDay, birthMnth, birthYr, deathDay, deathMnth, deathYr, udpValText;
     public JTextArea notes, udpTextArea;
     public ArrayList<Object> newValList;
@@ -92,8 +92,6 @@ public class PersonEditor extends KSJInternalFrame implements ListSelectionListe
         }  //  end of loop thru openPersonEditors
         MainPane.openPersonEditors.add(this);
         listener = new PEdListener(this);
-        resetInd = ctxt.indSerNumGen;
-        resetFam = ctxt.famSerNumGen;
         rebuilding = true;
 
         Dimension oneLine = new Dimension(250, 30),
@@ -1081,13 +1079,22 @@ public class PersonEditor extends KSJInternalFrame implements ListSelectionListe
             } //  end of udp-delete-person
             else if (e.getActionCommand().equals("edit single UDP value")) {
                 //  Can't get here if typ = indiv.
-                String newVal = udpValText.getText().trim(), valType = typLabel.getText();
+                String newVal = udpValText.getText().trim(), 
+                       valType = typLabel.getText();
+                if (udCopy.value == null) {
+                    udCopy.value = new ArrayList();
+                }
                 try {  //  an exception will be thrown if type is violated
                     if (udCopy.typ.equals("integer")) {
                         Integer newInt = new Integer(newVal);
                         if (udCopy.validEntries != null && !udCopy.validEntries.isEmpty()
                                 && udCopy.validEntries.indexOf(newInt) == -1) {
                             throw new KSConstraintInconsistency("Not a permitted value.");
+                        }
+                        if (udCopy.minVal != null && newInt < udCopy.minVal.intValue()) {
+                            throw new KSConstraintInconsistency("This is less than the minimum value allowed.");
+                        } else if (udCopy.maxVal != null && newInt > udCopy.maxVal.intValue()) {
+                            throw new KSConstraintInconsistency("This is more than the maximum value allowed.");
                         }
                         if (udCopy.value.isEmpty()) {
                             udCopy.value.add(newInt);
@@ -1099,6 +1106,11 @@ public class PersonEditor extends KSJInternalFrame implements ListSelectionListe
                         if (udCopy.validEntries != null && !udCopy.validEntries.isEmpty()
                                 && udCopy.validEntries.indexOf(newFlt) == -1) {
                             throw new KSConstraintInconsistency("Not a permitted value.");
+                        }
+                        if (udCopy.minVal != null && newFlt < udCopy.minVal.floatValue()) {
+                            throw new KSConstraintInconsistency("This is less than the minimum value allowed.");
+                        } else if (udCopy.maxVal != null && newFlt > udCopy.maxVal.floatValue()) {
+                            throw new KSConstraintInconsistency("This is more than the maximum value allowed.");
                         }
                         if (udCopy.value.isEmpty()) {
                             udCopy.value.add(newFlt);
@@ -1120,10 +1132,15 @@ public class PersonEditor extends KSJInternalFrame implements ListSelectionListe
                                 && udCopy.validEntries.indexOf(newVal) == -1) {
                             throw new KSConstraintInconsistency("Not a permitted value.");
                         }
+                        String oldVal = (udCopy.value.isEmpty() ? "" : (String)udCopy.value.get(0));
                         if (udCopy.value.isEmpty()) {
                             udCopy.value.add(newVal);
                         } else {
                             udCopy.value.set(0, newVal);
+                        }
+                        if (udCopy.connects) {  //  A connecting UDP has type = string
+                            Context.current.deleteConnectingUDPVal(ind, udCopy.starName, oldVal, udCopy.sameVal);
+                            Context.current.addConnectingUDPVal(ind, udCopy.starName, newVal, udCopy.sameVal);
                         }
                     }
                 } catch (KSConstraintInconsistency ksci) {

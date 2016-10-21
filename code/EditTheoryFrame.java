@@ -9,10 +9,14 @@ import java.io.Serializable;
  *  or to directly enter definitions they have deduced.
  *  This is the only way a User can define an auxiliary predicate.
  * 
- * NOTE: In any domain theory, a kin term is either defined (def is in theory,and all dyads are in dt.dyadsDefined)
+ * NOTE 1: In any domain theory, a kin term is either defined (def is in theory,and all dyads are in dt.dyadsDefined)
  *       or undefined (not in theory, dyads in dt.deyadsUndefined). BUT, in this theory editor the User can choose
  *       a defined term to edit. Therefore, localDefined & localUndefined reflect the current status of a term in the
  *       editor, not its status in the domain theory. 
+ * 
+ * NOTE 2:  Generally in SILKin, all kin terms are stored in 'slashified' form, and 'de-slashified' only when they are
+ *       placed in a display field. However, since kin terms are being listed in menus, etc. in a Theory Editor, they
+ *       are kept in de-slashified form, and only slashified when written out or stored on the Domain Theory. 
  *
  * @author Gary Morris, Northern Virginia Community College
  */
@@ -62,6 +66,7 @@ public class EditTheoryFrame extends JFrame {
     private EditTheoryFrame() {
         initComponents();
         current = this;
+        notEditableBtn.setSelected(true);
         addWindowListener(new CloseListener());
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
@@ -83,6 +88,63 @@ public class EditTheoryFrame extends JFrame {
         s.add("male");
         s.add("female");
         return s;
+    }
+    
+    String slashify(String s){
+        return PersonPanel.slashify(current, s);
+    }
+    
+    /** Decompose a Horn Clause test string (with possible multiple clauses) into
+     *  it's components, slashify all the predicates, and then return the string. 
+     *  This method calls 'slashifyCB' on each clause. 
+     * @param hc    a Horn Clause, must start with a head
+     * @return      a slashified Horn Clause
+     * @throws KSBadHornClauseException if hc is not in proper Horn Clause syntax.
+     */
+    String slashifyHC(String hc) throws KSBadHornClauseException {
+        int implies = hc.indexOf(":-"),
+                left = hc.indexOf("(");
+        String term = hc.substring(0, left),
+               slashified = slashify(term) + hc.substring(left, implies + 2) + " ", 
+               body = "", args;
+        if ((hc.length() - implies) < 3) {  //  there's no body, just a header
+            return slashified;
+        }
+        ArrayList<String> cbs = breakIntoCBs(hc);
+        for (int i=0; i < cbs.size(); i++) {
+            if (i > 0) {
+                slashified += "\n\t | ";
+            }
+            slashified += slashifyCB(cbs.get(i));
+        }        
+        return slashified;
+    }
+   
+    
+    /** Decompose a ClauseBody into its components, slashify the predicate, and return
+     *  the slashified string.
+     * 
+     * @param cb    the text of a 'headless' ClauseBody
+     * @return      the ClauseBody with all predicates slashified
+     */
+    String slashifyCB(String cb) {  
+        String slashified = "", term, args;
+        int left = cb.indexOf("("),
+            predStart = 0, right;
+        while (left > 0) {
+            term = cb.substring(predStart, left).trim();             
+            right = cb.indexOf(")", left);
+            args = cb.substring(left, right +1);
+            slashified += slashify(term) + args;
+            slashified += cb.substring(right +1, right +2); // the required punctuation after a right paren
+            left = cb.indexOf("(", right);
+            predStart = right +2;
+        }        
+        return slashified;
+    }
+    
+    String deSlashify(String s) {
+        return PersonPanel.deSlashify(s);
     }
     
     /** Loads (or reloads) specific DomainTheory into this editor. */
@@ -114,6 +176,7 @@ public class EditTheoryFrame extends JFrame {
         hornClauseTextArea.getDocument().addDocumentListener(new HCEditListener()); 
         localDefined.clear();       
         localDefined.addAll(dt.dyadsDefined.keySet());
+        localDefined = deSlashifyArray(localDefined);
         if (dt.ctxt.userDefinedProperties != null) {
             uDPs.clear();
             uDPs.addAll(dt.ctxt.userDefinedProperties.keySet());
@@ -121,6 +184,7 @@ public class EditTheoryFrame extends JFrame {
         localUndefined.clear();
         localUndefined.addAll(dt.dyadsUndefined.keySet());
         localUndefined.remove("no__term");
+        localUndefined = deSlashifyArray(localUndefined);
         loadEditsInProgress();
         loadKinTermDefsComboBox();
         findAuxiliaries();
@@ -130,12 +194,20 @@ public class EditTheoryFrame extends JFrame {
         loading = false;
     }
     
+    public static ArrayList<String> deSlashifyArray(ArrayList<String> as) {
+        ArrayList<String> result = new ArrayList<String>();
+        for (String s : as) {
+            result.add(PersonPanel.deSlashify(s));
+        }
+        return result;
+    }
+    
     public void loadEditsInProgress() {
         // Load from DT. Subtract from local-X
         if (dt.editsInProgress != null) {
             editsInProgress = dt.editsInProgress;
             for (EditInProgress eip : editsInProgress.values()) {
-                String kt = eip.kinTerm;
+                String kt = deSlashify(eip.kinTerm);
                 if (!localDefined.remove(kt)) {
                     localUndefined.remove(kt);
                 }
@@ -163,7 +235,7 @@ public class EditTheoryFrame extends JFrame {
         String[] model = new String[preModel.size()];
         int loc = 0;
         for (String s : preModel) {
-            model[loc++] = s;
+            model[loc++] = deSlashify(s);
         }
         kinTermDefsCombo.setModel(new DefaultComboBoxModel(model));      
     }
@@ -177,6 +249,7 @@ public class EditTheoryFrame extends JFrame {
                 auxiliaries.add(s);
             }
         }
+        auxiliaries = deSlashifyArray(auxiliaries);
     }
 
     public void loadAuxiliaryDefsComboBox() {
@@ -256,10 +329,10 @@ public class EditTheoryFrame extends JFrame {
         deleteEditBtn = new javax.swing.JButton();
         autoGenCkBox = new javax.swing.JCheckBox();
         periodBtn = new javax.swing.JButton();
-        editableCkBox = new javax.swing.JCheckBox();
         editDefBtn = new javax.swing.JRadioButton();
         editCommentsBtn = new javax.swing.JRadioButton();
         commentsLabel = new javax.swing.JLabel();
+        notEditableBtn = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addFocusListener(new java.awt.event.FocusAdapter() {
@@ -398,13 +471,6 @@ public class EditTheoryFrame extends JFrame {
             }
         });
 
-        editableCkBox.setText("Display is editable.");
-        editableCkBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editableCkBoxActionPerformed(evt);
-            }
-        });
-
         buttonGroup1.add(editDefBtn);
         editDefBtn.setSelected(true);
         editDefBtn.setText("Edit Def");
@@ -424,6 +490,14 @@ public class EditTheoryFrame extends JFrame {
 
         commentsLabel.setText("          ");
 
+        buttonGroup1.add(notEditableBtn);
+        notEditableBtn.setText("Display NOT Editable");
+        notEditableBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                notEditableBtnActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -435,27 +509,40 @@ public class EditTheoryFrame extends JFrame {
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(layout.createSequentialGroup()
                                 .add(autoGenCkBox)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 214, Short.MAX_VALUE)
-                                .add(editableCkBox)
-                                .add(132, 132, 132))
+                                .add(132, 516, Short.MAX_VALUE))
+                            .add(layout.createSequentialGroup()
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(primitiveCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 218, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                    .add(layout.createSequentialGroup()
+                                        .add(24, 24, 24)
+                                        .add(notEditableBtn)))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(layout.createSequentialGroup()
+                                        .add(editDefBtn)
+                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .add(layout.createSequentialGroup()
+                                        .add(primitiveInsertBtn)
+                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 141, Short.MAX_VALUE)
+                                        .add(periodBtn, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 71, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                        .add(18, 18, 18)
+                                        .add(localTermInsertBtn)
+                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                        .add(localTermCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
                             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                                 .add(deleteEditBtn)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 179, Short.MAX_VALUE)
-                                .add(syntaxCheckBtn)
-                                .add(27, 27, 27)
-                                .add(dyadCheckBtn)
-                                .add(27, 27, 27)
-                                .add(acceptDefBtn))
-                            .add(layout.createSequentialGroup()
-                                .add(primitiveCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 218, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(primitiveInsertBtn)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 123, Short.MAX_VALUE)
-                                .add(periodBtn, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 71, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .add(18, 18, 18)
-                                .add(localTermInsertBtn)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(localTermCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 197, Short.MAX_VALUE)
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(layout.createSequentialGroup()
+                                        .add(editCommentsBtn)
+                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                        .add(commentsLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 240, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                    .add(layout.createSequentialGroup()
+                                        .add(syntaxCheckBtn)
+                                        .add(27, 27, 27)
+                                        .add(dyadCheckBtn)
+                                        .add(27, 27, 27)
+                                        .add(acceptDefBtn)))))
                         .addContainerGap())
                     .add(layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -481,14 +568,6 @@ public class EditTheoryFrame extends JFrame {
                                 .add(helpBtn, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 42, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .add(52, 52, 52)))
                         .add(35, 35, 35))))
-            .add(layout.createSequentialGroup()
-                .add(207, 207, 207)
-                .add(editDefBtn)
-                .add(28, 28, 28)
-                .add(editCommentsBtn)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(commentsLabel)
-                .addContainerGap(297, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -514,7 +593,8 @@ public class EditTheoryFrame extends JFrame {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(editDefBtn)
                     .add(editCommentsBtn)
-                    .add(commentsLabel))
+                    .add(commentsLabel)
+                    .add(notEditableBtn))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 14, Short.MAX_VALUE)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(primitiveCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -529,9 +609,7 @@ public class EditTheoryFrame extends JFrame {
                     .add(syntaxCheckBtn)
                     .add(deleteEditBtn))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(autoGenCkBox)
-                    .add(editableCkBox))
+                .add(autoGenCkBox)
                 .addContainerGap())
         );
 
@@ -548,11 +626,11 @@ public class EditTheoryFrame extends JFrame {
         loading = true;
         auxiliaryDefsCombo.setSelectedIndex(0);
         // Menu choice will be 1 of 4 types:
-        // Invalid -- the seperator or title line - re-display title line
+        // Invalid -- the separator or title line - re-display title line
         if (menuChoice.equals("Kin Terms & Edits In Progress") || menuChoice.startsWith("---")) {
             kinTermDefsCombo.setSelectedIndex(0);
             hornClauseTextArea.setText("[No definition selected for editing.]");
-            setEditable(false);
+//            setEditable(false);
             deleteEditBtn.setEnabled(false);
             if (editCommentsBtn.isSelected()) {
                 editContextComments();
@@ -562,28 +640,32 @@ public class EditTheoryFrame extends JFrame {
         }
         // Edit-in-Progress -- restore the partial edit to the editor window
         // EIPs don't have comments
-        if (editsInProgress.containsKey(menuChoice)) {
-            EditInProgress eip = editsInProgress.get(menuChoice);
-            currentEdit = eip;
+        String slashifiedMenuChoice = slashify(menuChoice);
+        if (editsInProgress.containsKey(slashifiedMenuChoice)) {            
+            EditInProgress eip = editsInProgress.get(slashifiedMenuChoice);
+            currentEdit = eip;  //  eip.currentText is always deSlashified
             hornClauseTextArea.setText(PersonPanel.restoreLineBreaks(eip.currentText));
             deleteEditBtn.setEnabled(true);
             syntaxCheckBtn.setEnabled(true);
             dyadCheckBtn.setEnabled(eip.syntaxOK);
             acceptDefBtn.setEnabled(eip.dyadCkOK);
-            setEditable(true);
-            editableCkBox.setEnabled(true);
-            editDefBtn.setSelected(true);
+//            setEditable(true);
         }
-        // Defined Term -- load KTD in editor. It's not edited unless text changes
-        else if (localDefined.contains(menuChoice)) {
-            KinTermDef ktd = (KinTermDef) dt.theory.get(menuChoice);
-            if (editDefBtn.isSelected()) {
-                hornClauseTextArea.setText(ktd.toString("original", true, true));
-                currentEdit = null;
+        // Defined Term -- load KTD in editor. 
+        else if (localDefined.contains(menuChoice)) {            
+            KinTermDef ktd = (KinTermDef) dt.theory.get(slashifiedMenuChoice);
+            if (editDefBtn.isSelected() || notEditableBtn.isSelected()) {
+                hornClauseTextArea.setText(deSlashify(ktd.toString("original", true, true)));
+                if (notEditableBtn.isSelected()) {  //  Just Looking
+                    currentEdit = null;
+                    syntaxCheckBtn.setEnabled(false);
+                    deleteEditBtn.setEnabled(false);
+                } else {  // Going to Edit                    
+                    convertToEIP(slashifiedMenuChoice);          
+                    syntaxCheckBtn.setEnabled(true);  
+                    deleteEditBtn.setEnabled(true);        
+                }
                 displayTerm = menuChoice;
-                setEditable(false);
-                deleteEditBtn.setEnabled(false);
-                syntaxCheckBtn.setEnabled(false);
                 dyadCheckBtn.setEnabled(false);
                 acceptDefBtn.setEnabled(false);
             } else {  // edit of comments is selected
@@ -593,16 +675,19 @@ public class EditTheoryFrame extends JFrame {
         }
         // Undefined term -- create EIP and add to edits-in-progress
         else if (localUndefined.contains(menuChoice)) {
+            makeNewEIP(slashifiedMenuChoice);
             localUndefined.remove(menuChoice); 
-            makeNewEIP(menuChoice);  
-            editDefBtn.setSelected(true);
+            editDefBtn.setSelected(true);            
         }else {
             MainPane.displayError("Menu choice invalid.", "Internal Error", JOptionPane.ERROR_MESSAGE);
         }
+        hornClauseTextArea.setEditable(! notEditableBtn.isSelected());
         loading = false;
     }//GEN-LAST:event_kinTermDefsComboActionPerformed
 
+   
     private void makeNewEIP(String term) {
+        //  term is already slashified
         if (currentEdit != null && currentEdit.deletions) {
             currentEdit.resetCounters(hornClauseTextArea.getText());
         }
@@ -610,44 +695,42 @@ public class EditTheoryFrame extends JFrame {
         currentEdit = eip;
         editsInProgress.put(eip.kinTerm, eip);
         eip.currentDef = new KinTermDef(eip.kinTerm);
-        eip.currentText = eip.currentDef.clauseHead.toString() + " :- ";
+        eip.currentText = deSlashify(eip.currentDef.clauseHead.toString()) + " :- ";
         eip.checkpoint = eip.currentText.length() - 1;
         eip.currentDef.domTh = dt;
         eip.indent = (int) (1.5 * eip.checkpoint);
         loadKinTermDefsComboBox();
-        kinTermDefsCombo.setSelectedItem(term);
-        hornClauseTextArea.setText(eip.currentText);
+        kinTermDefsCombo.setSelectedItem(deSlashify(term));
+        hornClauseTextArea.setText(eip.currentText + " ");
         deleteEditBtn.setEnabled(true);
         syntaxCheckBtn.setEnabled(true);
         dyadCheckBtn.setEnabled(eip.syntaxOK);
         acceptDefBtn.setEnabled(eip.dyadCkOK);
-        setEditable(true);
+//        setEditable(true);
     }    
     
     private void convertToEIP(String definedTerm) {
+        //  definedTerm is already slashified
+        String deSlashifiedTerm = deSlashify(definedTerm);
         EditInProgress eip = new EditInProgress(definedTerm);
         currentEdit = eip;
         editsInProgress.put(eip.kinTerm, eip);
         eip.currentDef = (KinTermDef) dt.theory.get(definedTerm);
-        eip.currentText = eip.currentDef.toString("original", true, true);
+        eip.currentText = deSlashify(eip.currentDef.toString("original", true, true));
         eip.checkpoint = eip.currentText.length() - 1;
-        eip.indent = (int) (1.5 * (eip.currentDef.clauseHead.toString().length() +1));
+        eip.indent = (int) (1.5 * (eip.currentDef.clauseHead.toString().length() +1));        
+        localDefined.remove(deSlashifiedTerm);
         loadKinTermDefsComboBox();
         loadLocalTermComboBox();
-        kinTermDefsCombo.setSelectedItem(definedTerm);
+        kinTermDefsCombo.setSelectedItem(deSlashifiedTerm);
         hornClauseTextArea.setText(eip.currentText);
         deleteEditBtn.setEnabled(true);
         syntaxCheckBtn.setEnabled(true);
         dyadCheckBtn.setEnabled(eip.syntaxOK);
         acceptDefBtn.setEnabled(eip.dyadCkOK);
-        setEditable(true);
+//        setEditable(true);
     }    
-    
-    private void setEditable (boolean val) {
-        editableCkBox.setSelected(val);
-        hornClauseTextArea.setEditable(val);
-    }
-    
+   
     private void auxiliaryDefsComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_auxiliaryDefsComboActionPerformed
         if (loading) return;
         String menuChoice = (String)auxiliaryDefsCombo.getSelectedItem();
@@ -656,7 +739,6 @@ public class EditTheoryFrame extends JFrame {
         if (menuChoice.equals("Auxiliary Terms") || menuChoice.equals(seperator)) {
             auxiliaryDefsCombo.setSelectedIndex(0);
             hornClauseTextArea.setText("[No definition selected for editing.]");
-            setEditable(false);
             if (editCommentsBtn.isSelected()) {
                 editContextComments();
             }
@@ -666,15 +748,15 @@ public class EditTheoryFrame extends JFrame {
         if (menuChoice.equals("Define New Auxiliary Term")) {
             String auxTerm = getValidAuxTerm();
             if (auxTerm == null) return;
-            makeNewEIP(auxTerm);
+            makeNewEIP(slashify(auxTerm));
         }
         else if (auxiliaries.contains(menuChoice)) {  // It's not edited unless text changes
-            KinTermDef ktd = (KinTermDef) dt.theory.get(menuChoice);
+            KinTermDef ktd = (KinTermDef) dt.theory.get(slashify(menuChoice));
             if (editDefBtn.isSelected()) {
-                hornClauseTextArea.setText(ktd.toString("original", true, true));
+                hornClauseTextArea.setText(deSlashify(ktd.toString("original", true, true)));
                 currentEdit = null;
                 displayTerm = menuChoice;
-                setEditable(false);
+//                setEditable(false);
                 deleteEditBtn.setEnabled(false);
                 syntaxCheckBtn.setEnabled(false);
                 dyadCheckBtn.setEnabled(false);
@@ -698,7 +780,7 @@ public class EditTheoryFrame extends JFrame {
         hornClauseTextArea.setText(PersonPanel.restoreLineBreaks(txt));
         commentsLabel.setText("on domain theory " + dt.languageName);
         commentsLabel.setVisible(true);
-        setEditable(true);
+//        setEditable(true);
         commentKTD = null;
         deleteEditBtn.setEnabled(false);
         syntaxCheckBtn.setEnabled(false);
@@ -712,7 +794,7 @@ public class EditTheoryFrame extends JFrame {
         hornClauseTextArea.setText(PersonPanel.restoreLineBreaks(txt));
         commentsLabel.setText("on definition \"" + commentKTD.kinTerm + "\"");
         commentsLabel.setVisible(true);
-        setEditable(true);
+//        setEditable(true);
         deleteEditBtn.setEnabled(false);
         syntaxCheckBtn.setEnabled(false);
         dyadCheckBtn.setEnabled(false);
@@ -759,7 +841,7 @@ public class EditTheoryFrame extends JFrame {
                 || txtSoFar.substring(cursor).contains(".")));
         if (!messingInMiddle) {
             EditInProgress eip = currentEdit;
-            int endOfHead = eip.currentDef.clauseHead.toString().length() + 1;
+            int endOfHead = deSlashify(eip.currentDef.clauseHead.toString()).length() + 1;
             if (autoGenCkBox.isSelected() && cursor >= end) {
                 int dot = Math.max(endOfHead, txtSoFar.lastIndexOf("."));
                 boolean newStart = (dot != endOfHead && !txtSoFar.substring(dot).contains("|"));
@@ -768,6 +850,8 @@ public class EditTheoryFrame extends JFrame {
                 }
                 if (newStart || eip.deletions || eip.insertions) {
                     eip.resetVars();
+                    // eip uses slashified text
+                    endOfHead = eip.currentDef.clauseHead.toString().length() + 1;
                     eip.checkpoint = Math.max(endOfHead, txtSoFar.lastIndexOf(".") + 1);
                     eip.resetCounters(txtSoFar);
                     dyadCheckBtn.setEnabled(false);
@@ -792,7 +876,10 @@ public class EditTheoryFrame extends JFrame {
     }    
     
     private void hornClauseTextAreaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_hornClauseTextAreaFocusLost
-        String latestTxt = FamilyPanel.convertBannedCharacters(hornClauseTextArea.getText()).trim();
+        if (notEditableBtn.isSelected()) {
+            return;
+        }
+        String latestTxt = hornClauseTextArea.getText().trim();
         if (editDefBtn.isSelected()) {
             if (currentEdit == null) {
                 return;
@@ -802,12 +889,14 @@ public class EditTheoryFrame extends JFrame {
                 acceptDefBtn.setEnabled(false);
                 currentEdit.syntaxOK = false;
                 dyadCheckBtn.setEnabled(false);
-                currentEdit.dyadCkOK = false;
+                currentEdit.dyadCkOK = false;                    
+                
             }
-        }else {  //  editing comments
+        } else {  //  editing comments
+            latestTxt = FamilyPanel.convertBannedCharacters(latestTxt);
             if (commentKTD != null) {  //  editing a KTD's comments
                 commentKTD.comments = latestTxt;
-                
+
             } else {  //  we're editing Context comments 
                 dt.ctxt.comments = latestTxt;
                 SIL_Edit.edWin.chart.dirty = true;
@@ -833,8 +922,11 @@ public class EditTheoryFrame extends JFrame {
         }
         editsInProgress.remove(eip.kinTerm);
         if (dt.dyadsDefined.keySet().contains(eip.kinTerm)) {
-            localDefined.add(eip.kinTerm);
-            localDefined = realphabetize(localDefined);
+            String deSlasherm = deSlashify(eip.kinTerm);
+            if (!localDefined.contains(deSlasherm)) {
+                localDefined.add(deSlasherm);
+                localDefined = realphabetize(localDefined);
+            }
             loadKinTermDefsComboBox();
             loadLocalTermComboBox();
         } else if (dt.dyadsUndefined.keySet().contains(eip.kinTerm)) {
@@ -849,7 +941,7 @@ public class EditTheoryFrame extends JFrame {
         kinTermDefsCombo.setSelectedIndex(0);
         auxiliaryDefsCombo.setSelectedIndex(0);
         hornClauseTextArea.setText("[No definition selected for editing.]");
-        setEditable(false);
+//        setEditable(false);
         currentEdit = null;
     }//GEN-LAST:event_deleteEditBtnActionPerformed
 
@@ -875,27 +967,17 @@ public class EditTheoryFrame extends JFrame {
         }
     }//GEN-LAST:event_periodBtnActionPerformed
 
-    private void editableCkBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editableCkBoxActionPerformed
-        
-        if (editableCkBox.isSelected()) {
-            if (currentEdit == null) {
-                confirmEdit();
-            } else {
-                hornClauseTextArea.setEditable(true);
-            }
-        } else {  // User just de-selected
-            hornClauseTextArea.setEditable(false);
-        }
-    }//GEN-LAST:event_editableCkBoxActionPerformed
-
     private void syntaxCheckBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_syntaxCheckBtnActionPerformed
         // Read contents of hornClauseTextArea as a KTD. If it parses OK,
         // syntax ck is passed. Pop up a congrats msg and light the 'Dyad Ck' btn.
         // If parse bombs, try to suggest why.
         String textDefinition = hornClauseTextArea.getText();
-        ArrayList<String> cbs;
+        ArrayList<String> cbs, cbSlash = new ArrayList<String>();
         try {
             cbs = breakIntoCBs(textDefinition);
+            for (String s : cbs) {
+                cbSlash.add(slashifyCB(s));
+            }
         } catch (KSBadHornClauseException exc) {
             JOptionPane.showMessageDialog(current, exc.toString(),
                     "Syntax Error", JOptionPane.ERROR_MESSAGE);
@@ -908,7 +990,7 @@ public class EditTheoryFrame extends JFrame {
         }
         KinTermDef ktd = currentEdit.currentDef;
         clearKTD(ktd);
-        for (String s : cbs) {
+        for (String s : cbSlash) {
             ClauseBody cb = null;
             try {
                 cb = Library.readCBfromString(s, dt);
@@ -997,7 +1079,7 @@ public class EditTheoryFrame extends JFrame {
             return;
         }else {
             String msg = "Encountered an Internal Error (not your fault):\n" 
-                    + "Kin term '" + kinTerm + "' not found in dyads!"
+                    + "Kin term '" + deSlashify(kinTerm) + "' not found in dyads!"
                     + "\nPlease report this to the SILKin Team.";
             JOptionPane.showMessageDialog(current, msg, 
                     "INTERNAL ERROR", JOptionPane.ERROR_MESSAGE);
@@ -1089,8 +1171,11 @@ public class EditTheoryFrame extends JFrame {
             auxiliaries = realphabetize(auxiliaries);
             loadAuxiliaryDefsComboBox();
         } else {  //  must be non-auxiliary
-            localDefined.add(eip.kinTerm);
-            localDefined = realphabetize(localDefined);
+            String deSlashTerm = deSlashify(eip.kinTerm);
+            if (! localDefined.contains(deSlashTerm)) {
+                localDefined.add(deSlashTerm);
+                localDefined = realphabetize(localDefined);
+            }
         }
         loadKinTermDefsComboBox();
         loadLocalTermComboBox();
@@ -1134,7 +1219,7 @@ public class EditTheoryFrame extends JFrame {
 
     private void editDefBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editDefBtnActionPerformed
         commentsLabel.setVisible(false);
-        editableCkBox.setEnabled(true);
+        hornClauseTextArea.setEditable(true);
         int choice = auxiliaryDefsCombo.getSelectedIndex();
         if (choice > 0) {  // go back to editing the aux
             auxiliaryDefsCombo.setSelectedIndex(choice);
@@ -1142,10 +1227,13 @@ public class EditTheoryFrame extends JFrame {
             choice = kinTermDefsCombo.getSelectedIndex();
             kinTermDefsCombo.setSelectedIndex(choice);
         }
+        syntaxCheckBtn.setEnabled(true);
+        dyadCheckBtn.setEnabled(false);
+        acceptDefBtn.setEnabled(false);
     }//GEN-LAST:event_editDefBtnActionPerformed
 
     private void editCommentsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editCommentsBtnActionPerformed
-        editableCkBox.setEnabled(false);
+        hornClauseTextArea.setEditable(true);
         String ktChoice = (String)kinTermDefsCombo.getSelectedItem(),
                auxChoice = (String)auxiliaryDefsCombo.getSelectedItem();
         if (kinTermDefsCombo.getSelectedIndex() == 0
@@ -1186,19 +1274,32 @@ public class EditTheoryFrame extends JFrame {
     private void kinTermDefsComboFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_kinTermDefsComboFocusGained
         if (dirty) {
             localDefined.clear();
-            localDefined.addAll(dt.dyadsDefined.keySet());
+            ArrayList<String> ldTemp = new ArrayList<String>();
+            ldTemp.addAll(dt.dyadsDefined.keySet());
+            for (String s : ldTemp) {
+                localDefined.add(deSlashify(s));
+            }
             if (dt.ctxt.userDefinedProperties != null) {
                 uDPs.clear();
                 uDPs.addAll(dt.ctxt.userDefinedProperties.keySet());
             }
             localUndefined.clear();
-            localUndefined.addAll(dt.dyadsUndefined.keySet());
-            localUndefined.remove("no__term");
+            ldTemp = new ArrayList<String>();
+            ldTemp.addAll(dt.dyadsUndefined.keySet());
+            ldTemp.remove("no__term");
+            for (String s : ldTemp) {
+                localUndefined.add(deSlashify(s));
+            }
             loadKinTermDefsComboBox();
             loadLocalTermComboBox();
             dirty = false;
         }
     }//GEN-LAST:event_kinTermDefsComboFocusGained
+
+    private void notEditableBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notEditableBtnActionPerformed
+        commentsLabel.setVisible(false);
+        hornClauseTextArea.setEditable(false);
+    }//GEN-LAST:event_notEditableBtnActionPerformed
 
 
     private void verifyArity(ClauseBody cb) throws KSBadHornClauseException {
@@ -1327,6 +1428,9 @@ public class EditTheoryFrame extends JFrame {
         int start = textDefinition.indexOf(":-") + 2,
             stop = textDefinition.indexOf(".", start),
             end = textDefinition.length() -1;
+        if (start >= end) {
+            return list;
+        }
         String msg;
         if (start > 1 && stop == -1) {
             msg = "Each Horn Clause must end with a period.\n" +
@@ -1361,12 +1465,12 @@ public class EditTheoryFrame extends JFrame {
             int ch = JOptionPane.showConfirmDialog(current, s1, "Be Sure!",
                      JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (ch == JOptionPane.NO_OPTION) {
-                editableCkBox.setSelected(false);
+                notEditableBtn.setSelected(true);
                 return;
             }
             auxiliaries.remove(displayTerm);
             localDefined.remove(displayTerm);
-            convertToEIP(displayTerm);
+            convertToEIP(slashify(displayTerm));
             displayTerm = null;
         }
     
@@ -1461,13 +1565,13 @@ public class EditTheoryFrame extends JFrame {
     private javax.swing.JButton dyadCheckBtn;
     private javax.swing.JRadioButton editCommentsBtn;
     private javax.swing.JRadioButton editDefBtn;
-    private javax.swing.JCheckBox editableCkBox;
     private javax.swing.JButton helpBtn;
     private javax.swing.JScrollPane hornClauseScrollPane;
     private javax.swing.JTextArea hornClauseTextArea;
     private javax.swing.JComboBox kinTermDefsCombo;
     private javax.swing.JComboBox localTermCombo;
     private javax.swing.JButton localTermInsertBtn;
+    private javax.swing.JRadioButton notEditableBtn;
     private javax.swing.JButton periodBtn;
     private javax.swing.JComboBox primitiveCombo;
     private javax.swing.JButton primitiveInsertBtn;
@@ -1539,7 +1643,12 @@ public class EditTheoryFrame extends JFrame {
         
         public String toSILKString(String baser) {
             String xml = baser + "<eip kinTerm=\"" + kinTerm;
-            xml += "\" text=\"" + FamilyPanel.convertBannedCharacters(currentText);
+            String curTxt = "";
+            try {
+                curTxt = FamilyPanel.convertBannedCharacters(current.slashifyHC(currentText));
+            }catch(Exception exc) { // it was slashified already, with no issues.     
+            }
+            xml += "\" text=\"" + curTxt;
             xml += "\" indent=\"" + indent;
             xml += "\" lastVar=\"" + lastVar;
             xml += "\" nextVar=\"" + nextVar;

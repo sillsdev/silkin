@@ -37,6 +37,7 @@ public class SIL_Edit extends JFrame {
     static ArrayList<ArrayList<Integer>> namedDyadList = null;
     static boolean helpScreenOnStartUp = true;
     static TreeMap<String, PropagationMethod> linkMethods = buildLinkMethods();
+    RecentActionListener recentAC = new RecentActionListener();
 
     static TreeMap<String, PropagationMethod> buildLinkMethods() {
         TreeMap<String, PropagationMethod> lm = new TreeMap<String, PropagationMethod>();
@@ -75,8 +76,6 @@ public class SIL_Edit extends JFrame {
      */
     public SIL_Edit() {
         edWin = this;
-        initComponents();  //  initComponents is NetBeans-generated code
-        prepComponents();  //  prepComponents is my own code
         try {
             if (Library.stubs.isEmpty()) {
                 Library.readStubFile();
@@ -86,6 +85,8 @@ public class SIL_Edit extends JFrame {
             e.printStackTrace();
             MainPane.displayError(e.toString(), "Internal Problem", JOptionPane.ERROR_MESSAGE);
         }
+        initComponents();  //  initComponents is NetBeans-generated code
+        prepComponents();  //  prepComponents is my own code
         // Listen for window closing, so Library.stubs file can be saved before exit.
 //        topDog.addShutdownHook(new CleanUpThread());
     }
@@ -104,6 +105,7 @@ public class SIL_Edit extends JFrame {
         newContextItem = new JMenuItem();
         newLiBrowserItem = new JMenuItem();
         loadItem = new JMenuItem();
+        loadRecent = new JMenu();
         importGEDCOMitem = new JMenuItem();
         gedcomSubMenu = new JMenu();
         exportGEDCOMItem = new JMenuItem();
@@ -191,6 +193,10 @@ public class SIL_Edit extends JFrame {
             }
         });
         fileMenu.add(loadItem);
+        
+        loadRecent.setText("Open Recent");
+        rebuildRecentSubMenu();
+        fileMenu.add(loadRecent);
         
         gedcomSubMenu.setText("GEDCOM");
         importGEDCOMitem.setText("Import GEDCOM");
@@ -562,8 +568,30 @@ public class SIL_Edit extends JFrame {
         add(Box.createRigidArea(new Dimension(0, 5)));
         add(chartHolderPanel);
         add(Box.createRigidArea(new Dimension(0, 5)));
+        add(new JLabel("Detail Display"));
         add(personPanel1);
         add(familyPanel1);
+    }
+    
+    public void rebuildRecentSubMenu() {
+        loadRecent.removeAll();
+        int n = 0;
+        for (File f : Library.recentFiles) {
+            if (f != null) {
+                JMenuItem item = new JMenuItem(f.getName());
+                String ac = "n " + n++;
+                item.setActionCommand(ac);
+                item.setToolTipText(f.getParent());
+                item.addActionListener(recentAC);
+                loadRecent.add(item);
+            }
+        }
+        try {
+            Library.writeStubFile();
+        } catch (JavaSystemException jse) {
+            MainPane.displayError(jse.toString(), "Error Writing Stub File",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void prepComponents() {
@@ -599,6 +627,29 @@ public class SIL_Edit extends JFrame {
         printAllCharts.setEnabled(true);
         pack();
     }
+    
+    static String findMutualChart(Individual ind1, Individual ind2) {
+        ArrayList<String> charts1 = new ArrayList<String>(),
+                charts2 = new ArrayList<String>();
+        charts1.add(ind1.homeChart);
+        charts2.add(ind2.homeChart);
+        if (ind1.links != null) {
+            for (Link lk : ind1.links) {
+                charts1.add(lk.homeChart);
+            }
+        }
+        if (ind2.links != null) {
+            for (Link lk : ind2.links) {
+                charts2.add(lk.homeChart);
+            }
+        }
+        charts1.retainAll(charts2);  // Set intersection
+        if (charts1.isEmpty()) {
+            return null;
+        } else {
+            return charts1.get(0);
+        }
+    }   
 
     void rebuildChartCombo() {
         loadingCharts = true;
@@ -659,12 +710,12 @@ public class SIL_Edit extends JFrame {
     }
 
     private void loadItemActionPerformed(ActionEvent evt) {
-        chart.loadSILKFile();
+        chart.pickSILKFile();
     }
 
     private void loadItemPreXMLActionPerformed(ActionEvent evt) {
         Library.preXML = true;
-        chart.loadSILKFile();
+        chart.pickSILKFile();
         Library.preXML = false;
     }
     
@@ -933,15 +984,7 @@ public class SIL_Edit extends JFrame {
             MainPane.topPane.menuAdmin.setEnabled(false);
             MainPane.topPane.enableAdvancedMenuItems(false);
             MainPane.topPane.setVisible(true);
-        }
-    }
-
-    private void keyTestItemActionPerformed(ActionEvent evt) {
-        TestPanel.createAndShowGUI();
-    }
-
-    private void unicodeTestItemActionPerformed(ActionEvent evt) {
-        new UnicodeTester().setVisible(true);
+        }       
     }
 
     private void adminSILKinItemActionPerformed(ActionEvent evt) {
@@ -1252,6 +1295,12 @@ public class SIL_Edit extends JFrame {
     public void chartComboSetEnabled(boolean bool) {
         chartComboBox.setEnabled(bool);
     }
+    
+    public void goToChart(String ltr) {
+        Context c = Context.current;
+        chartComboBox.setSelectedIndex(c.getChartIndex(ltr) + 1);
+        chartComboBoxActionPerformed(new ActionEvent(this, 0, ltr));
+    }
 
     private void chartComboBoxActionPerformed(ActionEvent evt) {
         if (loadingCharts) {
@@ -1279,6 +1328,7 @@ public class SIL_Edit extends JFrame {
                 chartComboBox.setSelectedIndex(Context.current.getChartIndex(Context.current.currentChart) +1);
                 return;
             }
+            newDescription = FamilyPanel.convertBannedCharacters(newDescription);
             Context.current.chartDescriptions.add(newDescription);
             Context.current.currentChart = nxtLtr;
             rebuildChartCombo();
@@ -1295,6 +1345,7 @@ public class SIL_Edit extends JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        //  This is the start point for GitSILKin
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
@@ -1548,7 +1599,8 @@ public class SIL_Edit extends JFrame {
                     newHigherPriority = false,
                     newMoreNatural = false;
             if (ctxt.hasNonChartables(toNode.miniPreds) &&
-                    ! ctxt.hasNonChartables(fromNode.miniPreds)) {
+                    ! ctxt.hasNonChartables(fromNode.miniPreds) &&
+                    ! ctxt.isNonChartable(kinTyp)) {
                 newMoreNatural = true;
             }
             if (newPathLength == toPathLength) {
@@ -1873,6 +1925,52 @@ public class SIL_Edit extends JFrame {
         actOnSuggsItem.setEnabled(true);
         returnToSuggsItem.setEnabled(false);
     }
+    
+    class ChartItemListener implements ItemListener {
+        
+        public void itemStateChanged(ItemEvent evt) {
+            
+        }
+                
+    }
+    
+
+     class RecentActionListener implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) {
+            if (e.getActionCommand().equals("n 0")) {
+                File f = Library.recentFiles[0];
+                if (f != null) {
+                    chart.saveFile = f;
+                    chart.loadSILKFile();
+                }
+            } else if (e.getActionCommand().equals("n 1")) {
+                File f = Library.recentFiles[1];
+                if (f != null) {
+                    chart.saveFile = f;
+                    chart.loadSILKFile();
+                }
+            } else if (e.getActionCommand().equals("n 2")) {
+                File f = Library.recentFiles[2];
+                if (f != null) {
+                    chart.saveFile = f;
+                    chart.loadSILKFile();
+                }
+            } else if (e.getActionCommand().equals("n 3")) {
+                File f = Library.recentFiles[3];
+                if (f != null) {
+                    chart.saveFile = f;
+                    chart.loadSILKFile();
+                }
+            } else if (e.getActionCommand().equals("n 4")) {
+                File f = Library.recentFiles[4];
+                if (f != null) {
+                    chart.saveFile = f;
+                    chart.loadSILKFile();
+                }
+            }
+        }
+    }
 
     static abstract class PropagationMethod {
 
@@ -2172,10 +2270,9 @@ public class SIL_Edit extends JFrame {
     public ChartPanel chart;
     private JPanel chartHolderPanel;
     private JPanel chartHolderHorizontal;
-    private JComboBox chartComboBox;
+            JComboBox chartComboBox;
     private DefaultComboBoxModel chartComboModel;
-    private JLabel chartLabel;
-    private JScrollPane chartScrollPane;
+            JScrollPane chartScrollPane;
     private JMenu contextMenu;
     private JMenuItem copyItem;
     private JMenuItem cutItem;
@@ -2214,6 +2311,7 @@ public class SIL_Edit extends JFrame {
     private JRadioButtonMenuItem ltrRefBtn;
     private JRadioButtonMenuItem lastNameBtn;
     private JMenuItem loadItem;
+    private JMenu loadRecent;
     private ButtonGroup nameButtonGroup;
     private JMenuItem newContextItem;
     private JMenuItem newLiBrowserItem;

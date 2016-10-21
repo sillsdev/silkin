@@ -20,7 +20,7 @@ import javax.swing.JScrollPane;
 public class PrintChart implements Printable {
 
     public static Font printFont;
-    public static Font tinyFont = new Font("Dialog", Font.PLAIN, 4);
+    public static Font tinyFont = new Font("Dialog", Font.PLAIN, 8);
     public static PageFormat pgFormat = null;
     ChartPanel chart = null;
     JScrollPane pane;
@@ -76,6 +76,8 @@ public class PrintChart implements Printable {
                 }
             }
         }
+        Font oldChartFont = ChartPanel.chartFont;
+        ChartPanel.chartFont = printFont;
         job.setPrintable(this, pgFormat);
         ok = job.printDialog();
         if (ok) {
@@ -85,6 +87,7 @@ public class PrintChart implements Printable {
                 Context.breakpoint();
             }
         }
+        ChartPanel.chartFont = oldChartFont;
     }  
 
     public int print(Graphics g, PageFormat pf, int page) throws PrinterException {
@@ -111,7 +114,6 @@ public class PrintChart implements Printable {
                     header += "\t\t\t\t\t\t\t\tFrom: " + saveFile.getName();
                 }
                 g2d.drawString(header, offsetX + 5, offsetY + 15);
-                g2d.setFont(printFont);
                 chart.paint0(g2d, segmentBounds, ctxt.currentChart);
                 return PAGE_EXISTS;
             }
@@ -119,7 +121,6 @@ public class PrintChart implements Printable {
             if (page > 0) {
                 return NO_SUCH_PAGE;
             }
-            g2d.setFont(printFont);
             Rectangle segmentBounds = pane.getViewport().getViewRect();
             // Adjust bounds to remove white space left and top
             int[] chartSize = SIL_Edit.edWin.chart.chartSize(segmentBounds);

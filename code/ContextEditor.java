@@ -205,6 +205,7 @@ public class ContextEditor extends KSJInternalFrame {
         matrixLabelC.setAlignmentX(0.5f);
         matrixLabelD.setAlignmentX(0.5f);
         JButton matrixEditBtn = new JButton("Edit Matrix");
+        matrixEditBtn.setEnabled(false);
         matrixEditBtn.setActionCommand("edit matrix");
         matrixEditBtn.addActionListener(listener);
         matrixEditBtn.setAlignmentX(0.5f);
@@ -438,9 +439,11 @@ public class ContextEditor extends KSJInternalFrame {
         ctxt.saveState = true;
         String newName = name.getText(), msg;
         while (!Library.validateFileName(newName, false)) {
-            msg = "The name '" + newName + "' violates the rules for names:\n"
-                    + "The name MUST start with a letter.\n"
-                    + "Use up to 28 LETTERS, NUMBERS, or DASHES (-) but NO SPACES.";
+            msg = "The name '" + newName + "' violates the rules for names:";
+            msg += "\nIt must have 2 to 28 characters.";
+            msg += "\nYou may not use BackSlash, ForwardSlash, Colon, DoubleQuote";
+            msg += "\nAsterisk, QuestionMark, LeftAngleBracket, RightAngleBracket,";
+            msg += "\nor the VerticalBar in a name. TRY AGAIN.";
             newName = JOptionPane.showInputDialog(msg);
         }  //  end of harrass-em-until-they-give-a-good-name
         name.setText(newName);
@@ -462,6 +465,9 @@ public class ContextEditor extends KSJInternalFrame {
                         null, options, options[0]);
                 if (choice == 0) {
                     Library.userContextName = newName;
+                    if (SIL_Edit.edWin != null && ctxt == Library.contextUnderConstruction) {
+                        SIL_Edit.edWin.chart.changeFileName(newName);
+                    }
                 }
             }  //  end of Change-is-confirmed
         }  //  end of change-was-made       
@@ -621,7 +627,6 @@ public class ContextEditor extends KSJInternalFrame {
                     System.err.println("ERROR in creating Edit Frame.\n" + exc);
                 }
             }
-
         }  //  end of ActionListener method actionPerformed
     }  //  end of inner class CEListener
 

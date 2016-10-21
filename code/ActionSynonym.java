@@ -145,7 +145,8 @@ public class ActionSynonym extends javax.swing.JPanel {
         }
         // make drop-down menu of primary term
         primaryTermComboBox.setModel(new DefaultComboBoxModel(new String[]
-                { syn.kinTerm, syn.otherTerm() }));
+                { PersonPanel.deSlashify(syn.kinTerm), 
+                  PersonPanel.deSlashify(syn.otherTerm()) }));
         primaryTermComboBox.setSelectedIndex(0);
         noActionBtn.setSelected(true);
         notesTextPane.setText("");
