@@ -1,0 +1,1 @@
+/** This category of Predicate reflects a built-in predicate SILKin understands. *  *  @author		Gary Morris, Northern Virginia Community College *                              garymorris2245@verizon.net */public class PrimitiveCategory	extends PredCategory  {	}
