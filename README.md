@@ -4,8 +4,9 @@
 </li> <li>
 When invoked by User, apply a Machine Learning algorithm to the collected data (dyads) to induce definitions for each kin term and identify similarities to previously-analyzed kinship systems in the SILKin library. In addition to proposing definitions, also identify potential synonyms, umbrella terms, or anomalies in the data.<br>
 </li> </ol>
-<b>Latest Release of SILKin is 2.1.1</b>
-<p>This release includes a number of fixes including support for right-to-left Scripts. There is a Windows installer available too. To get the released versions (rather than the source which is available on this site) got to http://www.software.SIL.org/silkin
+<b>Latest Release of SILKin is 2.3</b>
+<p>This release includes a number of fixes including support for right-to-left Scripts. The major addition for version 2.3 is "internationalization" of the menus and screen text. Currently the database contains only English and French text, but other languages can be added without additional programming.</p>
+<p>There is a Windows installer available too. To get the released versions (rather than the source which is available on this site) got to http://www.software.SIL.org/silkin
 </p><p>
 The SIL site has complete information about SILKin, including news, FAQ, installation procedures, Help & Tutorials. It also has bug reporting facilities and notes for developers who may wish to join this project or fork it.
 </p>
