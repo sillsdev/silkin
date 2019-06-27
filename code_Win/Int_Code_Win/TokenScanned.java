@@ -1,0 +1,1 @@
+/** Each instance of TokenScanned is a parse token.  *  *  @author		Gary Morris, Northern Virginia Community College *                              garymorris2245@verizon.net */		public class TokenScanned	{	    String lexeme, token;    int lineNum, charPos, intVal;    float floatVal;    }	// end of class TokenScanned

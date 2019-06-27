@@ -1,1 +1,0 @@
-/** This interface defines the supertype of any symbol in Prolog syntax (that is, anything	that starts with a lowercase letter).      @author		Gary Morris, Northern Virginia Community College		garymorris2245@verizon.net*/public interface Symbol {	String printName();	}  // end of interface Symbol
