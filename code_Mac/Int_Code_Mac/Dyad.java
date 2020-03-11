@@ -50,10 +50,12 @@ public class Dyad  implements Serializable, Comparable  {
         Valid link-types are "P" (parent), "C" (child), "S" (spouse), and "*" (star-link).  */    
     public String pcStringStructural = "";
   
-     /**  <code>confirmed</code> = true means User has confirmed this Dyad is reliable.  Ergo, it should not be treated as
-		  an Anomaly.  
-		  <code>challenged</code> = true means this dyad has been added to an Anomaly*/    
-    public boolean confirmed = false, challenged = false;
+         
+    /**  <code>confirmed</code> = true means User has confirmed this Dyad is reliable.  
+     * Ergo, it should not be treated as an Anomaly.  */ 
+    public boolean confirmed = false;
+    /**  <code>challenged</code> = true means this dyad has been added to an Anomaly*/
+    public boolean challenged = false;
     DomainTheory.DyadToken token;
 	
 	

@@ -1,5 +1,5 @@
 
-/**  This class encodes an Alphabet to support the DFA used in parsing 
+/**  This class encodes an Alphabet to support the {@link DFA} used in parsing 
 Horn Clauses.  The static method <code>check</code> recognizes the
 following alphabet:
 <ul>

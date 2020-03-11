@@ -6,9 +6,14 @@ import javax.swing.*;
 import java.net.*;
 
 /**The Library holds all the {@link Context}s that are active.  Each language 
- * or culture has its own Context. It maintains a directory of all known 
+ * or culture has its own Context. The Library class maintains a directory of all known 
  * Contexts; it reads them into memory and writes them out as needed. Contexts 
- * are stored & accessed by language-name.<p>
+ * are stored & accessed by language-name.
+ * <p>When a SILK file is loaded (its context is called the Context Under 
+ * Construction), all the editor variables and other options that are not specific
+ * to the context are stored in the Library.
+ * </p>
+ * <p>
  * There is only one Library.  All methods and fields are static.
  * </p>
  *  @author		Gary Morris, Northern Virginia Community College
@@ -59,6 +64,8 @@ public class Library {
     /** The language name most recently chosen in the Languages Menu. */
     public static String currentLanguage = "English";  // 
     public static ArrayList<String> langCodes;
+    public static int saveInterval = 10;
+    public static int changeCounter = 1;
     static final int DATA_GATHERING = 0;
     static final int BROWSING = 1;
     static final int SUGGESTIONS = 2;
@@ -3072,7 +3079,7 @@ public class Library {
      * 
      * @throws     {@link JavaSystemException} if reading any file gets an IO Exception
      */
-    public static void loadSILKFile(File file) throws KSParsingErrorException, JavaSystemException,
+    public static void loadSILKFile(File file) throws KSParsingErrorException, JavaSystemException, IOException,
             KSBadHornClauseException, KSInternalErrorException, KSConstraintInconsistency, KSDateParseException {
         //  if a context may have been changed
         Linus silkLineServer = new Linus(file, "UTF8");
@@ -3082,9 +3089,15 @@ public class Library {
             contextUnderConstruction = parzer.parseSILKFile();
         } else {
             ParserSILKFile parzer = new ParserSILKFile(tok);
-            contextUnderConstruction = parzer.parseSILKFile();
+            try { 
+                contextUnderConstruction = parzer.parseSILKFile();
+            } catch (Exception exc) {
+                silkLineServer.fileToParse.close();
+                throw new JavaSystemException(exc.getMessage());
+            }
             translateReasons(contextUnderConstruction);
         }
+        
         contextUnderConstruction.saveState = false;  //  will change if any edits made
         Context.current = contextUnderConstruction;
         retrieveOrCreateStub(contextUnderConstruction.languageName);

@@ -1,7 +1,7 @@
-/**Each instance of LinusFromString is initialized with s string; it will 
- * provide that string when <code>makeLine</code> is called.  Thereafer, it 
+/**Each instance of LinusFromString is initialized with a string; it will 
+ * provide that string when <code>makeLine</code> is called.  Thereafter, it 
  * responds with null.	<p>	
- * This extension of Linus is intended	to allow parsing from a string.
+ * This extension of Linus is intendedto allow parsing from a string.
  * </p>
  *  @author		Gary Morris, Northern Virginia Community College
  *                              garymorris2245@verizon.net

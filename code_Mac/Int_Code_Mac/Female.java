@@ -37,7 +37,7 @@
  *  @author		Gary Morris, Northern Virginia Community College
  *                              garymorris2245@verizon.net
  */
-class Female extends Kind {
+public class Female extends Kind {
 
     public Female() {
         symbol = new drawCircle();

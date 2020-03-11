@@ -9,9 +9,9 @@ import java.io.Serializable;
  * have been accepted, or to directly enter definitions they have deduced.
  *  This is the only way a User can define an auxiliary predicate.
  *  <ul>
- * <li>In any domain theory, a kin term is either defined (def is in theory,and 
+ * <li>In any domain theory, a kin term is either defined (def is in theory, and 
  * all dyads are in dt.dyadsDefined) or undefined (not in theory, dyads in 
- * dt.deyadsUndefined). BUT, in this theory editor the User can choose a defined 
+ * dt.dyadsUndefined). BUT, in this theory editor the User can choose a defined 
  * term to edit. Therefore, localDefined & localUndefined reflect the current 
  * status of a term in the editor, not its status in the domain theory. </li>
  * 
@@ -565,8 +565,8 @@ public class EditTheoryFrame extends JFrame {
                                     .add(editDefBtn)
                                     .add(layout.createSequentialGroup()
                                         .add(primitiveInsertBtn)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .add(periodBtn, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 108, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 268, Short.MAX_VALUE)
+                                        .add(periodBtn, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 71, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                         .add(18, 18, 18)
                                         .add(localTermInsertBtn)
                                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)

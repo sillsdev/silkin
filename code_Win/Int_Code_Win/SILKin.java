@@ -33,10 +33,10 @@ public class SILKin extends JFrame {
         //  runMode = "KAES";
         //  runMode = "learn";
         String os = System.getProperty("os.name");
-//        if (os.equals("Mac OS X")) {
-//            com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
-//            app.setAboutHandler(new AboutBox());
-//        }
+        if (os.equals("Mac OS X")) {
+            com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
+            app.setAboutHandler(new AboutBox());
+        }
         try {
             //Schedule a job for the event-dispatching thread: creating and showing a GUI.
             if (runMode.equals("learn")) {

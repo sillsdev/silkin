@@ -40,9 +40,8 @@ public class PrintHornClauses implements Printable {
     /**
      * Construct a PrintHornClauses object ready for printing
      *
-     * @param js the scroll pane containing the lbText to be printed
      * @param ch is the browser lbText to be printed.
-     * @param whole do we print the whole pane, or just the visible portion?
+     * @param lb2   is the LibBrowser containing the Horn Clauses
      */
     public PrintHornClauses(LibBrowserText ch, LibBrowser lb2) {
         lbText = ch;

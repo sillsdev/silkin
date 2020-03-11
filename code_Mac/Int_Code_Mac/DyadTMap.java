@@ -5,7 +5,7 @@ import java.io.*;
  *  <code>dyAdd</code>, which type-checks items added to the TreeMap 
  *  (only {@link Dyad}s allowed) and stores them indexed by kin term & PCString.
  *
- * The DyadTMap itself is a 2-level TMap: kinTerm -> pcString -> AList of Dyads
+ * The DyadTMap itself is a 2-level TMap: kinTerm -> pcString -> AList of Dyads. 
  * It is where we store all the Dyads gathered for an entire context (language).
  * So all dyads for 'uncle' are stored under the index term 'uncle.'
  * Within the group of 'uncle' dyads, we further index them on kinType

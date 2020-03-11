@@ -15,10 +15,6 @@ import javax.swing.JOptionPane;
  * The matrix is normally built one person at a time as a Field Worker gathers 
  * data about people in the local culture.  It is imperative that the retrieval 
  * of kinTerms by (row, col) address be fast and scalable.</p> <p>
- * A special problem arises when the User alters a chart to correct a kinTerm.  
- * A "retraction" dyad must be created whenever that happens.  The retraction 
- * will contain all the info in the original (erroneous) node so it can be 
- * removed from the indexRef or indexAddr.</p> <p>
  * A KinTermMatrix has 2 associated indexes of kinTerms, for Reference terms and 
  * terms of Address.  For every kinTerm that has been recorded in a matrix, its 
  * index entry has a list of all the Egos who have a kin of that type, and for 

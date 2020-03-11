@@ -3,9 +3,17 @@ import java.util.* ;
 import java.io.*;
 
 /**This class represents the definition of a kin term in Horn Clause syntax.
- * 
- *  @author		Gary Morris, Northern Virginia Community College
- *                              garymorris2245@verizon.net
+ A kin term definition is composed of a ClauseHead ('uncle(Alter,Ego)'), the
+ 'implies' or 'is-defined-as' symbol (':-'), and then a series of ClauseBodies.
+ A {@link ClauseBody} is composed of {@link Literal}s. A Literal is composed of
+ a {@link Predicate} and then one or more {@link Argument}s enclosed in parentheses.
+ 
+ <p> When the <i>definitions</i> field holds more than one ClauseBody, then 
+ there is more than one way to define this kin term. 
+ </p>
+ 
+  @author		Gary Morris, Northern Virginia Community College
+                              garymorris2245@verizon.net
  */
 public class KinTermDef implements Serializable, Comparable {
 //  NOTE: Error messages intended for the developer or administrator are not translated.
@@ -1104,7 +1112,7 @@ public class KinTermDef implements Serializable, Comparable {
     
     @param	hypo		the SourceDT Context for this DomainTheory
     @param	egoBag		contains at least 1 male and 1 female {@link Individual} who can serve as Ego in definitions.
-    @param	dt			the SourceDT we're using
+    @param	orca		contains the 'correct answer' for testing
     @param	learnedDef	the KTD which has been learned for this kinTerm (or null)
     */
     public void generateExamples(Context hypo, ArrayList<Object> egoBag, Oracle orca, KinTermDef learnedDef)  
@@ -1135,7 +1143,7 @@ public class KinTermDef implements Serializable, Comparable {
     
     @param	ctxt		the (hypothetical) Context for this DomainTheory
     @param	egoBag		contains at least 1 male and 1 female {@link Individual} who can serve as Ego in definitions.
-    @param	dt			the DomainTheory we're using
+    @param	orca		contains the 'correct answer' for testing
      */
     public void generateExamples(Context ctxt, ArrayList<Object> egoBag, Oracle orca)
             throws KSBadHornClauseException, KSInternalErrorException, KSConstraintInconsistency,

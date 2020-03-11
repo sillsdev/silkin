@@ -40,7 +40,7 @@
  *  @author		Gary Morris, Northern Virginia Community College
  *                              garymorris2245@verizon.net
  */
-class Neuter extends Kind {
+public class Neuter extends Kind {
 
     public Neuter() {
         symbol = new drawSquare();

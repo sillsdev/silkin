@@ -1,5 +1,5 @@
 /**This class represents exceptions that are thrown when SILKin tries to parse
- * a date (usually via {@link UDate} and encounters an invalid format.
+ * a date (usually via {@link UDate}) and encounters an invalid format.
  * 
  *  @author		Gary Morris, Northern Virginia Community College
  *                              garymorris2245@verizon.net

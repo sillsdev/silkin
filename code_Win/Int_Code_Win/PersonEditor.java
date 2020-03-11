@@ -1347,7 +1347,7 @@ public class PersonEditor extends KSJInternalFrame implements ListSelectionListe
                                 }
                                 MainPane.activity.log.append("While updating a FamilyEditor from PersonEditor:\n" + pve);
                             }
-                        } //  end of we're-editing-existing-child-for-the-FamilyEditor
+                        }  //  end of we're-editing-existing-child-for-the-FamilyEditor
                         if (SIL_Edit.edWin != null && SIL_Edit.edWin.chart != null) {
                             SIL_Edit.edWin.chart.repaint();
                         }

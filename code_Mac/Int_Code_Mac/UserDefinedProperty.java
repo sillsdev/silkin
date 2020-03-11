@@ -20,7 +20,7 @@ import java.awt.Color;
  * </li><li> string
  * </li><li> boolean
  * </li><li> Individual
-< * </li>li> individual
+ * </li><li> individual
  * </li><li> int{}
  * </li><li> float{}
  * </li><li> string{}
@@ -42,7 +42,7 @@ public class UserDefinedProperty implements Serializable {
     public Number minVal, maxVal;
     public Color chartColor = null;
 
-    /**  Cloning constructor.
+    /**  Cloning constructor, uses a template to create a specific UDP for an Individual.
     
     @param  udp     another UserDefinedProperty object; the 'template' for this one.
      */
@@ -187,6 +187,10 @@ public class UserDefinedProperty implements Serializable {
         return shortOne.substring(0, end);
     }  //  end of method truncate
 
+    /** Gives a string of valid entries for this UDP.
+     * 
+     * @return a comma-separated string
+     */
     public String getValidEntriesString() {
         String answer = "";
         if (typ.equals("string")) {
@@ -219,6 +223,10 @@ public class UserDefinedProperty implements Serializable {
         return answer;
     }  //  end of method getValidEntriesString
     
+    /** Gives an array of valid entries for this UDP.
+     * 
+     * @return a String array
+     */
     public String[] getValidEntryArray() {
         if (validEntries == null || validEntries.isEmpty()) {
             return null;

@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.util.*;
 import java.awt.Dimension;
 
-/**This class creates an editor of a 2x2 matrix of kin types. this is used to
+/**This class creates an editor of a 2x2 matrix of kin types. This is used to
  * determine which line of descent to follow first when seeking a path from Ego
  * to Alter. In a matriarchal society, we will follow the mother's line before
  * the father's line.

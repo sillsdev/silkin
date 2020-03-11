@@ -8,7 +8,7 @@ import java.text.*;
  *  <p>
  *   Because so many methods are defined at the Domain Theory level, the code 
  *  files are broken into 4 classes: DT_Abstract1, DT_Abstract2, DomainTheory 
- *  and Learned_DT. 
+ *  and {@link Learned_DT}. 
  *
  *  @author Gary Morris, Northern Virginia Community College
  *              garymorris2245@verizon.net
@@ -227,7 +227,7 @@ public class DomainTheory extends DT_Abstract2 {
      * 
      * @param kinTerm  the term whose definition will be checked 
      * @param maxNoise  a parameter allowing a little noise in the data
-     * @return
+     * @return          a list of Issues for the user to resolve
      * @throws KSBadHornClauseException
      * @throws KSNoChainOfRelations2Alter
      * @throws KSInternalErrorException
@@ -1889,7 +1889,7 @@ public class DomainTheory extends DT_Abstract2 {
      * @param sourceDT
      * @param doInduction
      * @param learner
-     * @return
+     * @return  a list that specifies the elements of a solution 
      * @throws KSInternalErrorException
      * @throws JavaSystemException
      * @throws KSParsingErrorException

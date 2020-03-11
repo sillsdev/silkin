@@ -35,7 +35,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-/**SILKin's GUI is built on top of the KAES code donated my Michael Fischer; this
+/**SILKin's GUI is built on top of the KAES code donated by Michael Fischer; this
  * is the class that Fischer created to represent Unions. When SILKin began to
  * extensively modify this GUI, the {@link Family} class was added as an extension
  * to this class. SILKin code normally uses Family instances, but uses the methods

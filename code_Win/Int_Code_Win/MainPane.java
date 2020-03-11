@@ -37,6 +37,7 @@ public class MainPane extends JFrame implements ActionListener {
     public static int buildNmbr = 511;
     public static int NUMBER_OF_EGOS = 4;
     public static boolean fill_In_Flag = false;
+    public static boolean emergencyExit = false;
     static MyResBundle se = Library.screenElements,
                      msgs = Library.messages;
     private JMenuBar menuBar = new JMenuBar();
@@ -2101,7 +2102,8 @@ public class MainPane extends JFrame implements ActionListener {
 
     } //  end of method writeActivityLog
 
-    /* ContextFilter makes filters that only allow *.ctxt files and directories. */
+    /** ContextFilter makes filters that only allow *.ctxt files and directories. 
+     */
     public static class ContextFilter extends javax.swing.filechooser.FileFilter {
 
         //Accept all directories and all ctxt files.
@@ -2136,14 +2138,16 @@ public class MainPane extends JFrame implements ActionListener {
     public class CleanUpThread extends Thread {
 
         public void run() {
-            if (SIL_Edit.edWin != null &&
-                    SIL_Edit.edWin.chart.saveFile != null) {
+            if (SIL_Edit.edWin != null
+                    && SIL_Edit.edWin.chart.saveFile != null) {
                 try {
                     if (SIL_Edit.editingCtxt != null) {
                         Context.current = SIL_Edit.editingCtxt;
                     }
-                    SIL_Edit.edWin.chart.saveSILKFile();
-                    System.out.println("Wrote: " + SIL_Edit.edWin.chart.saveFile);
+                    if (!emergencyExit) {
+                        SIL_Edit.edWin.chart.saveSILKFile();
+                        System.out.println("Wrote: " + SIL_Edit.edWin.chart.saveFile);
+                    }
                 } catch (Exception ex) {
                     System.out.println(msgs.getString("cleanUpException"));
                 }

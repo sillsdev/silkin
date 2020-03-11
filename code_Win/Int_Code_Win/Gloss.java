@@ -4,21 +4,21 @@ import java.io.Serializable;
 /** This class represents the XML structure of an English gloss of the
  * definition of a KinTermDef. The XML schema is:<br/>
  *  &lt;gloss&gt;  <br/>
- *	&lt;element text="…."/&gt;<br/>
- *	&lt;element text="…."/&gt;<br/>
- *	&lt;element text="…."/&gt;<br/>
+ *	&lt;element text=".."&gt;<br/>
+ *	&lt;element text=".."&gt;<br/>
+ *	&lt;element text=".."&gt;<br/>
  *	&lt;where&gt;<br/>
  *		&lt;cultural-pred kinTerm=".."&gt;<br/>
- *			&lt;element text="…."/&gt;<br/>
- *			&lt;element text="…."/&gt;<br/>
+ *			&lt;element text=".."&gt;<br/>
+ *			&lt;element text=".."&gt;<br/>
  *		&lt;/cultural-pred&gt;<br/>
  *		&lt;cultural-pred kinTerm=".."&gt;<br/>
- *			&lt;element text="…."/&gt;<br/>
- *			&lt;element text="…."/&gt;<br/>
+ *			&lt;element text=".."&gt;<br/>
+ *			&lt;element text=".."&gt;<br/>
  * 		&lt;/cultural-pred&gt;<br/>
  *		&lt;cultural-pred kinTerm=".."&gt;<br/>
- *			&lt;element text="…."/&gt;<br/>
- *			&lt;element text="…."/&gt;<br/>
+ *			&lt;element text=".."&gt;<br/>
+ *			&lt;element text=".."&gt;<br/>
  *		&lt;/cultural-pred&gt;<br/>
  *	&lt;/where&gt;<br/>
  *  &lt;/gloss&gt;<br/>

@@ -499,7 +499,7 @@ public class Node implements Serializable {
     /**  Take the pcString and miniPreds of this node and
      *   'invert' them for a node containing the reciprocal kinTerm.
      * 
-     @param  altNode    receiver of inverted list & string
+     @param  node    receiver of inverted list & string
      */
     public void invertMiniPredsAndPCStringFor(Node node) {
         String revPred;

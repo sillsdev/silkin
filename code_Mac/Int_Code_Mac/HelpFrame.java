@@ -402,6 +402,7 @@ public class HelpFrame extends JFrame implements HyperlinkListener {
             nameCaptureItem = new JMenuItem();
             snapToGridItem = new JMenuItem();
             adoptionHelpItem = new JMenuItem();
+            intervalHelpItem = new JMenuItem();
             linkPriorityItem = new JMenuItem();
             chartPrintingItem = new JMenuItem();
 //          Theory Edit Sub-Menus
@@ -733,6 +734,13 @@ public class HelpFrame extends JFrame implements HyperlinkListener {
             });
             prefsSubMenu.add(adoptionHelpItem);
 
+            intervalHelpItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    window.displayPage(PREFS, "interval");
+                }
+            });
+            prefsSubMenu.add(intervalHelpItem);
+
             linkPriorityItem.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {
                     window.displayPage(PREFS, "priority");
@@ -904,6 +912,7 @@ public class HelpFrame extends JFrame implements HyperlinkListener {
             nameCaptureItem.setText(labels.getString("nameCap"));
             snapToGridItem.setText(labels.getString("snap"));
             adoptionHelpItem.setText(labels.getString("adoptHelp"));
+            intervalHelpItem.setText(labels.getString("intervalHelp"));
             linkPriorityItem.setText(labels.getString("linkPri"));
             chartPrintingItem.setText(labels.getString("fonts"));
             theoryEditSubMenu.setText(labels.getString("edDef"));
@@ -965,6 +974,7 @@ public class HelpFrame extends JFrame implements HyperlinkListener {
         private JMenuItem nameCaptureItem;
         private JMenuItem snapToGridItem;
         private JMenuItem adoptionHelpItem;
+        private JMenuItem intervalHelpItem;
         private JMenuItem linkPriorityItem;
         private JMenuItem chartPrintingItem;
         private JMenuItem layoutItem;

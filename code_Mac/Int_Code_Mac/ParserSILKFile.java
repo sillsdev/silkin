@@ -7,13 +7,13 @@ import java.awt.print.PageFormat;
 import java.awt.print.PrinterJob;
 import javax.swing.*;
 
-/**This SILKFileParser is an extension of the basic {@link ParserDomainTheory}
+/**This ParserSILKFile is an extension of the basic {@link ParserDomainTheory}
  * which reads in Domain Theories expressed in Horn Clauses. This one reads in a
  * SILK file which has been saved to disk in a *.silk format. The Context-Free
  * Grammar defining a *.silk file format is documented in
  * {@link SILKFileGrammar}. <p> 
  * When constructed with a {@link Tokenizer}, this
- * SILKFileParserPreXML will construct a {@link Context} from the tokens found
+ * ParserSILKFile will construct a {@link Context} from the tokens found
  * in the <code>Tokenizer's</code> input file. </p>
  * <p>
  * NOTE: All exception text in this class is intended for the developer in 
@@ -1248,6 +1248,7 @@ public class ParserSILKFile extends ParserDomainTheory {
         parseKinTypePriorities();
         parseSnapToGrid();
         parseAdoptionHelp();
+        parseSaveInterval();
         parseDisplayGEDCOM();
         parseGEDCOMtrees();
         parseSpecialRelationships();
@@ -1331,13 +1332,24 @@ public class ParserSILKFile extends ParserDomainTheory {
         current = scanner.lookAhead();  // peek at token, which must be a flag.
         if (current.lexeme.startsWith("<adoptionHelp")) {
             newCtxt.adoptionHelp = Boolean.parseBoolean(readOneAttribute("adoptionHelp", "val", "parseAdoptionHelp"));
+        } else if (!current.lexeme.equals("</editorSettings>") && !current.lexeme.startsWith("<saveInterval") 
+                && !current.lexeme.equals("<specialRelationships>") && !current.lexeme.startsWith("<displayGEDCOM")) {
+            error("parseAdoptionHelp seeking the flags <adoptionHelp>, <saveInterval>, <displayGEDCOM>, <specialRelationsips> or </editorSettings>'. ");
+        }
+    }
+    
+    void parseSaveInterval() throws KSParsingErrorException {
+        current = scanner.lookAhead();  // peek at token, which must be a flag.
+        if (current.lexeme.startsWith("<saveInterval")) {
+            Library.saveInterval = Integer.parseInt(readOneAttribute("saveInterval", "val", "parseSaveInterval"));
         } else if (!current.lexeme.equals("</editorSettings>") && 
                 !current.lexeme.equals("<specialRelationships>") && !current.lexeme.startsWith("<displayGEDCOM")) {
             error("parseAdoptionHelp seeking the flags <adoptionHelp>, <displayGEDCOM>, <specialRelationsips> or </editorSettings>'. ");
         }
-    }
+    } 
     
-     void parseDisplayGEDCOM() throws KSParsingErrorException {
+    
+    void parseDisplayGEDCOM() throws KSParsingErrorException {
         current = scanner.lookAhead();  // peek at token, which must be a flag.
         if (current.lexeme.startsWith("<displayGEDCOM")) {
             newCtxt.displayGEDCOM = Boolean.parseBoolean(readOneAttribute("displayGEDCOM", "val", "parseDisplayGEDCOM"));

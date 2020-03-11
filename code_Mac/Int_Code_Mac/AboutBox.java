@@ -17,6 +17,12 @@ import java.awt.image.*;
 import java.io.*;
 import javax.imageio.*;
 
+/**This class builds a frame that is displayed when the user
+ * clicks on "About SILKin" on a Mac. 
+ * 
+ *  @author		Gary Morris, Northern Virginia Community College
+ *                              garymorris2245@verizon.net
+ */
 public class AboutBox extends JFrame
         implements com.apple.eawt.AboutHandler, ActionListener  {
     
@@ -75,6 +81,10 @@ public class AboutBox extends JFrame
         aboutFrame.setVisible(true);
     }
 
+    /** When any ActionEvent occurs, this method closes the frame.
+     * 
+     * @param newEvent 
+     */
     public void actionPerformed(ActionEvent newEvent) {
         aboutFrame.setVisible(false);
     }		

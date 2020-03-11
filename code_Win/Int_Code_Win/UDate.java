@@ -3,7 +3,7 @@ import java.util.Locale;
 import java.text.ParseException;
 import java.text.DateFormat;
 
-/**This class is part of the SILKin program's Utilities. It handles all date
+/**This (Universal DAte) class is part of the SILKin program's Utilities. It handles all date
  * processing and enforces the date format conventions followed in SILKin.
  *<pre>
  * Default date format is xsd: date     YYYY-MM-DD.

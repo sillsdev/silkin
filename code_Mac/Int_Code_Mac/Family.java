@@ -461,8 +461,8 @@ public class Family extends Marriage implements Serializable, Locatable {
     }  // end of constructor with 2 Individuals, a divorce req, & divorce specs
 
     /**  Update data for this Family from later information.
-    @param		a Family with later data.
-     */
+    * @param newRec   a Family with later data.
+    */
     public void updateFrom(Family newRec) {
         deleted = newRec.deleted;
         children = newRec.children;
@@ -975,7 +975,6 @@ public class Family extends Marriage implements Serializable, Locatable {
     </ul>
 
     @param	out		a PrintWriter to write to.
-    @param	today	String: today's date as it should appear in the DataChange field of GEDCOM record.
      */
     public void exportGEDCOM(PrintWriter out) {
         out.println("0 @F" + serialNmbr + "@ FAM");

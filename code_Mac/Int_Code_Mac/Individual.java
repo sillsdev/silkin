@@ -5,7 +5,7 @@ import java.awt.Point;
 /**Each Individual is either an actual person in the culture under study, 
  * or is a hypothetical person created to illustrate the kinship terms in a 
  * particular domain theory. 
- * Individuals are born into {@link Family}s and participate in them via marriages.
+ * Individuals are born into {@link Family}s and participate in them via {@link Marriage}s.
  * In the Kinship system, societies are composed only of Families and Individuals.
  * 
  *  @author		Gary Morris, Northern Virginia Community College
@@ -513,7 +513,7 @@ public boolean hasDoD() {
     }
 
     /**  Update data for this Individual from later information.
-    @param		an individual with later data.
+    @param newRec   an individual with later data.
      */
     public void updateFrom(Individual newRec) {
         name = newRec.name;
@@ -710,13 +710,16 @@ public boolean hasDoD() {
     list of all primary kinTerms and a list (in square brackets) of extended kinTerms that this
     Individual exemplifies.
     
-    @param	out		a PrintWriter to write to.
-    @param	today	String: today's date as it should appear in the DataChange field of GEDCOM record.
+    * @param	out         a PrintWriter to write to.
+    * @param	realData    true = this record is for a non-hypothetical person
+    * @param    includeAux  "Include" = output auxiliaries
+    * @param    nonTerms    a list of predicates that are not kin terms
+    * @param    adoptNote   if non-null, a note about the adoptions recorded in the
+    *                       original GEDCOM file.
     */
     public void exportGEDCOM(PrintWriter out, boolean realData, String includeAux, 
             ArrayList<Object> nonTerms, String adoptNote) {
         // Write out one Individual record in GEDCOM format
-//        if (serialNmbr == 26) Context.breakpoint();
         out.println("0 @I" + serialNmbr + "@ INDI");
         String outText = "";
         if (realData) {
@@ -2191,15 +2194,15 @@ public boolean hasDoD() {
     }  //  end of method getUDPClass
     
     
-    /**  Make a new TreeMap to serve as the userDefinedProperties (UDP) treemap for a newly-created
+    /**  Make a new TreeMap to serve as the userDefinedProperties (UDP) TreeMap for a newly-created
          Individual.  The parameter is the UDP 'template' from the DomainTheory.  It has all the type
          information about each UDP.  We want to copy that, but for each {@link UserDefinedProperty} object
-         in the treemap we want to put a fresh (empty) ArrayList<Object> in the 'value' field so this Individual can
+         in the TreeMap we want to put a fresh (empty) ArrayList<Object> in the 'value' field so this Individual can
          have her own value(s) for each property.   If 'useDefaults' is false, we do NOT assign default values here; 
-		 the 'Monster Constructor' must check for constraints before assigning a value; that is done in findConformingValue
+         the 'Monster Constructor' must check for constraints before assigning a value; that is done in findConformingValue
          
-         @param dtUDTTreeMap    the template treemap from the current Context
-		 @param useDefaults		true = assign a default value, if one is defined.
+         @param ctxtUDPTreeMap  the template TreeMap from the current Context
+	 @param useDefaults	true = assign a default value, if one is defined.
          
          @return    a new copy of the template with unique value fields for this Individual
 
@@ -2219,14 +2222,13 @@ public boolean hasDoD() {
                 newUDP.value.add(newUDP.defaultValue);
             }
             newTM.put(propName, newUDP);
-        }  //  end of loop thru UDP's in the template treemap
+        }  //  end of loop thru UDP's in the template TreeMap
         return newTM;
     }  //  end of method makeNewUDPTreeMap
 	
     /**  A 'shorthand' version of <code>makeNewUDPTreeMap</code> with useDefaults = true
          
-         @param dtUDTTreeMap    the template treemap from the current Context
-         
+         @param ctxtUDPTreeMap    the template TreeMap from the current Context         
          @return    a new copy of the template with unique value fields for this Individual
     */
     public TreeMap makeNewUDPTreeMap(TreeMap ctxtUDPTreeMap)  {

@@ -168,8 +168,8 @@ public class LibBrowserChart extends JPanel implements Scrollable {
      * @param maxY  the vertical height 
      */
     public void writeLegend2Col(Graphics g, int maxY) {
-        ArrayList<String> leftCol = new ArrayList<String>(),
-                          rightCol = new ArrayList<String>();
+        ArrayList<String> leftCol = new ArrayList<>(),
+                          rightCol = new ArrayList<>();
         int length = 0, titleLength, j;
         String title = browser.letterLegend.get(0);
         titleLength = title.length() * LibBrowser.factor;

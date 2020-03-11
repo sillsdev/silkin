@@ -35,7 +35,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-/**SILKin's GUI is built on top of the KAES code donated my Michael Fischer; this
+/**SILKin's GUI is built on top of the KAES code donated by Michael Fischer; this
  * is the class that Fischer created to represent Unions. When SILKin began to
  * extensively modify this GUI, the {@link Family} class was added as an extension
  * to this class. SILKin code normally uses Family instances, but uses the methods
@@ -454,16 +454,17 @@ public void lineageDeltaMove(int dx, int dy, ArrayList<Individual> people, Array
 
     public void drawSpouseLines(Graphics g, Rectangle myRect, boolean doIt) {
         // If either spouse is a Link, draw line to the link. Otherwise to the actual spouse.
+        // But do not draw lines to a deleted symbol.
         Family fam = (Family) this;
         ArrayList<Locatable> spice = new ArrayList<Locatable>(2);
-        if (fam.husbandLink != null) {
+        if (fam.husbandLink != null && !fam.husbandLink.deleted) {
             spice.add(fam.husbandLink);
-        }else if (fam.husband != null) {
+        }else if (fam.husband != null && !fam.husband.deleted) {
             spice.add(fam.husband);
         }
-        if (fam.wifeLink != null) {
+        if (fam.wifeLink != null && !fam.wifeLink.deleted) {
             spice.add(fam.wifeLink);
-        }else if (fam.wife != null) {
+        }else if (fam.wife != null && !fam.wife.deleted) {
             spice.add(fam.wife);
         } // Spice contains the spouse symbols to be painted, if any.
         boolean spouseIn = false;
@@ -545,7 +546,7 @@ public void lineageDeltaMove(int dx, int dy, ArrayList<Individual> people, Array
             }
             for (Object k : fam.children) {
                 Individual kid = (Individual) k;
-                if (!kid.deleted && !linkees.contains(kid)) { // ignore kids who are links
+                if (!linkees.contains(kid) && !kid.deleted) { // ignore kids who are links or deleted
                     miny = Math.min(miny, kid.location.y);
                     maxy = Math.max(maxy, kid.location.y);
                 }
@@ -553,8 +554,8 @@ public void lineageDeltaMove(int dx, int dy, ArrayList<Individual> people, Array
             Rectangle xr = bounds();
             int xw = xr.width / 2;
             // IF there are any kids, AND [marriage is in myRect) OR kid is in myRect]
-            // THEN draw the lines.
-            fam.computeBirthGrps();
+            // THEN draw the lines.            
+            fam.computeBirthGrps();  // to re-compute the minX
             for (BirthGroup bg : birthGrps) {
                 minx = Math.min(minx, bg.topPtX);
                 maxx = Math.max(maxx, bg.topPtX);
@@ -572,7 +573,7 @@ public void lineageDeltaMove(int dx, int dy, ArrayList<Individual> people, Array
                 } // only draw kids who are not represented by Links
                 for (Individual ind : bg.members) {
                     if (ind.location.x != -100 && ind.location.y != -100 
-                            && !ind.deleted && !linkees.contains(ind)) {
+                            && !linkees.contains(ind) && !ind.deleted) {
                         g.drawLine(ind.location.x + xw, ind.location.y, bg.topPtX + xw, miny);
                     }
                 }

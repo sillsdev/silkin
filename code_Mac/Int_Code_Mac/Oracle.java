@@ -77,6 +77,10 @@ public class Oracle implements Serializable {
         return null;  //  return a null to signal 'no correction needed'
     }  //  end of method correction
 
+    /**This inner class represents bad dyads intentionally added to the dyads in
+     * a test of the Learning Module. It was used strictly for testing in the
+     * academic phase. It is not used in the delivered system.
+     */
     public static class NoiseRecord implements Serializable {
 
         String noiseType, goodKTerm, badKTerm;

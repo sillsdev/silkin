@@ -3,12 +3,16 @@ import java.text.*;
 import java.io.*;
 import java.awt.*;
 import javax.swing.JOptionPane;
+import java.nio.file.Path;
+import java.nio.file.Files;
+import static java.nio.file.StandardCopyOption.*;
 
 /** Each instance of Context is a 'workspace' in which a particular culture's 
  * Kinship System is under construction or examination.  Each contains its own 
  * population of {@link Family} and {@link Individual} objects, domain theories, 
  * etc.
  *   Class-level (static) fields act as global variables.
+ *   Most file operations are centered im this class.
  *
 @author		Gary Morris, Northern Virginia Community College
 *                   garymorris2245@verizon.net
@@ -97,6 +101,7 @@ public class Context implements Serializable {
     public int infoPerson, infoMarriage, labelChoice, ktLabelChoice, maxNoiseP = 25, ignorableP = 5;
     public boolean editable, distinctAdrTerms, birthDateNormallyCaptured = false,
             surnameNormallyCaptured = true, displayGEDCOM = false;
+    public static String[] priorVersions;
 
     /** This zero-arg constructor is for use by Serialization ONLY.  */
     public Context() {
@@ -1260,6 +1265,7 @@ public class Context implements Serializable {
             KSDateParseException {
         String directory = f.getParent(), path, lang;
         PrintWriter silk = null;
+        makePriorVersion(f);
         try {
             silk = new PrintWriter(f, "UTF-8");
         } catch (Exception ex) {
@@ -1288,6 +1294,133 @@ public class Context implements Serializable {
         silk.close();
         saveState = false;
     }  //  end of method writeSILKFile
+    
+    /** To prevent data loss in case of a crash, move the SILK file from which
+     *  the current session was launched to the Library/Prior_Versions folder,
+     *  giving it the lowest version number not already used.
+     * 
+     *  @param silkFile   the file from which the current session was launched,
+     *                    or else the previous version saved.
+     * */
+     public static void makePriorVersion(File silkFile) {
+        String pdn = Library.libraryDirectory + "Prior_Versions";
+        File priorDir = new File(pdn);
+        if (! priorDir.exists()) {
+            priorDir.mkdir();
+        }  //  Now we have a valid Prior_Versions folder
+        String[] priorVersions = getPriors(priorDir, silkFile);
+        int versionNmbr = 0;
+        for(String str : priorVersions) {  //  the array could be empty
+            int ext = str.indexOf(".silk");
+            int vNum, vPt = str.lastIndexOf("--v");
+            if (vPt > 1 && vPt < ext - 3) {  
+                //  language names have minimum 2 characters
+                vNum = Integer.parseInt(str.substring(vPt+3, ext));
+                if (vNum > versionNmbr) {
+                    versionNmbr = vNum;
+                }
+            }
+        }  // at end of this loop we should have captured the highest prior
+           // version number, if any
+        versionNmbr++;  // the new version number
+        String nm = silkFile.getName();
+        int ext = nm.indexOf(".silk");
+        int langNm = Math.max(0, nm.lastIndexOf("/"));
+        String newName = nm.substring(langNm,ext) + "--v" + versionNmbr + ".silk";
+        File newPrior = new File(pdn + "/" + newName);
+        // Converting to Paths so that Windows will work correctly
+        Path silkPath = silkFile.toPath();
+        Path priorPath = newPrior.toPath();
+        try {  //  use 'copy' instead of 'move' so Windows will work -- Grrr!
+            Files.copy(silkPath, priorPath, COPY_ATTRIBUTES);
+        }catch(Exception exc) {
+            String msg = Library.messages.getString("errorRetrieving")
+                    + exc.getMessage();
+            String title = Library.messages.getString("notYourFault");
+            title = title.substring(0, title.length() -2);  // remove newline at end
+            MainPane.displayError(msg, title, JOptionPane.ERROR_MESSAGE);
+        }        
+    }
+     
+     /** Create an array of the names of prior versions of this file. 
+      * 
+      * @param priorDir the directory (folder) in the Library where priors are stored
+      * @param silkFile the file for which priors are sought
+      * @return         an array of all the names of priors for this base file
+      */
+     public static String[] getPriors(File priorDir, File silkFile) {
+        FilePicker picky = new FilePicker();
+        String nm = silkFile.getName();
+        int ext = nm.indexOf(".silk");
+        int langNm = Math.max(0, nm.lastIndexOf("/"));
+        picky.langNameSought = nm.substring(langNm,ext);
+        priorVersions = priorDir.list(picky);  
+        return priorVersions;
+     }
+     
+     /** Modify msg to inform the User whether a Prior Version is available.
+      * 
+      * @param msg      The text of the exception's message re: the error
+      * @param silkFile The file we are trying to open or save
+      * @return         a modification of msg that informs User whether there
+      *                 are any prior versions available.
+      */
+    public static String craftBackupMsg(String msg, File silkFile) {
+        String newMsg = msg + "\n";
+        String pdn = Library.libraryDirectory + "Prior_Versions";
+        File priorDir = new File(pdn);
+        if (!priorDir.exists()  || getPriors(priorDir, silkFile).length == 0) {
+            newMsg += "\n" + Library.messages.getString("noPriorVersions1");
+            newMsg += silkFile.getName() + " "
+                    + Library.messages.getString("noPriorVersions2");
+            ChartPanel.setPriorsFlagTo(false);
+            return newMsg;
+        }  //  OK. The Priors directory exists & has priors for this file
+        newMsg += "\n" + Library.messages.getString("usePriorVersions1");
+        newMsg += Library.messages.getString("usePriorVersions2");
+            ChartPanel.setPriorsFlagTo(true);
+        return newMsg;
+    }
+    
+    /** Find the most recent (highest numbered) prior version, rename it
+     *  with the base file name (removing the version number) and move it
+     *  to the User's edit directory.
+     */
+    public static void revertToPrior() {
+        int versionNmbr = 0;
+        String latestName = "";
+        for(String str : priorVersions) {  // the array can't be empty
+            int ext = str.indexOf(".silk");
+            int vNum, vPt = str.lastIndexOf("--v");
+            if (vPt > 1 && vPt < ext - 3) {  
+                //  language names have minimum 2 characters
+                vNum = Integer.parseInt(str.substring(vPt+3, ext));
+                if (vNum > versionNmbr) {
+                    versionNmbr = vNum;
+                    latestName = str;
+                }
+            }
+        }  //  Now we know the latest version    
+        String fn = Library.libraryDirectory + "Prior_Versions/" + latestName;
+        File prior = new File(fn);
+        int ext = latestName.indexOf(".silk");
+        int vPt = latestName.lastIndexOf("--v");
+        String newName = Library.editDirectory + "/" + latestName.substring(0, vPt);
+        newName += latestName.substring(ext);
+        File newCurrent = new File(newName);
+        Path priorPath = prior.toPath();
+        Path currentPath = newCurrent.toPath();
+        try {
+            Files.move(priorPath, currentPath, REPLACE_EXISTING);
+        } catch(Exception exc) {
+            String msg = Library.messages.getString("errorRetrieving")
+                    + exc.getMessage();
+            String title = Library.messages.getString("notYourFault");
+            title = title.substring(0, title.length() -2);  // remove newline at end
+            MainPane.displayError(msg, title, JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
 
     /** This method writes the entire saved state of the SIL_Edit session in XML-like format.
      *  It is used by writeSILKFile for xxx.silk files, and by writeSuggsFile for xxx.sugg files.
@@ -1299,7 +1432,7 @@ public class Context implements Serializable {
      * @throws FileNotFoundException        if there's a file system error
      * @throws KSInternalErrorException     if SILKin code crashes
      */
-    void writeSILKGuts(PrintWriter silk, String directory)
+    public void writeSILKGuts(PrintWriter silk, String directory)
             throws FileNotFoundException, KSInternalErrorException, KSDateParseException {
         String path, lang;
         silk.println("<parameters>");
@@ -1319,7 +1452,7 @@ public class Context implements Serializable {
         silk.println("  <dataAuthors>");
         for (String auth : dataAuthors) {
             silk.println("\t<dataAuthor name=\"" + auth + "\"/>");
-        }
+        }        
         silk.println("  </dataAuthors>");  //  end of dataAuthors
         if (dateOfLastDataChange != null) {
             silk.println("  <lastDataChangeDate value=\"" + dateOfLastDataChange + "\"/>");
@@ -1377,6 +1510,7 @@ public class Context implements Serializable {
         silk.println("  <snapToGrid val=\"" + Library.snapToGrid + "\" x=\"" 
                 + Library.gridX + "\" y=\"" + Library.gridY + "\"/>");
         silk.println("  <adoptionHelp val=\"" + adoptionHelp + "\"/>");
+        silk.println("  <saveInterval val=\"" + Library.saveInterval + "\"/>");
         silk.println("  <displayGEDCOM val=\"" + displayGEDCOM + "\"/>");
         if (gedcomHeaderItems != null) {
             printGEDCOMTree(silk, "gedcomHeaderItems", gedcomHeaderItems);            
@@ -1985,8 +2119,30 @@ public class Context implements Serializable {
         return true;
     }
     
+    /** This inner class provides a file name filter for sorting through the 
+     *  Prior Versions directory.    
+    */
+    public static class FilePicker implements java.io.FilenameFilter {
+        String langNameSought = "";
+        
+        /** Return true if the candidate file is a prior version of the file sought.
+         * 
+         * @param dir       the directory holding the file
+         * @param fileName  the name of the candidate file
+         * @return          true only if fileName's base name (without the version number)
+         *                  matches the language name sought.
+         */
+        public boolean accept(File dir, String fileName) {
+            if (fileName.contains(langNameSought)) {
+                return true;
+            }
+            return false;
+        }
+    }
+    
     /**
-     * This convenience class has 3 named fields: parent, child, and udpName.
+     * This convenience class (a Special Relationship Triple) has 3 named fields: 
+     * parent, child, and udpName.
      * It makes the code more readable.
      */
     public static class SpecRelTriple implements Serializable {
@@ -2008,6 +2164,10 @@ public class Context implements Serializable {
         }
     }
 
+    /**This inner class is a compact pointer 
+     * to a {@link ClauseBody}. It allows for manipulation and comparison 
+     * of large number of ClauseBodies without overloading memory. 
+     */
     public static class CB_Ptr implements Serializable {
 
         String kinTerm;

@@ -10,8 +10,8 @@ import java.io.*;
  * files are broken into 4 classes:  <ol>
  * <li>DT_Abstract1</li>
  * <li>DT_Abstract12</li>
- * <li>DomainTheory</li>
- * <li>Learned_DT</li></ol></p>
+ * <li>{@link DomainTheory}</li>
+ * <li>{@link Learned_DT}</li></ol></p>
  * 
  *  @author		Gary Morris, Northern Virginia Community College
  *                              garymorris2245@verizon.net

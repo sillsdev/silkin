@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-/**This class uses an {@link ArrayList<Object>} to implement a standard queue.
+/**This class uses an {@link ArrayList} to implement a standard queue.
  * 
  *  @author		Gary Morris, Northern Virginia Community College
  *                              garymorris2245@verizon.net

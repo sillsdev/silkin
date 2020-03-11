@@ -13,6 +13,10 @@ import javax.swing.*;
  * When constructed with a {@link Tokenizer}, this ParserSILKFilePreXML will 
  * construct a {@link Context} from the tokens found in the 
  * <code>Tokenizer's</code> input file. </p>
+ * <p>This parser will theoretically never be needed. But just in case someone
+ * has an old-style SILK file they want to read into a modern version of SILKin,
+ * we keep it around.
+ * </p>
  * 
  *  @author		Gary Morris, Northern Virginia Community College
  *                              garymorris2245@verizon.net

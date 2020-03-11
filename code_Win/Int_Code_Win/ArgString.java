@@ -1,5 +1,5 @@
 /** An ArgString is a string used as an argument to a predicate.
-  *  UserDefinedProperties use string args; the (@link Parser} can parse them.
+  *  UserDefinedProperties use string args; the {@link ParserSILKFile} can parse them.
   *
   * @author		Gary Morris, Northern Virginia Community College
   *         garymorris2245@verizon.net

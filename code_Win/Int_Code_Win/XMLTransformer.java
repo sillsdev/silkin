@@ -22,13 +22,15 @@ import java.io.*;
  */
 public class XMLTransformer {
 
+    /**This method does the transformation from XML data to formatted HTML.
+     * 
+     * @param datafile      the XML file to be transformed
+     * @param stylesheet    the XSL file specifying the transformation
+     * @param outfile       the output HTML file
+     */
     public void transform(File datafile, File stylesheet, File outfile) {
 
         try {
-            //  Parse data file into a DOM for input
-//            DocumentBuilder builder = factory.newDocumentBuilder();
-//            Document document = builder.parse(datafile);
-            // Use a Transformer for output
             TransformerFactory tFactory = TransformerFactory.newInstance();
             StreamSource stylesource = new StreamSource(stylesheet);
             Transformer transformer = tFactory.newTransformer(stylesource);

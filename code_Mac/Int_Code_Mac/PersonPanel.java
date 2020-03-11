@@ -13,6 +13,9 @@ import java.beans.PropertyVetoException;
  * Those portions taken from his code are copyrighted by him; all rights
  * reserved. See his complete copyright statement and terms of re-use in
  * e.g. KinshipEditor.java in this package.
+ * <p>A PersonPanel displays all the data about a Person and allows the User to
+ * edit any of it (except the serial number, of course).
+ * </p>
  * <p>
  * DATA POSTING STRATEGY - As soon as any field in this panel loses focus, we
  * post the latest data to the Individual/Person being displayed ("infoPerson").
@@ -512,9 +515,7 @@ public class PersonPanel extends javax.swing.JPanel {
                             .add(alterFirstNames, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(alterLastName)
                             .add(jLabel1)))
-                    .add(layout.createSequentialGroup()
-                        .add(egoPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .add(egoPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                         .add(jLabel5)
@@ -538,13 +539,11 @@ public class PersonPanel extends javax.swing.JPanel {
                         .add(personDeathYear, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(personDeathMon, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(personDeathDD, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(layout.createSequentialGroup()
-                                .add(6, 6, 6)
-                                .add(dataChgDateLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE))
-                            .add(dataChgDate, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)))
+                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(layout.createSequentialGroup()
+                            .add(6, 6, 6)
+                            .add(dataChgDateLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE))
+                        .add(dataChgDate, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
                         .add(20, 20, 20)
@@ -1470,7 +1469,7 @@ public class PersonPanel extends javax.swing.JPanel {
      * @param c the window to write to
      * @param k the string to be sanitized
      * @param typ the type of string we are sanitizing
-     * @return
+     * @return  the input string with all forbidden characters corrected
      * @throws KSParsingErrorException 
      */
     public static String sanitizeKinTerms(java.awt.Component c, String k, String typ) throws KSParsingErrorException {
@@ -1703,6 +1702,9 @@ public class PersonPanel extends javax.swing.JPanel {
         parent.chart.dirty = true;
         dirty = false;
         storing = false;
+        if (++Library.changeCounter % Library.saveInterval == 0) {
+            parent.chart.saveSILKFile();
+        }
         debugDyads();
     }
     

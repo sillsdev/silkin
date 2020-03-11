@@ -726,7 +726,7 @@ public class SIL_Edit extends JFrame {
         }
     }
 
-    /**Post whichever option the User has selected to {@link LIbrary]'s variable.
+    /**Post whichever option the User has selected to {@link Library}'s variable.
      * 
      * @param onOff User's choice, made in 'Edit Prefs.'
      */ 
@@ -2235,30 +2235,40 @@ public class SIL_Edit extends JFrame {
                 File f = Library.recentFiles[0];
                 if (f != null) {
                     chart.saveFile = f;
+                    chart.failureCount = 0;
+                    chart.recursionCount = 0;
                     chart.loadSILKFile();
                 }
             } else if (e.getActionCommand().equals("n 1")) {
                 File f = Library.recentFiles[1];
                 if (f != null) {
                     chart.saveFile = f;
+                    chart.failureCount = 0;
+                    chart.recursionCount = 0;
                     chart.loadSILKFile();
                 }
             } else if (e.getActionCommand().equals("n 2")) {
                 File f = Library.recentFiles[2];
                 if (f != null) {
                     chart.saveFile = f;
+                    chart.failureCount = 0;
+                    chart.recursionCount = 0;
                     chart.loadSILKFile();
                 }
             } else if (e.getActionCommand().equals("n 3")) {
                 File f = Library.recentFiles[3];
                 if (f != null) {
                     chart.saveFile = f;
+                    chart.failureCount = 0;
+                    chart.recursionCount = 0;
                     chart.loadSILKFile();
                 }
             } else if (e.getActionCommand().equals("n 4")) {
                 File f = Library.recentFiles[4];
                 if (f != null) {
                     chart.saveFile = f;
+                    chart.failureCount = 0;
+                    chart.recursionCount = 0;
                     chart.loadSILKFile();
                 }
             }

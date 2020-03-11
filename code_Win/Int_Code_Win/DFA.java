@@ -1,6 +1,6 @@
 import java.util.* ;
 
-/** An instance of the DFA class is a Parsing Table: an ArrayList<Object> of {@link DFA_Row}s.
+/** An instance of the (Deterministic Finite Automata) DFA class is a Parsing Table: an ArrayList<Object> of {@link DFA_Row}s.
 	Each DFA_Row contains one or more {@link DFA_Cell}s.  Each DFA_Cell 
 	contains an 'alphabit' or component of the Alphabet (e.g. LineTerm, WhiteSpace, LtrOrDig) 
 	and a newState which is the state you shift to if you consume that 'alphabit.'  

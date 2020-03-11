@@ -20,8 +20,8 @@ import java.io.*;
 public class MyResBundle implements Serializable {
     TreeMap<String, String> lookUpTable = new TreeMap<String, String>();
 
-    static MyResBundle getBundle(String baseName, Locale locale,
-            String resDir) throws KSInternalErrorException {
+    static MyResBundle getBundle(String baseName, Locale locale, String resDir) 
+            throws KSInternalErrorException {
         // Error check the args, then read the resource file and load TMap
         if (baseName == null || locale == null) {
             throw new KSInternalErrorException("Missing argument in 'getBundle' call.");

@@ -1240,7 +1240,11 @@ public class ParserGEDCOM {
         }
     }
 
-    
+    /**In the GEDCOM 5.5 protocol, dozens of specialized data may be recorded
+     * in XML-style blocks; because these have no value to SILKin, they are
+     * simply stored as a <code>GEDCOMitem</code> and held until the file is 
+     * written out in GEDCOM format. 
+     */
     public static class GEDCOMitem implements Serializable {
         int level, refLoc = -1;
         String tag, ref, text;
@@ -1356,6 +1360,10 @@ public class ParserGEDCOM {
         }
     } // end of class GEDCOMitem
     
+    /**This inner class is just a convenience for recording adoptions in a GEDCOM
+     * file.
+     * 
+     */
     public static class AdoptionRecords implements Serializable {
         ArrayList<Locatable[]> records = new ArrayList<Locatable[]>();
         

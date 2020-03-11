@@ -270,10 +270,10 @@ public class FamilyEditor extends KSJInternalFrame {
         Individual spouse;
         if (typ.equals("husband")) {  //  it's-a-husband
             spouse = fam.husband;
-            label = se.getString("husband");
+            label = se.getString("husb");
         } else {  //  it's-a-wife
             spouse = fam.wife;
-            label = se.getString("wife");
+            label = se.getString("wif");
         }
         if ((spouse != null) && (spouse.name != null) && (spouse.name.length() > 0)) {
             spouseName = spouse.name;
@@ -283,7 +283,7 @@ public class FamilyEditor extends KSJInternalFrame {
         } else {
             spouseName = "none";
         }
-        JLabel hLabel = new JLabel(label + ": " + spouseName);
+        JLabel hLabel = new JLabel(label + spouseName);
         sRow.add(hLabel);
         if (spouse != null) {
             JButton viewSpouse = new JButton(se.getString("viewEdit"));
@@ -373,14 +373,14 @@ public class FamilyEditor extends KSJInternalFrame {
                 //  This action only fires if the Family is a deleted record.
                 fam.deleted = false;
                 if (fam.location.getX() < 10 || fam.location.getY() < 20) {
-                    fam.location = new Point(10,80);
+                    fam.location = new Point(10, 80);
                 }
                 editor.remove(deleteBox);
                 editor.getBounds(bnds);
-                editor.repaint(bnds);
                 if (SIL_Edit.edWin != null && SIL_Edit.edWin.chart != null) {
                     SIL_Edit.edWin.chart.repaint();
                 }
+                editor.repaint(bnds);
             } else if (e.getActionCommand().equals("new wed date")) {
                 a = wedDay.getText();
                 b = wedYear.getText();

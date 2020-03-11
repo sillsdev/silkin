@@ -14,7 +14,7 @@ import javax.swing.*;
  *  <li>DT_Abstract1</li> 
  *  <li>DT_Abstract2</li>
  *  <li>DomainTheory</li>
- *  <li>Learned_DT</li>
+ *  <li>{@link Learned_DT}</li>
  * </ol>
  * 
  *  @author		Gary Morris, Northern Virginia Community College
@@ -238,7 +238,7 @@ public abstract class DT_Abstract2 extends DT_Abstract1  {
      *  It assembles the lists of Head Clause Variable Constraints and other 
      *  features for this Domain theory.
      *
-     *	@returns    a FeatureVectorObj with all the characteristics of this DomainTheory
+     *	@return    a FeatureVectorObj with all the characteristics of this DomainTheory
     */
     public FeatureVectorObj computeFeatureVector(ArrayList<Object> egoList) throws KSInternalErrorException, KSBadHornClauseException,
             KSInternalErrorException, KSConstraintInconsistency, ClassNotFoundException {

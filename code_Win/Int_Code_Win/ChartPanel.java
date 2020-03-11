@@ -876,7 +876,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
     }
     
     /**
-     * Make a new instance of a pre-defined {@link UDP} and prepare for 
+     * Make a new instance of a pre-defined {@link UserDefinedProperty} and prepare for 
      * adding it to the chart.
      */
     public void createChartableUDP_1() {
@@ -1165,7 +1165,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             }
         }  //  end of loop thru Individuals with defailt color = black
         for (Family m : Context.current.familyCensus) {
-            if (m != null && !m.deleted && m.homeChart.equals(Context.current.currentChart)) {
+            if (m != null && !m.deleted  && m.homeChart.equals(Context.current.currentChart)) {
                 m.drawSymbol(g, myRect, Color.black);
                 m.drawLines(g, myRect);
             }
@@ -2281,14 +2281,33 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         Library.editDirectory = currCtxt.editDirectory;
         try {
             currCtxt.writeSILKFile(saveFile, editParameters(currCtxt));
+        } catch (Exception kse) {
+            String msg = se.getString("errorSavingSilk") + ":\n" + kse;
+            System.err.println(msg);
+            msg = Context.craftBackupMsg(msg, saveFile);  //  will set priorsExist
+            msg += Library.messages.getString("usePriorVersions3");
+            String msg2 = Library.messages.getString("seriousError");
+            JOptionPane.showMessageDialog(this, msg, msg2, JOptionPane.ERROR_MESSAGE);   
+            if (priorsExist) {
+                Context.revertToPrior();
+            }
+            MainPane.emergencyExit = true;
+            System.exit(7);
+        }
+        try {            
             Library.saveUserContext();
         } catch (Exception kse) {
             String msg = se.getString("errorSavingSilk") + ":\n" + kse;
             System.err.println(msg);
             MainPane.displayError(msg, msgs.getString("seriousError"), JOptionPane.PLAIN_MESSAGE);
-        }
+        }        
         edWin.setTitle("Editing: " + saveFile.getName() + ".");
         dirty = false;
+    }
+    
+    static boolean priorsExist = false;
+    static void setPriorsFlagTo(boolean value) {
+        priorsExist = value;
     }
 
     public String editParameters(Context ctxt) {
@@ -2455,19 +2474,56 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             setOrigin(0, 0);
             saveFile = fc.getSelectedFile();
             Library.userDirectory = saveFile.getName();
+            failureCount = 0;
+            recursionCount = 0;
             loadSILKFile();
         }
     }
     
+    int failureCount = 0,
+        recursionCount = 0;
     /** Load the SILK file that has been stored in saveFile, verify that all
      *  necessary data is present, and load everything into its proper internal 
      * fields. Almost all the parameters and settings will be loaded to 'edWin'
      * (the SIL_Edit window), the context, or this ChartPanel.
+     * 
+     * If the load operation fails for any reason, alert the User and try to
+     * load the most recent prior version. Keep count of failures; 2 in a row 
+     * and we give up. Also keep count of recursive calls; we only want to ask 
+     * the User once to identify the currentUser.
      */
     public void loadSILKFile() {
         Context ctxt = null;
         try {
-            Library.loadSILKFile(saveFile);  // makes a new Context.current from SILK file
+           Library.loadSILKFile(saveFile);  // makes a new Context.current from SILK file
+        } catch (Exception e) {
+            String msg = se.getString("whileReading") + " " + saveFile.getName() + "\n" + e;
+            StackTraceElement[] bad = e.getStackTrace();
+            for (int i = 0; i < 5; i++) {
+                msg += "\n" + bad[i];
+            }
+            msg = Context.craftBackupMsg(msg, saveFile);  //  this sets 'priorsExist'
+            failureCount++;
+            if (priorsExist) {
+                msg += Library.messages.getString("usePriorVersions4");
+            }            
+            String msg2 = Library.messages.getString("seriousError");
+            JOptionPane.showMessageDialog(this, msg, msg2, JOptionPane.ERROR_MESSAGE);   
+            if (priorsExist) {
+                if (failureCount > 1) {
+                    msg = Library.messages.getString("multiErrorRetrieving");
+                    JOptionPane.showMessageDialog(this, msg, msg2, JOptionPane.ERROR_MESSAGE);   
+                    return;
+                }
+                Context.revertToPrior();  //  move the latest prior into Context Under Construction
+                recursionCount++;
+                loadSILKFile();  //  load from Context Under Construction
+            }            
+        }
+        try {
+            if (failureCount > 1) {
+                    return;
+                }
             ctxt = Context.current;
             edWin.ktm = ctxt.ktm;
             DomainTheory dt = ctxt.domTheoryRef();
@@ -2634,6 +2690,10 @@ public class ChartPanel extends JPanel implements MouseInputListener {
     }
 
     String getCurrentUser(JFrame parentFrame, String paneTitle) throws KSInternalErrorException {
+        if (recursionCount > 0) {
+        	recursionCount--;
+       		return "";
+        } 
         ArrayList<String> dataAuthors = Context.current.dataAuthors;
         int size = dataAuthors.size(),
                    repeats = -1;

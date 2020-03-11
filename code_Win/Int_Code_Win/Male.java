@@ -37,7 +37,7 @@
  *  @author		Gary Morris, Northern Virginia Community College
  *                              garymorris2245@verizon.net
  */
-class Male extends Kind {
+public class Male extends Kind {
 
     public Male() {
         symbol = new drawTriangle();

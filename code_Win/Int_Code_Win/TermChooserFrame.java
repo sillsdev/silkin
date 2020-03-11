@@ -30,7 +30,7 @@ public class TermChooserFrame extends KSJInternalFrame {
      */
     public TermChooserFrame(DomainTheory domTh, LibBrowser frame) {
         super(title);
-        chosenTerms = new ArrayList<LibBrowser.TermTriple>();
+        chosenTerms = new ArrayList<>();
         dt = domTh;
         ctxt = dt.ctxt;
         parent = frame;

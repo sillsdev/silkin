@@ -15,8 +15,7 @@ import javax.swing.JOptionPane;
  * will ask the User to produce 1-2 dyads for that kin type. If a pair of persons already exist in the
  * IndividualCensus who could be used, we generate a named-data-request.
 </p><p>
- * In a future version, this index could be implemented as a database call.
- * For now, to make additions efficient, we implement this as a nested TreeMap:
+ * To make additions efficient, we implement this as a nested TreeMap:
  * kinType => egoSerial# => AList of AlterSerial#s
  * </p>
  *  @author		Gary Morris, Northern Virginia Community College

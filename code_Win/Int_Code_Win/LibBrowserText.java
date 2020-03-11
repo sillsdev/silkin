@@ -22,7 +22,7 @@ public class LibBrowserText extends javax.swing.JPanel {
     static Font boldFont = new Font("Dialog", Font.BOLD, 12);  // Default font
     static Font regFont = new Font("Dialog", Font.PLAIN, 10);  // Default font
     int maxX = 0, maxY = 0, charWidth = 5;
-    ArrayList<PrintLine> content = new ArrayList<PrintLine>();
+    ArrayList<PrintLine> content = new ArrayList<>();
     
     public LibBrowserText(LibBrowser lb2) {
         browser = lb2;

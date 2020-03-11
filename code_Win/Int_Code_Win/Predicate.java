@@ -44,7 +44,7 @@ public class Predicate	implements Symbol, Serializable  {
 	/** Construct a Predicate of category <code>cat</code> with the symbol <code>name</code> 
 		of arity <code>airTee</code>.
 	  
-	  @param	name	a String = the name of the Predicate.
+	  @param	nam	a String = the name of the Predicate.
 	  @param	cat		the {@link PredCategory} of this predicate.
 	*/
 	public Predicate(String nam, PredCategory cat)  {

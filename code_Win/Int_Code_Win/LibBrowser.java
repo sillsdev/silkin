@@ -385,7 +385,7 @@ public class LibBrowser extends KSJInternalFrame {
         ArrayList<Object> egoBag = new ArrayList<Object>();
         egoBag.add(currentContext.individualCensus.get(0));
         ClauseBody cb = null;
-        ArrayList<Object> pile = new ArrayList<Object>();
+        ArrayList<Object> pile = new ArrayList<>();
         for (TermTriple trip : list) {
             KinTermDef ktd = (KinTermDef) currentDomTh.theory.get(trip.kinTerm);
             //  If the base and exp fields mean "all" and "all" we simply add all
@@ -410,7 +410,7 @@ public class LibBrowser extends KSJInternalFrame {
         }  //  End of loop thru list. Now pile contains all CB's we want to diagram.
            //  Now go thru the pile, unify variables & create examples
         try {
-            ArrayList<Object> round2 = new ArrayList<Object>();
+            ArrayList<Object> round2 = new ArrayList<>();
             for (int j = 0; j < pile.size(); j++) {
                 cb = (ClauseBody) pile.get(j);
                 cb.unifyVariables();
@@ -520,7 +520,7 @@ public class LibBrowser extends KSJInternalFrame {
         paul.assignChartAndLevel();
 //        printPopulation();  //  Only for debugging
         paul.processChartRows();
-        TreeMap<String, Integer> spacerMap = new TreeMap<String, Integer>();
+        TreeMap<String, Integer> spacerMap = new TreeMap<>();
         computeHorizontalCushions(spacerMap);
         paul.expandToGridUnits(spacerMap);
         narrowSpaceAroundFamilies(spacerMap);
@@ -563,8 +563,8 @@ public class LibBrowser extends KSJInternalFrame {
     }
     
     public ArrayList<String> makeTermsUsed() {
-        ArrayList<String> terms = new ArrayList<String>();
-        ArrayList<Object> bagOfTerms = new ArrayList<Object>();
+        ArrayList<String> terms = new ArrayList<>();
+        ArrayList<Object> bagOfTerms = new ArrayList<>();
         for (Individual ind : currentContext.individualCensus) {
             bagOfTerms.addAll(ind.node.kinTermsRef);
             bagOfTerms.addAll(ind.node.kinTermsAddr);
@@ -687,8 +687,7 @@ public class LibBrowser extends KSJInternalFrame {
          */
         public void narrowSpaceAroundFamilies(TreeMap<String, Integer> spacerMap) {
             TreeMap<String, TreeMap<Integer, TreeMap<Integer, Locatable>>> 
-                    allCharts = new TreeMap<String, TreeMap<Integer, 
-                            TreeMap<Integer, Locatable>>>();
+                    allCharts = new TreeMap<>();
             sortSymbols(allCharts);  // Sort all symbols by chart, by row, left to right
             Iterator chartIter = allCharts.entrySet().iterator();
             while (chartIter.hasNext()) {
@@ -1450,11 +1449,11 @@ public class LibBrowser extends KSJInternalFrame {
     /**
      * The DiagramButtonListener class creates an ActionListener that listens
      * for clicks on the 'Diagram Examples' button. When an action fires, launch
- a TermChooserFrame to collect the commands that record which clauses
- should be diagramed. When User has finished using that frame, it will
- build a list of TermTriples for her commands. Then the TermChooserFrame
- will call LibBrowser.diagramTerms() to create a hypothetical population
- which illustrates the chosen term/clause -- and diagram it.
+     * a TermChooserFrame to collect the commands that record which clauses
+     * should be diagramed. When User has finished using that frame, it will
+     * build a list of TermTriples for her commands. Then the TermChooserFrame
+     * will call LibBrowser.diagramTerms() to create a hypothetical population
+     * which illustrates the chosen term/clause -- and diagram it.
      */
     public class DiagramButtonListener implements ActionListener {
 
@@ -1475,7 +1474,7 @@ public class LibBrowser extends KSJInternalFrame {
             DomainTheory.current = currentDomTh;  //  and domTh fields.
             TermChooserFrame picker = new TermChooserFrame(currentDomTh, window);
             picker.desktop = desktop;
-            picker.setLocation(100, 150);
+            picker.setLocation(200, 200);
             desktop.add(picker);
             picker.show();
             picker.moveToFront();

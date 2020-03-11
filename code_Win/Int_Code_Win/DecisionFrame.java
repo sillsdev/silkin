@@ -1,3 +1,11 @@
+import javax.swing.*;
+import javax.swing.text.*;
+import javax.swing.event .*;
+import java.util.*;
+import java.awt.*;
+import java.io.*;
+import java.awt.event.*;
+import java.net.*;
 
 /**This class defines the window in which the User makes decisions about
  * Suggestions. It always displays a drop-down menu of suggestions, a
@@ -12,15 +20,6 @@
  *
  * Created on Feb 24, 2011
  */
-
-import javax.swing.*;
-import javax.swing.text.*;
-import javax.swing.event .*;
-import java.util.*;
-import java.awt.*;
-import java.io.*;
-import java.awt.event.*;
-import java.net.*;
 public class DecisionFrame extends JFrame  implements HyperlinkListener {
     public TreeMap<String, ArrayList<Issue>> issues;
     public ArrayList<Issue> suggestions = new ArrayList<Issue>();

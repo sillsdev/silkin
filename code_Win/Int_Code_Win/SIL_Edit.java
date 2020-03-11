@@ -47,8 +47,7 @@ public class SIL_Edit extends JFrame {
      *                        value = the appropriate PropagationMethod
      */
     public static TreeMap<String, PropagationMethod> buildLinkMethods() {
-        TreeMap<String, PropagationMethod> lm = 
-                new TreeMap<String, PropagationMethod>();
+        TreeMap<String, PropagationMethod> lm = new TreeMap<>();
         lm.put("Fa", new ParentMethod());
         lm.put("Mo", new ParentMethod());
         lm.put("P", new ParentMethod());
@@ -727,7 +726,7 @@ public class SIL_Edit extends JFrame {
         }
     }
 
-    /**Post whichever option the User has selected to {@link LIbrary]'s variable.
+    /**Post whichever option the User has selected to {@link Library}'s variable.
      * 
      * @param onOff User's choice, made in 'Edit Prefs.'
      */ 
@@ -915,10 +914,11 @@ public class SIL_Edit extends JFrame {
         if (SIL_Edit.edWin.chart.dirty) {
             SIL_Edit.edWin.chart.doWantToSave();
         }
-        try {  //   must write no matter what -- for MenuLang
+        try {  //  must write no matter what -- for MenuLang
             Library.writeStubFile();
-        } catch (Exception e) { }
-            // None expected. If exception occurs, just proceed.
+        } catch (Exception e) {
+            // None expected. If ecception happens, just proceed.
+        }
         System.exit(0);
     }
 
@@ -2235,30 +2235,40 @@ public class SIL_Edit extends JFrame {
                 File f = Library.recentFiles[0];
                 if (f != null) {
                     chart.saveFile = f;
+                    chart.failureCount = 0;
+                    chart.recursionCount = 0;
                     chart.loadSILKFile();
                 }
             } else if (e.getActionCommand().equals("n 1")) {
                 File f = Library.recentFiles[1];
                 if (f != null) {
                     chart.saveFile = f;
+                    chart.failureCount = 0;
+                    chart.recursionCount = 0;
                     chart.loadSILKFile();
                 }
             } else if (e.getActionCommand().equals("n 2")) {
                 File f = Library.recentFiles[2];
                 if (f != null) {
                     chart.saveFile = f;
+                    chart.failureCount = 0;
+                    chart.recursionCount = 0;
                     chart.loadSILKFile();
                 }
             } else if (e.getActionCommand().equals("n 3")) {
                 File f = Library.recentFiles[3];
                 if (f != null) {
                     chart.saveFile = f;
+                    chart.failureCount = 0;
+                    chart.recursionCount = 0;
                     chart.loadSILKFile();
                 }
             } else if (e.getActionCommand().equals("n 4")) {
                 File f = Library.recentFiles[4];
                 if (f != null) {
                     chart.saveFile = f;
+                    chart.failureCount = 0;
+                    chart.recursionCount = 0;
                     chart.loadSILKFile();
                 }
             }

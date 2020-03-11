@@ -13,11 +13,11 @@ import java.text.*;
  * e.g. KinshipEditor.java in this package.
  * <p>
  * DATA POSTING STRATEGY - As soon as any field in this panel loses focus, we
- * post the latest data to the Individual/Person being displayed ("infoPerson").
- * When a new person is chosen for display, we validate all data and if any
- * invalid fields are found, we do not allow the change in infoPerson until
- * valid data is entered. Then the person's record is updated and we proceed to
- * let user choose a new infoPerson to display/edit.
+ * post the latest data to the Marriage/Family being displayed ("infoMarriage").
+ * When a new family is chosen for display, we validate all data and if any
+ * invalid fields are found, we do not allow the change in infoMarriage until
+ * valid data is entered. Then the family's record is updated and we proceed to
+ * let user choose a new infoMarriage to display/edit.
  * </p>
  *  @author		Gary Morris, Northern Virginia Community College
  *                              garymorris2245@verizon.net
@@ -568,6 +568,9 @@ public class FamilyPanel extends JPanel {
         infoMarriage.dataChangeDate = UDate.today();
         Context.current.dateOfLastDataChange = infoMarriage.dataChangeDate;
         parent.chart.dirty = true;
+        if (++Library.changeCounter % Library.saveInterval == 0) {
+            parent.chart.saveSILKFile();
+        }
         dirty = false;
         storing = false;
     }
