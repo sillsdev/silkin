@@ -764,7 +764,7 @@ public class PersonEditor extends KSJInternalFrame implements ListSelectionListe
                 ctxt.ktm.insertNewRow(ind.serialNmbr);
                 if (SIL_Edit.edWin != null) {
                     SIL_Edit.edWin.ktm.insertNewRow(ind.serialNmbr);
-                    ind.homeChart = Context.current.currentChart;
+                    ind.homeChart = Context.getCurrent().currentChart;
                     SIL_Edit.edWin.chart.repaint();
                 }
             } else if (e.getActionCommand().equals("new birthdate")) {
@@ -1163,8 +1163,8 @@ public class PersonEditor extends KSJInternalFrame implements ListSelectionListe
                             udCopy.value.set(0, newVal);
                         }
                         if (udCopy.connects) {  //  A connecting UDP has type = string
-                            Context.current.deleteConnectingUDPVal(ind, udCopy.starName, oldVal, udCopy.sameVal);
-                            Context.current.addConnectingUDPVal(ind, udCopy.starName, newVal, udCopy.sameVal);
+                            Context.getCurrent().deleteConnectingUDPVal(ind, udCopy.starName, oldVal, udCopy.sameVal);
+                            Context.getCurrent().addConnectingUDPVal(ind, udCopy.starName, newVal, udCopy.sameVal);
                         }
                     }
                 } catch (KSConstraintInconsistency ksci) {
@@ -1299,7 +1299,7 @@ public class PersonEditor extends KSJInternalFrame implements ListSelectionListe
                         } else {
                             ind.deleted = true;
                         }
-                        Context.current.ktm.deletePerson(ind);
+                        Context.getCurrent().ktm.deletePerson(ind);
                         if (ind.birthFamily != null) {
                             int kidNum = ind.birthFamily.children.indexOf(ind);
                             ind.birthFamily.children.remove(kidNum);

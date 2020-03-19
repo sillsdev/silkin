@@ -313,8 +313,8 @@ public class Person  {
         } else {  // pick the kin term
             boolean ref = (kinTermLabel % 2) == 1;  // odd nmbrs are ref terms
             try {
-                dt = (ref ? Context.current.domTheoryRef()
-                        : Context.current.domTheoryAdr());
+                dt = (ref ? Context.getCurrent().domTheoryRef()
+                        : Context.getCurrent().domTheoryAdr());
                 terms = (ref ? ind.node.kinTermsRef()
                         : ind.node.kinTermsAddr());
             } catch (Exception e) {
@@ -355,21 +355,20 @@ public class Person  {
                 }
                 outKTerm = PersonPanel.deSlashify(outKTerm);
             }  // end of kin term label picker
-
-            if (out.equals("")) {  // don't print blank over a kin term
-                out += (outKTerm != null ? outKTerm : "");
-                outKTerm = null;
-            }
-            int w = g.getFontMetrics().stringWidth(out) / 2;
-            int x = theBounds.x + theBounds.width / 2 - w;
-            int y = theBounds.y + theBounds.height + 16;
-            g.drawString(out, x, y);
-            if (outKTerm != null && outKTerm.length() > 0) {
-                w = g.getFontMetrics().stringWidth(outKTerm) / 2;
-                x = theBounds.x + theBounds.width / 2 - w;
-                y = theBounds.y + theBounds.height + 28;
-                g.drawString(outKTerm, x, y);
-            }
+        }
+        if (out.equals("")) {  // don't print blank over a kin term
+            out += (outKTerm != null ? outKTerm : "");
+            outKTerm = null;
+        }
+        int w = g.getFontMetrics().stringWidth(out) / 2;
+        int x = theBounds.x + theBounds.width / 2 - w;
+        int y = theBounds.y + theBounds.height + 16;
+        g.drawString(out, x, y);
+        if (outKTerm != null && outKTerm.length() > 0) {
+            w = g.getFontMetrics().stringWidth(outKTerm) / 2;
+            x = theBounds.x + theBounds.width / 2 - w;
+            y = theBounds.y + theBounds.height + 28;
+            g.drawString(outKTerm, x, y);
         }
     }
 	
@@ -486,7 +485,7 @@ public class Person  {
         for (int i = folks.size() - 1; i >= 0; i--) {
             if (folks.get(i) != null
                     && folks.get(i).bounds().contains(x, y)
-                    && folks.get(i).homeChart.equals(Context.current.currentChart)) {
+                    && folks.get(i).homeChart.equals(Context.getCurrent().currentChart)) {
                 return i;
             }
         }

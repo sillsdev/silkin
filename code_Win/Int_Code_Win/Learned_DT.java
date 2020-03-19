@@ -204,7 +204,7 @@ public class Learned_DT extends DomainTheory implements Serializable {
         if (Library.synUmbDetectOn) {
             detectSynonymsAndUmbrellas(kinTerm, pos, neg, maxNoise);
         }
-        Context.current = ctxt;
+        Context.setCurrent(ctxt);
     }  //  end of method learnKinTermLGG
 
     /** After loading Library resources, if necessary, we search the Library for
@@ -320,7 +320,7 @@ public class Learned_DT extends DomainTheory implements Serializable {
             }
         }
         detectSynonymsAndUmbrellas(kinTerm, pos, neg, maxNoise);  //  always
-        Context.current = ctxt;
+        Context.setCurrent(ctxt);
     }  //  end of method learnKinTerm
     
     /**Return true if any of the {@link Dyad}s in POS have a kin type that 

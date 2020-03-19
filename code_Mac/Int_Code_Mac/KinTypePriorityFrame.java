@@ -100,7 +100,7 @@ public class KinTypePriorityFrame extends javax.swing.JFrame {
         // First we load the arrays of kin types
         // There are always a male and female kin type.
         // There might not be a neuter kin type.
-        Context ctxt = Context.current;
+        Context ctxt = Context.getCurrent();
         first = (ctxt.maleFirst ? maleKTs : femaleKTs);
         second = (ctxt.maleFirst ? femaleKTs : maleKTs);
         maleFirstBtn.setSelected(ctxt.maleFirst);
@@ -829,22 +829,22 @@ public class KinTypePriorityFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_femaleFirstBtnActionPerformed
 
     private void doneBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneBtnActionPerformed
-        Context.current.maleFirst = maleFirstBtn.isSelected();
-        int siz = Context.current.kinTypeOrder.size(),
+        Context.getCurrent().maleFirst = maleFirstBtn.isSelected();
+        int siz = Context.getCurrent().kinTypeOrder.size(),
             row = 0,
             i = 0;
         while (i < siz) {
-            Context.current.kinTypePriority.set(i, priorities.get(row));
-            Context.current.kinTypeOrder.set(i++, first.get(row));
-            Context.current.kinTypePriority.set(i, priorities.get(row));
+            Context.getCurrent().kinTypePriority.set(i, priorities.get(row));
+            Context.getCurrent().kinTypeOrder.set(i++, first.get(row));
+            Context.getCurrent().kinTypePriority.set(i, priorities.get(row));
             // Chartable UDPs appear in both first & second; they should appear once in kinTypeOrder
             String s = second.get(row);
             if (!s.startsWith("*")) {
-                Context.current.kinTypeOrder.set(i++, s);
+                Context.getCurrent().kinTypeOrder.set(i++, s);
             }
             if (neuterKTs.get(row) != null) {
-                Context.current.kinTypePriority.set(i, priorities.get(row));      
-                Context.current.kinTypeOrder.set(i++, neuterKTs.get(row));
+                Context.getCurrent().kinTypePriority.set(i, priorities.get(row));      
+                Context.getCurrent().kinTypeOrder.set(i++, neuterKTs.get(row));
             }            
             row++;
         }        

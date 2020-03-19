@@ -710,7 +710,7 @@ public class ParserSILKFile extends ParserDomainTheory {
         current = scanner.lookAhead();
         while (current.lexeme.indexOf("<dataAuthor") == 0) {
             String author = readOneAttribute("dataAuthor", "name", "parseAuthors");
-            Context.current.dataAuthors.add(author);
+            Context.getCurrent().dataAuthors.add(author);
             current = scanner.lookAhead();
         }
     }

@@ -434,13 +434,13 @@ public class ActionOverlap extends javax.swing.JPanel {
         }
         Dyad dad = olapDyads.get(ndx - 1);
         if (dyadOKBtn.isSelected()) {
-            Context.current.confirmDyad(dt, dad);
+            Context.getCurrent().confirmDyad(dt, dad);
         } else if (dyadDeleteBtn.isSelected()) {
             int egoNum = dad.ego.serialNmbr,
                 altNum = dad.alter.serialNmbr;
             boolean distinct = dt.addressTerms;
-            Context.current.deleteDyad(dt, dad.kinTerm, dad.pcString, egoNum, altNum);
-            Context.current.ktm.deleteKinTerm(egoNum, altNum, dad.kinTerm, distinct);
+            Context.getCurrent().deleteDyad(dt, dad.kinTerm, dad.pcString, egoNum, altNum);
+            Context.getCurrent().ktm.deleteKinTerm(egoNum, altNum, dad.kinTerm, distinct);
         } else if (dyadCorrectBtn.isSelected()) {
             int egoNum = dad.ego.serialNmbr,
                 altNum = dad.alter.serialNmbr;
@@ -449,9 +449,9 @@ public class ActionOverlap extends javax.swing.JPanel {
                    newTerm = PersonPanel.slashify(this, correctKinTermText.getText());
             Dyad dad2 = new Dyad(dad);
             dad2.kinTerm = newTerm;
-            Context.current.deleteDyad(dt, oldTerm, dad.pcString, egoNum, altNum);
-            Context.current.addDyad(dt, dad2);
-            Context.current.ktm.correctKinTerm(egoNum, altNum, oldTerm, newTerm, distinct);
+            Context.getCurrent().deleteDyad(dt, oldTerm, dad.pcString, egoNum, altNum);
+            Context.getCurrent().addDyad(dt, dad2);
+            Context.getCurrent().ktm.correctKinTerm(egoNum, altNum, oldTerm, newTerm, distinct);
         }
         if (! oc.dyadsProcessed.contains(dad)) {
             oc.dyadsProcessed.add(dad);

@@ -92,7 +92,7 @@ public class KSJInternalFrame extends JInternalFrame
     public void internalFrameActivated(InternalFrameEvent e) { 
         if (this instanceof LibBrowser) {
             LibBrowser lb = (LibBrowser) this;
-            Context.current = lb.currentContext;
+            Context.setCurrent(lb.currentContext);
         }
     }
     

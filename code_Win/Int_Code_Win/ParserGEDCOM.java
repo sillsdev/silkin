@@ -96,7 +96,7 @@ public class ParserGEDCOM {
         DomainTheory dt = new DomainTheory();
         dt.languageName = extractFileName(lineMan.filePath);
         ctxt = new Context(dt);
-        Context.current = ctxt;
+        Context.setCurrent(ctxt);
         DomainTheory.current = dt;
         //  Now we are ready to read data
         parseFirstPass();
@@ -118,7 +118,7 @@ public class ParserGEDCOM {
         if (!current.lexeme.equals("HEAD")) {
             error("First tag of GEDCOM file must be 'HEAD'. Found " + current.lexeme);
         }  //  OK. Set up new context to receive data.
-        if (Context.current != null && Context.current.languageName != null 
+        if (Context.getCurrent() != null && Context.getCurrent().languageName != null 
                 && SIL_Edit.edWin != null) {
             String msg = "Importing GEDCOM will create a new context to hold the data.";
             String fName = SIL_Edit.edWin.getTitle();

@@ -276,7 +276,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
                     whichLink = theLink;
                     edWin.getPPanel().dirty = true;
                 }
-                lastPersonLoc = new Point(Context.current.linkCensus.get(theLink).location);
+                lastPersonLoc = new Point(Context.getCurrent().linkCensus.get(theLink).location);
                 whichKnot = -1;
                 whichFolk = -1;
                 return;
@@ -338,14 +338,14 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         // Alternate action for Mouse_Down when designating adoption participants
         if (parent_Initiator == null) { // selected the edWin(s)
             if (theInd > -1) {
-                parent_Initiator = Context.current.individualCensus.get(theInd);
+                parent_Initiator = Context.getCurrent().individualCensus.get(theInd);
                 theSpecRel.parent = parent_Initiator;
             } else if (theLink > -1) {
-                Link lk = Context.current.linkCensus.get(theLink);
+                Link lk = Context.getCurrent().linkCensus.get(theLink);
                 parent_Initiator = lk.personPointedTo;
                 theSpecRel.parent = lk;
             } else if (theFam > -1) {
-                Family fam = Context.current.familyCensus.get(theFam);
+                Family fam = Context.getCurrent().familyCensus.get(theFam);
                 if (fam.husband == null && fam.wife == null) {
                     String msg = msgs.getString("emptyFamily");
                     Object[] btns = {se.getString("oK"), se.getString("cancel")};
@@ -379,10 +379,10 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             createChartableUDP_2();
         } else {  //  parent is already designated; this is the child
             if (theInd > -1) {
-                child_Recipient = Context.current.individualCensus.get(theInd);
+                child_Recipient = Context.getCurrent().individualCensus.get(theInd);
                 theSpecRel.child = child_Recipient;
             } else if (theLink > -1) {
-                Link lk = Context.current.linkCensus.get(theLink);
+                Link lk = Context.getCurrent().linkCensus.get(theLink);
                 child_Recipient = lk.personPointedTo;
                 theSpecRel.child = lk;
             } else {  //  Nothing useful was clicked
@@ -458,9 +458,10 @@ public class ChartPanel extends JPanel implements MouseInputListener {
                 dt.addTerm(ktd);
                 dt.nonTerms.add(ktd.kinTerm);
             }
-            Context.current = new Context(dt);
+            Context.setCurrent(new Context(dt));
+            edWin.editingCtxt = Context.getCurrent();
             DomainTheory.current = dt;
-            Context.current.dataAuthors.add(auth);
+            Context.getCurrent().dataAuthors.add(auth);
         } catch (Exception e) {
             // Message for developer.
             msg = "Fatal error while creating new context.\n" + e;
@@ -468,13 +469,13 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             System.exit(9);
         } //  No overwrite will occur
 
-        Person.folks = Context.current.individualCensus;
-        Marriage.knots = Context.current.familyCensus;
-        Library.contextUnderConstruction = Context.current;
-        Library.activeContexts.put(ctxtName, Context.current);
-        Context.current.editDirectory = Library.editDirectory;
-        edWin.ktm = Context.current.ktm;
-        Context.current.loadDefaultKinTypeStuff();
+        Person.folks = Context.getCurrent().individualCensus;
+        Marriage.knots = Context.getCurrent().familyCensus;
+        Library.contextUnderConstruction = Context.getCurrent();
+        Library.activeContexts.put(ctxtName, Context.getCurrent());
+        Context.getCurrent().editDirectory = Library.editDirectory;
+        edWin.ktm = Context.getCurrent().ktm;
+        Context.getCurrent().loadDefaultKinTypeStuff();
         edWin.rebuildChartCombo();
         edWin.getPPanel().udpsPresent = false;
         edWin.getPPanel().initUDPCombo();
@@ -520,13 +521,13 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             case 0: // female
                 newPerson = new Individual(Person.fem, new Point(lastLoc.x, lastLoc.y));
                 newPerson.myId = newPerson.serialNmbr + 1;
-                newPerson.homeChart = Context.current.currentChart;
+                newPerson.homeChart = Context.getCurrent().currentChart;
                 edWin.getPPanel().addToEgoChoices(newPerson);
                 break;
             case 1: // male
                 newPerson = new Individual(Person.mal, new Point(lastLoc.x, lastLoc.y));
                 newPerson.myId = newPerson.serialNmbr + 1;
-                newPerson.homeChart = Context.current.currentChart;
+                newPerson.homeChart = Context.getCurrent().currentChart;
                 edWin.getPPanel().addToEgoChoices(newPerson);
                 break;
             case 2: // marriage
@@ -535,10 +536,10 @@ public class ChartPanel extends JPanel implements MouseInputListener {
                 break;
             case 3: // Linking to existing person
                 // Build menu of existing persons, let User choose one.
-                Object[] people = new Object[Context.current.indSerNumGen];
+                Object[] people = new Object[Context.getCurrent().indSerNumGen];
                 String newName;
                 int index = 0;
-                for (Individual ind : Context.current.individualCensus) {
+                for (Individual ind : Context.getCurrent().individualCensus) {
                     newName = (ind.deleted ? "deleted" + " <" + ind.serialNmbr + ">" 
                             : ind.homeChart + ": " + ind.name + " <" + ind.serialNmbr + ">");
                     people[index++] = newName;
@@ -562,10 +563,10 @@ public class ChartPanel extends JPanel implements MouseInputListener {
                 int strt = person.indexOf("<") + 1,
                  end = person.length() - 1;
                 int serial = Integer.parseInt(person.substring(strt, end));
-                Individual newbie = Context.current.individualCensus.get(serial);
+                Individual newbie = Context.getCurrent().individualCensus.get(serial);
                 Point location = new Point(lastLoc.x, lastLoc.y);
                 // Create the Link
-                newLink = new Link(newbie, Context.current.currentChart, location);
+                newLink = new Link(newbie, Context.getCurrent().currentChart, location);
                 break;
             case 4:
                 //  Draw a chartable UDP
@@ -592,7 +593,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             delayedAreaCk(newPerson);
             showInfo(newPerson);
         } else if (newMar != null) {
-            newMar.homeChart = Context.current.currentChart;
+            newMar.homeChart = Context.getCurrent().currentChart;
             delayedAreaCk(newMar);
             showInfo(newMar);
         } else if (newLink != null) {
@@ -614,12 +615,12 @@ public class ChartPanel extends JPanel implements MouseInputListener {
     }
 
     public int findMarriage(int x, int y) {
-        if (Marriage.knots == null || Context.current == null) {
+        if (Marriage.knots == null || Context.getCurrent() == null) {
             return -1;
         }
         for (Family m : Marriage.knots) {
             if (m != null && 
-                    m.homeChart.equals(Context.current.currentChart)
+                    m.homeChart.equals(Context.getCurrent().currentChart)
                     && m.bounds().contains(x, y)) {
                 return m.mid - 1;
             }
@@ -635,8 +636,8 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         if (viewArea != null) {
             printArea = viewArea;
         }
-        String currChart = Context.current.currentChart;
-        for (Family f : Context.current.familyCensus) {
+        String currChart = Context.getCurrent().currentChart;
+        for (Family f : Context.getCurrent().familyCensus) {
             if (!f.deleted && f.homeChart.equals(currChart)
                     && printArea.contains(f.location)) {
                 if (f.location.x < minX) {
@@ -653,7 +654,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
                 }
             }
         }
-        for (Individual ind : Context.current.individualCensus) {
+        for (Individual ind : Context.getCurrent().individualCensus) {
             if (!ind.deleted && ind.homeChart.equals(currChart)
                     && printArea.contains(ind.location)) {
                 if (ind.location.x < minX) {
@@ -670,7 +671,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
                 }
             }
         }
-        for (Link lk : Context.current.linkCensus) {
+        for (Link lk : Context.getCurrent().linkCensus) {
             if (!lk.deleted && lk.homeChart.equals(currChart)
                     && printArea.contains(lk.location)) {
                 if (lk.location.x < minX) {
@@ -851,16 +852,16 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         int extraHeight = Math.max((4 * sz) - top, 0);
         Point extra = gridSnap(new Point(extraWidth, extraHeight));
         if (extra.x + extra.y > 0) {
-            for (Individual ind : Context.current.individualCensus) {
+            for (Individual ind : Context.getCurrent().individualCensus) {
                 ind.adjustLocation(extra.x, extra.y);
             }
-            for (Family fam : Context.current.familyCensus) {
+            for (Family fam : Context.getCurrent().familyCensus) {
                 fam.adjustLocation(extra.x, extra.y);
                 for (Marriage.BirthGroup bg : fam.birthGrps) {
                     bg.topPtX += extra.x;
                 }
             }
-            for (Link lk : Context.current.linkCensus) {
+            for (Link lk : Context.getCurrent().linkCensus) {
                 lk.setLocationX(lk.getLocationX() + extra.x);
                 lk.setLocationY(lk.getLocationY() + extra.y);
             }
@@ -885,14 +886,14 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         child_Recipient = null;
         chosenUDP = null;
         edWin.chartComboSetEnabled(false);
-        if (Context.current.adoptionHelp) {
+        if (Context.getCurrent().adoptionHelp) {
             HelpFrame.window.displayPage(HelpFrame.NON_GEN, "rules");
             HelpFrame.window.setLocationRelativeTo(edWin.getPPanel());
         }
         try {
             // If only one chartable UDP, show it. Else menu choose.
             String chosenUDPName;
-            TreeMap udpMap = Context.current.userDefinedProperties;
+            TreeMap udpMap = Context.getCurrent().userDefinedProperties;
             if (udpMap == null || udpMap.isEmpty()) {
                 String msg = msgs.getString("noChartableUDPs");
                 JOptionPane.showMessageDialog(this, msg, 
@@ -1013,15 +1014,15 @@ public class ChartPanel extends JPanel implements MouseInputListener {
                 udp = (UserDefinedProperty) parent_Initiator.userDefinedProperties.get(uName),
                 udp2 = null;
         Family fam = null;
-        if (Context.current.specialRelationships == null) {
-            Context.current.specialRelationships = new TreeMap<String, ArrayList<Context.SpecRelTriple>>();
+        if (Context.getCurrent().specialRelationships == null) {
+            Context.getCurrent().specialRelationships = new TreeMap<String, ArrayList<Context.SpecRelTriple>>();
         }
-        if (Context.current.inverseSpecialRelationships == null) {
-            Context.current.inverseSpecialRelationships = new TreeMap<Individual, TreeMap<String, ArrayList<Individual>>>();
+        if (Context.getCurrent().inverseSpecialRelationships == null) {
+            Context.getCurrent().inverseSpecialRelationships = new TreeMap<Individual, TreeMap<String, ArrayList<Individual>>>();
         }
-        TreeMap<String, ArrayList<Context.SpecRelTriple>> sRs = Context.current.specialRelationships;
-        TreeMap<Individual, TreeMap<String, ArrayList<Individual>>> iRs = Context.current.inverseSpecialRelationships;        
-        String chartLtr = Context.current.currentChart;
+        TreeMap<String, ArrayList<Context.SpecRelTriple>> sRs = Context.getCurrent().specialRelationships;
+        TreeMap<Individual, TreeMap<String, ArrayList<Individual>>> iRs = Context.getCurrent().inverseSpecialRelationships;        
+        String chartLtr = Context.getCurrent().currentChart;
         
         if (udp.value.contains(child_Recipient)) {  //  This is a re-drop = REMOVAL
             udp.value.remove(child_Recipient);
@@ -1094,7 +1095,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
     }
     
     void removeSpecialRelationship(String chartLtr, Context.SpecRelTriple triple) {
-        Iterator iter = Context.current.specialRelationships.get(chartLtr).iterator();
+        Iterator iter = Context.getCurrent().specialRelationships.get(chartLtr).iterator();
         while (iter.hasNext()) {
             Context.SpecRelTriple tpl = (Context.SpecRelTriple) iter.next();
             if (tpl.equals(triple)) {
@@ -1116,15 +1117,15 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         if (loading) {
             return;
         }
-        if (Context.current != null && Context.current.libraryBrowsing) {
+        if (Context.getCurrent() != null && Context.getCurrent().libraryBrowsing) {
             paint1(g);
         } else {
             g.translate(originX, originY);
             Rectangle myRect = getBounds();
             myRect.setLocation(-originX, -originY);
             String currChart = null;
-            if (Context.current != null && Context.current.currentChart != null) {
-                currChart = Context.current.currentChart;
+            if (Context.getCurrent() != null && Context.getCurrent().currentChart != null) {
+                currChart = Context.getCurrent().currentChart;
             }
             paint0(g, myRect, currChart);
         }
@@ -1142,8 +1143,8 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         g.translate(originX, originY);
         Rectangle myRect = getBounds();
         myRect.setLocation(-originX, -originY);
-        for (Link lk : Context.current.linkCensus) {
-            if (!lk.deleted && lk.homeChart.equals(Context.current.currentChart)) {
+        for (Link lk : Context.getCurrent().linkCensus) {
+            if (!lk.deleted && lk.homeChart.equals(Context.getCurrent().currentChart)) {
                 Individual p = lk.personPointedTo;
                 if (p.name.equals("Ego")) {
                     lk.drawSymbol(g, myRect, Color.red);
@@ -1152,8 +1153,8 @@ public class ChartPanel extends JPanel implements MouseInputListener {
                 }
             }
         }  //  end of loop thru Links, w/ default color = green
-        for (Individual p : Context.current.individualCensus) {
-            if (p != null && !p.deleted && p.homeChart.equals(Context.current.currentChart)) {
+        for (Individual p : Context.getCurrent().individualCensus) {
+            if (p != null && !p.deleted && p.homeChart.equals(Context.getCurrent().currentChart)) {
                 if (p.name.equals("Ego")) {
                 // I want P's ID# to print on chart as 'name'    
                     p.name = "I-" + p.serialNmbr;
@@ -1164,22 +1165,22 @@ public class ChartPanel extends JPanel implements MouseInputListener {
                 }
             }
         }  //  end of loop thru Individuals with defailt color = black
-        for (Family m : Context.current.familyCensus) {
-            if (m != null && !m.deleted  && m.homeChart.equals(Context.current.currentChart)) {
+        for (Family m : Context.getCurrent().familyCensus) {
+            if (m != null && !m.deleted  && m.homeChart.equals(Context.getCurrent().currentChart)) {
                 m.drawSymbol(g, myRect, Color.black);
                 m.drawLines(g, myRect);
             }
         }  //  enf of loop thru families, who draw lines to their members
-        if (Context.current.specialRelationships != null && 
-                Context.current.specialRelationships.get(Context.current.currentChart) != null) {
+        if (Context.getCurrent().specialRelationships != null && 
+                Context.getCurrent().specialRelationships.get(Context.getCurrent().currentChart) != null) {
             for (Context.SpecRelTriple sr : 
-                    Context.current.specialRelationships.get(Context.current.currentChart)) {
+                    Context.getCurrent().specialRelationships.get(Context.getCurrent().currentChart)) {
                 Rectangle pr = sr.parent.bounds(), kr = sr.child.bounds();
                 int parentMidX = pr.x + (pr.width / 2),
                     kidMidX = kr.x + (kr.width / 2),
                     parBotY = pr.y + pr.height + GAP,
                     kidTopY = kr.y;
-                Color clr = ((UserDefinedProperty)Context.current.userDefinedProperties.get(sr.udpName)).chartColor;
+                Color clr = ((UserDefinedProperty)Context.getCurrent().userDefinedProperties.get(sr.udpName)).chartColor;
                 g.setColor(clr);
                 g.drawLine(parentMidX, parBotY, kidMidX, kidTopY);
             }
@@ -1211,7 +1212,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
      */
     public void paint0(Graphics g, Rectangle myRect, String chart) {
         Rectangle theRect;
-        if (Context.current == null) {
+        if (Context.getCurrent() == null) {
             return;
         }
         if (edWin.chartComboBox.isPopupVisible()) {
@@ -1225,10 +1226,10 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         ArrayList<Integer> path = new ArrayList<Integer>();
         try {
             if (whichFolk > -1) {
-                path = Context.current.ktm.getPath(edWin.getCurrentEgo(), whichFolk);
+                path = Context.getCurrent().ktm.getPath(edWin.getCurrentEgo(), whichFolk);
             } else if (whichLink > -1) {
-                int ppt = Context.current.linkCensus.get(whichLink).personPointedTo.serialNmbr;
-                path = Context.current.ktm.getPath(edWin.getCurrentEgo(), ppt);
+                int ppt = Context.getCurrent().linkCensus.get(whichLink).personPointedTo.serialNmbr;
+                path = Context.getCurrent().ktm.getPath(edWin.getCurrentEgo(), ppt);
             }
         } catch (KSInternalErrorException exc) {
             JOptionPane.showMessageDialog(this,
@@ -1244,7 +1245,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         }   
         g.setFont(chartFont);
         int tempSerial = -1;
-        for (Link lk : Context.current.linkCensus) {
+        for (Link lk : Context.getCurrent().linkCensus) {
             if (!lk.deleted && lk.homeChart.equals(chart)) {
                 Individual p = lk.personPointedTo;
                 if (p.serialNmbr == edWin.getCurrentEgo()) {
@@ -1279,9 +1280,9 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             }
         }  //  end of loop thru Individuals
         if (lastFolk != whichFolk && whichFolk >= 0) {
-            showInfo(Context.current.individualCensus.get(whichFolk));
+            showInfo(Context.getCurrent().individualCensus.get(whichFolk));
         } else if (lastFolk != tempSerial && tempSerial >= 0) {
-            showInfo(Context.current.individualCensus.get(tempSerial));
+            showInfo(Context.getCurrent().individualCensus.get(tempSerial));
         }
         
         whichFolk = oldFolk;
@@ -1326,15 +1327,15 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             }
         }
         lastKnot = whichKnot;
-        if (Context.current.specialRelationships != null && 
-                Context.current.specialRelationships.get(Context.current.currentChart) != null) {
-            for (Context.SpecRelTriple sr : Context.current.specialRelationships.get(Context.current.currentChart)) {
+        if (Context.getCurrent().specialRelationships != null && 
+                Context.getCurrent().specialRelationships.get(Context.getCurrent().currentChart) != null) {
+            for (Context.SpecRelTriple sr : Context.getCurrent().specialRelationships.get(Context.getCurrent().currentChart)) {
                 Rectangle pr = sr.parent.bounds(), kr = sr.child.bounds();
                 int parentMidX = pr.x + (pr.width / 2),
                     kidMidX = kr.x + (kr.width / 2),
                     parBotY = pr.y + pr.height + GAP,
                     kidTopY = kr.y;
-                Color clr = ((UserDefinedProperty)Context.current.userDefinedProperties.get(sr.udpName)).chartColor;
+                Color clr = ((UserDefinedProperty)Context.getCurrent().userDefinedProperties.get(sr.udpName)).chartColor;
                 g.setColor(clr);
                 g.drawLine(parentMidX, parBotY, kidMidX, kidTopY);
             }
@@ -1344,7 +1345,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
     
     public void setAlter(int serial) {
         whichFolk = serial;
-        edWin.infoPerson = Context.current.individualCensus.get(serial);
+        edWin.infoPerson = Context.getCurrent().individualCensus.get(serial);
         repaint();
     }
     
@@ -1409,7 +1410,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
                         new Point(mouseX, mouseY));
                 repaint();
             } else if (whichLink != -1) {
-                Link lk = Context.current.linkCensus.get(whichLink);
+                Link lk = Context.getCurrent().linkCensus.get(whichLink);
                 selectLine = new Line(new Point(lk.location.x + 10, lk.location.y + 10),
                         new Point(mouseX, mouseY));
                 repaint();
@@ -1443,7 +1444,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
 //                delayedAreaCk((Individual) p);
                 repaint();
             }else if (whichLink != -1) {
-                Link lk = Context.current.linkCensus.get(whichLink);
+                Link lk = Context.getCurrent().linkCensus.get(whichLink);
                 selectLine = new Line(new Point(lk.location.x + 10, lk.location.y + 10),
                         new Point(mouseX, mouseY));
 //                delayedAreaCk(lk);
@@ -1465,7 +1466,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
                 selectLine = new Line(lastPersonLoc, newLoc);
                 repaint();
             } else if (whichLink != -1) {
-                Link lk = Context.current.linkCensus.get(whichLink);
+                Link lk = Context.getCurrent().linkCensus.get(whichLink);
                 Point newLoc = new Point(mouseX - 10, mouseY - 10);
                 if (!draggedLinks.contains(lk)) {
                     draggedLinks.add(lk);
@@ -1564,7 +1565,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             return;
         }
         if (altDn && whichLink > -1) { // Chose New Ego
-            Individual ind = Context.current.linkCensus.get(whichLink).personPointedTo;
+            Individual ind = Context.getCurrent().linkCensus.get(whichLink).personPointedTo;
             edWin.changeEgo(ind.serialNmbr);
             edWin.getPPanel().resetEgoBox(edWin.getCurrentEgo());
             whichFolk = priorAlter;
@@ -1607,7 +1608,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             }else if (selectLine != null && whichHalf > 0 && whichLink > -1) {
                 //  We've released a Link after dragging to a Marriage
                 Family fx = Marriage.knots.get(tiedKnot);
-                Link lk = Context.current.linkCensus.get(whichLink);
+                Link lk = Context.getCurrent().linkCensus.get(whichLink);
                 Rectangle theRect = makeRect(fx);
                 if (theRect.contains(selectLine.toP.x, selectLine.toP.y)) {
                     Rectangle upperHalf = new Rectangle(theRect.x, theRect.y -5, theRect.width,
@@ -1653,7 +1654,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
                 } else {
                     whichFolk = serialNum;
                 }                
-                Individual ind = Context.current.individualCensus.get(whichFolk);
+                Individual ind = Context.getCurrent().individualCensus.get(whichFolk);
                 try {
                     deleteIndividual(ind);
                 } catch (KinshipSystemException exc) {
@@ -1687,7 +1688,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
                 } else {
                     whichLink = serialNum;
                 }
-                Link lk = Context.current.linkCensus.get(serialNum);
+                Link lk = Context.getCurrent().linkCensus.get(serialNum);
                 try {
                     deleteLink(lk);
                 } catch (KinshipSystemException exc) {
@@ -1709,7 +1710,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
     
     void deleteIndividual(Individual ind) throws KinshipSystemException {
         int serialNmbr = ind.serialNmbr;
-        if (Context.current.indSerNumGen > 1) {
+        if (Context.getCurrent().indSerNumGen > 1) {
             String msg = "", msg2 = "", title = msgs.getString("cannotDelete") + " " + ind.name;
             if (serialNmbr == edWin.getCurrentEgo()) {
                 msg = msgs.getString("cannotDeleteEgo");
@@ -1746,15 +1747,15 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             ind.delete();
         } catch (KSInternalErrorException k) {
         }  //  deleted persons may be messed up
-        if (serialNmbr == Context.current.indSerNumGen - 1 //  Delete last person made
+        if (serialNmbr == Context.getCurrent().indSerNumGen - 1 //  Delete last person made
                 && serialNmbr != edWin.getCurrentEgo()) {   //  if they are not Ego
-            Person.folks.remove(--Context.current.indSerNumGen);
+            Person.folks.remove(--Context.getCurrent().indSerNumGen);
             edWin.getPPanel().rebuildEgoBox();
         } else {
             edWin.getPPanel().updateEgoNames(ind);
             Person.folks.get(serialNmbr).location = new Point(-100, -100);
         }
-        Context.current.ktm.deletePerson(ind);
+        Context.getCurrent().ktm.deletePerson(ind);
         //  Because we do not allow deletion of persons who are married, adopted, or in a birth family,
         //  no recomputing of nodes is needed. Just delete this guy's row and column in the KTM
         //  and any associated dyads.                
@@ -1765,7 +1766,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             Individual ind = lk.personPointedTo;
             boolean linkIsKid = ind.birthFamily != null && ind.birthFamily.kidLinks.contains(lk);
             boolean linkIsSpouse = spouseLinkIn(ind.marriages, lk) != null;
-            if (Context.current.indSerNumGen > 1) {
+            if (Context.getCurrent().indSerNumGen > 1) {
                 String msg = "", title = msgs.getString("cannotDelete") + " " + lk.personPointedTo.name;
                 if (linkIsKid) {
                     msg = msgs.getString("cannotDeleteChild");
@@ -1794,7 +1795,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         }
         fam.delete();
         fam.delMarriage();
-        Context c = Context.current;
+        Context c = Context.getCurrent();
         if (c.specialRelationships != null && 
                 c.specialRelationships.get(c.currentChart) != null) {            
             ArrayList<Context.SpecRelTriple> oldies = new ArrayList<Context.SpecRelTriple>(),
@@ -1812,7 +1813,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
     }
     
     boolean inAdoption(Individual ind) {
-        Context c = Context.current;
+        Context c = Context.getCurrent();
         if (c.specialRelationships == null
                 || c.specialRelationships.get(c.currentChart) == null) {
             return false;
@@ -1844,7 +1845,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
     }
     
     boolean inAdoption(Link link) {
-        Context c = Context.current;
+        Context c = Context.getCurrent();
         if (c.specialRelationships == null
                 || c.specialRelationships.get(c.currentChart) == null) {
             return false;
@@ -1868,7 +1869,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
     }
     
     boolean isLinkee(Individual ind) {
-        for (Link lk : Context.current.linkCensus) {
+        for (Link lk : Context.getCurrent().linkCensus) {
             if (!lk.deleted && lk.personPointedTo == ind) {
                 return true;
             }
@@ -1941,7 +1942,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         } else {  // ix is already a spouse in fx. This is a deletion request.
             ix.setLocation(lastPersonLoc);
             // If deleted spouse shared a "family adoption" it now becomes a personal one
-            Context c = Context.current;
+            Context c = Context.getCurrent();
             if (c.specialRelationships != null
                     && c.specialRelationships.get(c.currentChart) != null) {
                 ArrayList<Context.SpecRelTriple> famAdoptions = new ArrayList<Context.SpecRelTriple>(),
@@ -2156,10 +2157,10 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         }
         recomputeNodes();
         try {
-            if ((Context.current.domTheoryRefExists()
-                    && !Context.current.domTheoryRef().issuesForUser.isEmpty())
-                    || (Context.current.domTheoryAdrExists()
-                    && !Context.current.domTheoryAdr().issuesForUser.isEmpty())) {
+            if ((Context.getCurrent().domTheoryRefExists()
+                    && !Context.getCurrent().domTheoryRef().issuesForUser.isEmpty())
+                    || (Context.getCurrent().domTheoryAdrExists()
+                    && !Context.getCurrent().domTheoryAdr().issuesForUser.isEmpty())) {
                 String msg = msgs.getString("priorSuggs1") + " " + ix.name 
                         + " " + msgs.getString("priorSuggs2");
                 MainPane.displayError(msg, msgs.getString("potentialProblem"), JOptionPane.PLAIN_MESSAGE);
@@ -2407,7 +2408,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         clearInfo();
         originX = 0;
         originY = 0;
-        Context.current = null;
+        Context.setCurrent(null);
         Library.contextUnderConstruction = null;
         MainPane.curr_CUC_Editor = null;
         saveFile = null;
@@ -2524,7 +2525,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             if (failureCount > 1) {
                     return;
                 }
-            ctxt = Context.current;
+            ctxt = Context.getCurrent();
             edWin.ktm = ctxt.ktm;
             DomainTheory dt = ctxt.domTheoryRef();
             if (!dt.theory.containsKey("step_brother")) {
@@ -2584,7 +2585,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
             ctxt.chartDescriptions.add(se.getString("defaultChart"));
         }
         edWin.editingCtxt = ctxt;
-        Context.current = ctxt;
+        Context.setCurrent(ctxt);
         edWin.rebuildChartCombo();
         String frameTitle = saveFile.getName();
         edWin.setTitle(se.getString("editing") + frameTitle);
@@ -2694,7 +2695,7 @@ public class ChartPanel extends JPanel implements MouseInputListener {
         	recursionCount--;
        		return "";
         } 
-        ArrayList<String> dataAuthors = Context.current.dataAuthors;
+        ArrayList<String> dataAuthors = Context.getCurrent().dataAuthors;
         int size = dataAuthors.size(),
                    repeats = -1;
         String[] authors = new String[size + 1];

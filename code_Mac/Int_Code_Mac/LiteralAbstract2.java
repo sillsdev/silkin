@@ -90,7 +90,7 @@ public abstract class LiteralAbstract2 extends LiteralAbstract1  {
         //  so we find it and bind it, then recurse on remLits.   OR
         //  (2) we create a suitable Individual and add it to the bindings - honoring constraints - then recurse.
         //  badBindings is a TreeMap of variables (argNames) & lists of prohibited bindings (individuals)
-        int kidArg, resetInd = Context.current.indSerNumGen, resetFam = Context.current.famSerNumGen;
+        int kidArg, resetInd = Context.getCurrent().indSerNumGen, resetFam = Context.getCurrent().famSerNumGen;
         int sbSize = starBindings.size();
         kidArg = (parArg + 1) % 2;
         Variable parent = (Variable) args.get(parArg), child = (Variable) args.get(kidArg);
@@ -329,7 +329,7 @@ public abstract class LiteralAbstract2 extends LiteralAbstract1  {
 				}
             if (! keepBB) {
                 badBindingsRemove(bindingMade, argBound, badBindings);
-                Context.current.resetTo(resetInd, resetFam);
+                Context.getCurrent().resetTo(resetInd, resetFam);
                 }  //  end of don't-keep-badBindings
             return false;
             //  end of recursive-descent-or-negatedConstraints-failed
@@ -595,7 +595,7 @@ public abstract class LiteralAbstract2 extends LiteralAbstract1  {
         //	   value whichis contained in the (ArrayList) value of Gary's UserDefinedProperty *friends.  Sub-sets and super-sets are not considered equal.
         //	   The math operator "contains" expresses sub-set relationships, if desired.
 
-        int resetInd = Context.current.indSerNumGen, resetFam = Context.current.famSerNumGen, sbSize = starBindings.size();
+        int resetInd = Context.getCurrent().indSerNumGen, resetFam = Context.getCurrent().famSerNumGen, sbSize = starBindings.size();
         String bindingMade = null;
         MathVariable mathVar = null;
         Constant konstant = null;
@@ -747,7 +747,7 @@ public abstract class LiteralAbstract2 extends LiteralAbstract1  {
                 triple.parent = person;
                 triple.child = (Individual)arg0.getVal().get(0);
                 triple.udpName = udp.starName;
-                Context.current.addSpecialRelationship(triple, "A"); // includes inverse 
+                Context.getCurrent().addSpecialRelationship(triple, "A"); // includes inverse 
 //                predHead = "+(";
             } // end of recording chartable UDP
         }
@@ -859,7 +859,7 @@ public abstract class LiteralAbstract2 extends LiteralAbstract1  {
         }
         if (!keepBB) {
             badBindingsRemove(bindingMade, argBound, badBindings);
-            Context.current.resetTo(resetInd, resetFam);
+            Context.getCurrent().resetTo(resetInd, resetFam);
         }  //  end of don't-keep-badBindings
         return false;
         //  end of recursive-descent-or-negatedConstraints-failed
@@ -942,7 +942,7 @@ public abstract class LiteralAbstract2 extends LiteralAbstract1  {
 
 		//  NOTE:  If X & Y are both null, we always consider that true.  If they are of mixed types (e.g. float and int) we throw an exception.
 
-        int resetInd = Context.current.indSerNumGen,  resetFam = Context.current.famSerNumGen;
+        int resetInd = Context.getCurrent().indSerNumGen,  resetFam = Context.getCurrent().famSerNumGen;
         int sbSize = starBindings.size();
         String bindingMade = null;
 		Argument xVar, yVar, argBound = null;
@@ -1010,7 +1010,7 @@ public abstract class LiteralAbstract2 extends LiteralAbstract1  {
 		updateBindingsEtc(bindings, badBindings, bindingMade, argBound, starBindings, sbSize);
 		if (! keepBB) {
             badBindingsRemove(bindingMade, argBound, badBindings);
-            Context.current.resetTo(resetInd, resetFam);
+            Context.getCurrent().resetTo(resetInd, resetFam);
         }  //  end of don't-keep-badBindings
         return false;
         //  end of recursive-descent-or-negatedConstraints-failed
@@ -1064,7 +1064,7 @@ public abstract class LiteralAbstract2 extends LiteralAbstract1  {
         //      To say X & Y are divorced is to say that they are NO LONGER married.
         //  The .getDivorceDate() field on a Family record can be null (no information/don't care) or a blank string
         //  (definitely not divorced) or a non-blank string (definitely divorced).
-        int resetInd = Context.current.indSerNumGen,  resetFam = Context.current.famSerNumGen;
+        int resetInd = Context.getCurrent().indSerNumGen,  resetFam = Context.getCurrent().famSerNumGen;
         int sbSize = starBindings.size();
         Variable spouse0 = (Variable)args.get(0),  spouse1 = (Variable)args.get(1);
         Individual indiv0 = (Individual)bindings.get(spouse0.argName), preBoundIndiv;
@@ -1093,7 +1093,7 @@ public abstract class LiteralAbstract2 extends LiteralAbstract1  {
             if (indiv0 == null)  {  // no suitable existing spouse found: fresh marriage
                 String deathReq = (String)constraints.death.get(spouse0.argName);
                 boolean killer = false;
-                if ((! singleNow(indiv1)) && (! Context.current.polygamyPermit) && (! divReq)) {
+                if ((! singleNow(indiv1)) && (! Context.getCurrent().polygamyPermit) && (! divReq)) {
                     if ((deathReq != null) && (deathReq.equals("alive")))
                         return false;  // Polygamy/re-marriage not permitted & existing spouse not OK.
                                        // NOTE: We WILL allow creation of a (past) divorce for a currently-married
@@ -1141,7 +1141,7 @@ public abstract class LiteralAbstract2 extends LiteralAbstract1  {
             if (indiv1 == null)  {  // no suitable existing spouse found: fresh marriage
                 String deathReq = (String)constraints.death.get(spouse1.argName);
                 boolean killer = false;
-                if ((! (singleNow(indiv0))) && (! Context.current.polygamyPermit) && (! divReq)) {
+                if ((! (singleNow(indiv0))) && (! Context.getCurrent().polygamyPermit) && (! divReq)) {
                     if ((deathReq != null) && (deathReq.equals("alive")))
                         return false;  // Polygamy not permitted in this context.  See note above.
                     else killer = true;  //  record our decision to create a dead former spouse
@@ -1219,7 +1219,7 @@ public abstract class LiteralAbstract2 extends LiteralAbstract1  {
                         // if true, we found an existing Presumed Spouse that spouse0 has replaced.
                 boolean singleFlag = singleNow(indiv1);
                 if ((!(found1)) &&
-                    ((Context.current.polygamyPermit) || (singleFlag))) { // remarriage or polygamy's the solution
+                    ((Context.getCurrent().polygamyPermit) || (singleFlag))) { // remarriage or polygamy's the solution
                     fam = new Family(indiv1, indiv0, spouse1.argName, spouse0.argName, divReq, constraints.divorce);
                     if (! (singleFlag)) fam.addNote("Polygamous marriage (of neuters) specified by domain theory.  ");
                 }  //  end of polygamy/remarriage
@@ -1230,7 +1230,7 @@ public abstract class LiteralAbstract2 extends LiteralAbstract1  {
                     // if true, we found an existing Presumed Spouse that spouse1 has replaced.
                 boolean singleFlag = singleNow(indiv0);
                 if ((!(found1)) &&
-                    ((Context.current.polygamyPermit) || (singleFlag))) { // remarriage or polygamy's the solution
+                    ((Context.getCurrent().polygamyPermit) || (singleFlag))) { // remarriage or polygamy's the solution
                     fam = new Family(indiv1, indiv0, spouse1.argName, spouse0.argName, divReq, constraints.divorce);
                     if (! (singleFlag)) fam.addNote("Polygamous marriage (of neuters) specified by domain theory.  ");
                     }  //  end of polygamy/remarriage
@@ -1244,7 +1244,7 @@ public abstract class LiteralAbstract2 extends LiteralAbstract1  {
                 else if (marriedToEachOther(indiv1, indiv0, (! divReq))) return false;
                 else if (! (marriedToEachOther(indiv1, indiv0, divReq)))  {
                     boolean singleFlag = ((singleNow(indiv1)) && (singleNow(indiv0)));
-                    if ((Context.current.polygamyPermit) || (singleFlag)) {
+                    if ((Context.getCurrent().polygamyPermit) || (singleFlag)) {
                         fam = new Family(indiv1, indiv0, spouse1.argName, spouse0.argName, divReq, constraints.divorce);
                         if (! (singleFlag)) fam.addNote("Polygamous marriage (of neuters) specified by domain theory.  ");
                     }  //  end of polygamy/remarriage
@@ -1332,7 +1332,7 @@ public abstract class LiteralAbstract2 extends LiteralAbstract1  {
 		//  if we get this far, all binding attempts have failed.  Pass failure up to next higher level.
 		if (! keepBB) {
             badBindingsRemove(bindingMade, argBound, badBindings);
-            Context.current.resetTo(resetInd, resetFam);
+            Context.getCurrent().resetTo(resetInd, resetFam);
 			}  //  end of don't-keep-badBindings
         return false;
         //  end of recursive-descent-or-negatedConstraints-failed
@@ -2285,7 +2285,7 @@ public abstract class LiteralAbstract2 extends LiteralAbstract1  {
         Family fam = null;
         if (parentIndiv.marriages.size() > starter)
             fam = (Family)parentIndiv.marriages.get(starter);
-        else if ((singleNow(parentIndiv)) || (Context.current.polygamyPermit))
+        else if ((singleNow(parentIndiv)) || (Context.getCurrent().polygamyPermit))
             fam = new Family(parentIndiv, argName, constraints.divorce);
         //  if we get this far, there's no existing marriage available,  parentIndiv is not single
         //  and polygamous marriage is not permitted.  We can always create a PRIOR marriage that

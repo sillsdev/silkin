@@ -878,7 +878,7 @@ public class EditTheoryFrame extends JFrame {
     
     private void authorNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_authorNameFocusLost
         String nam = authorName.getText();
-            if (!Context.current.dataAuthors.contains(nam)) {
+            if (!Context.getCurrent().dataAuthors.contains(nam)) {
                 String msg = nam + " " + se.getString("notKnownAuthor");
                 JOptionPane.showMessageDialog(current, msg);
                 try {
@@ -1091,8 +1091,8 @@ public class EditTheoryFrame extends JFrame {
 //        KinTermMatrix originalMatrix = dt.ctxt.ktm;
 //        dt.ctxt.ktm = originalMatrix.clone();
         
-        Context original = Context.current;
-        Context.current = Context.tempCtxt(dt);  
+        Context original = Context.getCurrent();
+        Context.setCurrent(Context.tempCtxt(dt));  
         ArrayList<Object> egoBag = dt.maleAndFemaleCreatedHeThem();
         DomainTheory.current = dt;
         syntaxErrors.clear();
@@ -1138,7 +1138,7 @@ public class EditTheoryFrame extends JFrame {
     }//GEN-LAST:event_syntaxCheckBtnActionPerformed
 
     void restoreContext(Context c) {
-        Context.current = c;
+        Context.setCurrent(c);
         dt.ctxt = c;
     }
     
@@ -1747,7 +1747,7 @@ public class EditTheoryFrame extends JFrame {
             dt = dth;
             kinTerm = kTerm;
             ktd = ktdef;           
-            ignorablePercent = Context.current.ignorableP / 100f;
+            ignorablePercent = Context.getCurrent().ignorableP / 100f;
         }  //  end of constructor
         
         

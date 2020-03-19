@@ -215,14 +215,14 @@ public boolean hasDoD() {
     @param	birthdate	Example:  'Jan 1, 1970'
     */
     public Individual(String name, String sex, Family ofOrigin, String birthdate)  {
-        serialNmbr = Context.current.indSerNumGen++;
+        serialNmbr = Context.getCurrent().indSerNumGen++;
         this.name = name;
         processNames(name);
         setDateOfBirth(birthdate);
         gender = parseGender(sex);
-        Context.current.addIndividual(this);
-        if (Context.current.userDefinedProperties != null)
-            userDefinedProperties = makeNewUDPTreeMap(Context.current.userDefinedProperties);
+        Context.getCurrent().addIndividual(this);
+        if (Context.getCurrent().userDefinedProperties != null)
+            userDefinedProperties = makeNewUDPTreeMap(Context.getCurrent().userDefinedProperties);
         ofOrigin.addChild(this);
         dataChangeDate = UDate.today();
     }  // end of constructor 
@@ -235,15 +235,15 @@ public boolean hasDoD() {
     @param	birthdate	Example:  'Jan 1, 1970'
     */
     public Individual(String name, String sex, String birthdate)  {
-        serialNmbr = Context.current.indSerNumGen++;
+        serialNmbr = Context.getCurrent().indSerNumGen++;
         this.name = name;
         node = new Node();
         processNames(name);
         setDateOfBirth(birthdate);
         gender = parseGender(sex);
-        Context.current.addIndividual(this);
-        if (Context.current.userDefinedProperties != null)
-            userDefinedProperties = makeNewUDPTreeMap(Context.current.userDefinedProperties);
+        Context.getCurrent().addIndividual(this);
+        if (Context.getCurrent().userDefinedProperties != null)
+            userDefinedProperties = makeNewUDPTreeMap(Context.getCurrent().userDefinedProperties);
         dataChangeDate = UDate.today();
     }  // end of constructor w/ name, sex, & birthdate
                                                             
@@ -257,12 +257,12 @@ public boolean hasDoD() {
         sex = gend;
         gender = parseGender(sex.name);
         setLocation(loc);
-        serialNmbr = Context.current.indSerNumGen++;
+        serialNmbr = Context.getCurrent().indSerNumGen++;
         myId = serialNmbr + 1;
         name = "Person " + serialNmbr;
-        Context.current.addIndividual(this);
-        if (Context.current.userDefinedProperties != null) {
-            userDefinedProperties = makeNewUDPTreeMap(Context.current.userDefinedProperties);
+        Context.getCurrent().addIndividual(this);
+        if (Context.getCurrent().userDefinedProperties != null) {
+            userDefinedProperties = makeNewUDPTreeMap(Context.getCurrent().userDefinedProperties);
         }
         dataChangeDate = UDate.today();
     }  // end of constructor w/ name, sex only.
@@ -275,15 +275,15 @@ public boolean hasDoD() {
     @param	sex			'M'  or 'F'  or '?' (neuter: doesn't matter or don't know)
     */
     public Individual(String name, String sex)  {
-        serialNmbr = Context.current.indSerNumGen++;
+        serialNmbr = Context.getCurrent().indSerNumGen++;
         this.name = name;
         node = new Node();
         processNames(name);
         gender = parseGender(sex);
         this.sex = (gender.equals("M") ? new Male() : new Female());
-        Context.current.addIndividual(this);
-        if (Context.current.userDefinedProperties != null)
-            userDefinedProperties = makeNewUDPTreeMap(Context.current.userDefinedProperties);
+        Context.getCurrent().addIndividual(this);
+        if (Context.getCurrent().userDefinedProperties != null)
+            userDefinedProperties = makeNewUDPTreeMap(Context.getCurrent().userDefinedProperties);
         dataChangeDate = UDate.today();
     }  // end of constructor w/ name, sex only.
 
@@ -373,16 +373,16 @@ public boolean hasDoD() {
     @param	marriage	Family where this Individual is a parent.
     */
     public Individual(String name, String sex, Family marriage) {
-        serialNmbr = Context.current.indSerNumGen++;
+        serialNmbr = Context.getCurrent().indSerNumGen++;
         this.name = name;
         node = new Node();
         processNames(name);
         marriages.add(marriage);
         gender = parseGender(sex);
         this.sex = (gender.equals("M") ? new Male() : new Female());
-        Context.current.addIndividual(this);
-        if (Context.current.userDefinedProperties != null) {
-            userDefinedProperties = makeNewUDPTreeMap(Context.current.userDefinedProperties);
+        Context.getCurrent().addIndividual(this);
+        if (Context.getCurrent().userDefinedProperties != null) {
+            userDefinedProperties = makeNewUDPTreeMap(Context.getCurrent().userDefinedProperties);
         }
         dataChangeDate = UDate.today();
     }  // end of constructor w/ name, sex only.
@@ -408,11 +408,11 @@ public boolean hasDoD() {
     Individual(String name, String sex, Family ofOrigin, String birthdate, String argName, Individual spouseInd,
             TreeMap bindings, ArrayList<Object> starBindings, ConstraintObj constraints, Variable vari, BoolFlag failFlag, ClauseBody cb)
             throws KSConstraintInconsistency, KSBadHornClauseException, ClassNotFoundException, KSInternalErrorException {
-        serialNmbr = Context.current.indSerNumGen++;
-        Context.current.addIndividual(this);
+        serialNmbr = Context.getCurrent().indSerNumGen++;
+        Context.getCurrent().addIndividual(this);
 //  Set any UserDefinedProperties (UDPs) that may apply
-        if (Context.current.userDefinedProperties != null) {
-            userDefinedProperties = makeNewUDPTreeMap(Context.current.userDefinedProperties, false);
+        if (Context.getCurrent().userDefinedProperties != null) {
+            userDefinedProperties = makeNewUDPTreeMap(Context.getCurrent().userDefinedProperties, false);
             TreeMap thisVarsUDPs = (TreeMap) constraints.userDefined.get(vari);
             if (thisVarsUDPs != null) { // thisVarsUDPs = a TreeMap with Keys = starPropertyNames and Values = MathVars, Constants, or Variables
                 Iterator iter = thisVarsUDPs.entrySet().iterator();
@@ -847,7 +847,7 @@ public boolean hasDoD() {
             }
         }
         if (dataAuthor != null) {
-            out.println("1 SUBM @" + Context.current.dataAuthors.indexOf(dataAuthor) + "@");
+            out.println("1 SUBM @" + Context.getCurrent().dataAuthors.indexOf(dataAuthor) + "@");
         }
         out.println("1 CHAN");
         out.println("2 DATE " + UDate.xsdToEuropean(dataChangeDate));
@@ -1350,29 +1350,29 @@ public boolean hasDoD() {
                     }
                     // if udp is chartable, post this new special relationship to the context
                     if (udp.chartable) {
-                        if (Context.current.specialRelationships == null) {
-                            Context.current.specialRelationships = new TreeMap<String, ArrayList<Context.SpecRelTriple>>();
+                        if (Context.getCurrent().specialRelationships == null) {
+                            Context.getCurrent().specialRelationships = new TreeMap<String, ArrayList<Context.SpecRelTriple>>();
                         }
-                        if (Context.current.specialRelationships.get("A") == null) {
-                            Context.current.specialRelationships.put("A", new ArrayList<Context.SpecRelTriple>());
+                        if (Context.getCurrent().specialRelationships.get("A") == null) {
+                            Context.getCurrent().specialRelationships.put("A", new ArrayList<Context.SpecRelTriple>());
                         }
                         Context.SpecRelTriple triple = new Context.SpecRelTriple();
                         triple.parent = this;
                         triple.child = (Individual) udp.value.get(0);
                         triple.udpName = udp.starName;
-                        Context.current.specialRelationships.get("A").add(triple);
-                        if (Context.current.inverseSpecialRelationships == null) {
-                            Context.current.inverseSpecialRelationships = new TreeMap<Individual, TreeMap<String, ArrayList<Individual>>>();
+                        Context.getCurrent().specialRelationships.get("A").add(triple);
+                        if (Context.getCurrent().inverseSpecialRelationships == null) {
+                            Context.getCurrent().inverseSpecialRelationships = new TreeMap<Individual, TreeMap<String, ArrayList<Individual>>>();
                         }
-                        if (Context.current.inverseSpecialRelationships.get(triple.child) == null) {
-                            Context.current.inverseSpecialRelationships.put(
+                        if (Context.getCurrent().inverseSpecialRelationships.get(triple.child) == null) {
+                            Context.getCurrent().inverseSpecialRelationships.put(
                                     (Individual)triple.child, new TreeMap<String, ArrayList<Individual>>());
                         }
-                        if (Context.current.inverseSpecialRelationships.get(triple.child).get(udp.starName) == null) {
-                            Context.current.inverseSpecialRelationships.get(triple.child).put(
+                        if (Context.getCurrent().inverseSpecialRelationships.get(triple.child).get(udp.starName) == null) {
+                            Context.getCurrent().inverseSpecialRelationships.get(triple.child).put(
                                     udp.starName, new ArrayList<Individual>());
                         }
-                        Context.current.inverseSpecialRelationships.get(triple.child).get(udp.starName).add(this);
+                        Context.getCurrent().inverseSpecialRelationships.get(triple.child).get(udp.starName).add(this);
                     }
                 }  //  end of commit
                 return true;
@@ -1929,12 +1929,12 @@ public boolean hasDoD() {
                         constraints, (Variable) arg, new BoolFlag(false), new ClauseBody()));
                 return list;
             }
-            int maxNum = Context.current.individualCensus.size(), listSize = Math.min(maxNum, 25),
+            int maxNum = Context.getCurrent().individualCensus.size(), listSize = Math.min(maxNum, 25),
                     num, limit = 3 * listSize;
             Individual ind;
             for (int i = 0; i < nmbrOfSmpls; i++) {
                 num = (new Double(Math.random() * maxNum)).intValue();
-                ind = (Individual) Context.current.individualCensus.get(num);
+                ind = (Individual) Context.getCurrent().individualCensus.get(num);
                 limit--;
                 if ((!list.contains(ind)) && (!unEqLst.contains(ind))) {
                     list.add(ind);

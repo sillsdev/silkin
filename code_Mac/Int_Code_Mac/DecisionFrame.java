@@ -47,9 +47,9 @@ public class DecisionFrame extends JFrame  implements HyperlinkListener {
         addWindowListener(new CloseListener());
         try {
             if (suggsInFocus == REF) {
-                dt = Context.current.domTheoryRef();
+                dt = Context.getCurrent().domTheoryRef();
             } else {
-                dt = Context.current.domTheoryAdr();
+                dt = Context.getCurrent().domTheoryAdr();
             }
         } catch (Exception ex) {
             String msg = "Error while accessing current Context.\nREPORT A BUG.";

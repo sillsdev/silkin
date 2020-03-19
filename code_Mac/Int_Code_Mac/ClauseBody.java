@@ -701,7 +701,7 @@ public class ClauseBody implements Serializable, Comparator {
             if ((bodyLit.predicate.name.startsWith("*"))
                     && (arg0Name.equals(((Argument) bodyLit.args.get(0)).argName))) {  //  found-a-star-pred-binding-this-var
                 starPredName = bodyLit.predicate.name;
-                udp = (UserDefinedProperty) Context.current.userDefinedProperties.get(starPredName);
+                udp = (UserDefinedProperty) Context.getCurrent().userDefinedProperties.get(starPredName);
                 if (udp == null) {
                     // Msg for developer. Not translated.
                     String msg = "User-Defined Property '" + starPredName + "' is not defined for this domain.";
@@ -1365,7 +1365,7 @@ public class ClauseBody implements Serializable, Comparator {
             candiStr = (StringObj) pcStrCopy.get(i);
             typ = famPred(candiStr);
             if ((typ > 19 && typ < 49) || typ == 1) {
-                famPreds.add(candiStr);  //  edWin or sibling, not spouse or child
+                famPreds.add(candiStr);  //  parent or sibling, not spouse or child
             }
         }
         priorSize = famPreds.size() + 1;
@@ -1497,7 +1497,7 @@ public class ClauseBody implements Serializable, Comparator {
             famPreds.remove(0);
             return;
         }
-        //  We have 1 edWin/child combo in hand, and the 2nd edWin
+        //  We have 1 parent/child combo in hand, and the 2nd parent
         family = bindFamily(candidate.value);
         par2 = family[0];
         candidates.add(candidate);
@@ -1544,9 +1544,9 @@ public class ClauseBody implements Serializable, Comparator {
     }  //  end of method postBinding
 
     public StringObj findOtherParent(String par1, String kid1, ArrayList<Object> searchSet) throws KSInternalErrorException {
-        //  Find in searchSet a birth Literal with a different edWin for kid1.
+        //  Find in searchSet a birth Literal with a different parent for kid1.
         StringObj answer;
-        String[] family;  //  family[0] = edWin; family[1] = kid
+        String[] family;  //  family[0] = parent; family[1] = kid
         for (int i = 0; i < searchSet.size(); i++) {
             answer = (StringObj) searchSet.get(i);
             int typ = famPred(answer.value);  //  1=P, 2=C, 11=Hu, 12=Wi, 13=Sp
@@ -1561,7 +1561,7 @@ public class ClauseBody implements Serializable, Comparator {
 
     public String findKidOf2Pars(String par1, String par2, ArrayList<Object> searchSet, ArrayList<Object> foundSet) throws KSInternalErrorException {
         StringObj prospect;
-        String[] family;  //  family[0] = edWin; family[1] = kid
+        String[] family;  //  family[0] = parent; family[1] = kid
         ArrayList<Object> kidsOf1 = new ArrayList<Object>(), kidsOf2 = new ArrayList<Object>(),
                 litsFor1 = new ArrayList<Object>(), litsFor2 = new ArrayList<Object>();
         for (int i = 0; i < searchSet.size(); i++) {
@@ -1589,10 +1589,10 @@ public class ClauseBody implements Serializable, Comparator {
     }  //  end of method findKidOf2Pars
 
     public StringObj findKid2(String par1, String par2, String kid1, ArrayList<Object> searchSet) throws KSInternalErrorException {
-        //  Find in searchSet a StringObj for a Literal with par1 or par2 as the edWin
+        //  Find in searchSet a StringObj for a Literal with par1 or par2 as the parent
         //  and someone other than kid1 as the kid.
         StringObj answer;
-        String[] family;  //  family[0] = edWin; family[1] = kid
+        String[] family;  //  family[0] = parent; family[1] = kid
         for (int i = 0; i < searchSet.size(); i++) {
             answer = (StringObj) searchSet.get(i);
             int typ = famPred(answer.value);  //  1=P, 2=C, 11=Hu, 12=Wi, 13=Sp
@@ -1610,7 +1610,7 @@ public class ClauseBody implements Serializable, Comparator {
         //  Find in searchSet a StringObj for a Literal with par1 or par2 as one spouse
         //  and someone new as the other spouse.
         StringObj answer;
-        String[] family;  //  family[0] = edWin; family[1] = kid
+        String[] family;  //  family[0] = parent; family[1] = kid
         for (int i = 0; i < searchSet.size(); i++) {
             answer = (StringObj) searchSet.get(i);
             int typ = famPred(answer.value);  //  1=P, 2=C, 11=Hu, 12=Wi, 13=Sp, 20+ = siblings
@@ -1631,7 +1631,7 @@ public class ClauseBody implements Serializable, Comparator {
         //  Find in searchSet a Literal with par1 as one spouse and someone
         //  other than par2 as the other spouse.
         StringObj answer;
-        String[] family;  //  family[0] = edWin; family[1] = kid
+        String[] family;  //  family[0] = parent; family[1] = kid
         for (int i = 0; i < searchSet.size(); i++) {
             answer = (StringObj) searchSet.get(i);
             int typ = famPred(answer.value);  //  1=P, 2=C, 11=Hu, 12=Wi, 13=Sp
@@ -1647,9 +1647,9 @@ public class ClauseBody implements Serializable, Comparator {
     }  //  end of method findSpouse4
 
     public StringObj confirmKid(String par1, String par2, String kid, ArrayList<Object> searchSet) throws KSInternalErrorException {
-        //  Find a Literal with par1 or par2 as edWin and kid as ... well, kid.
+        //  Find a Literal with par1 or par2 as parent and kid as ... well, kid.
         StringObj answer;
-        String[] family;  //  family[0] = edWin; family[1] = kid
+        String[] family;  //  family[0] = parent; family[1] = kid
         for (int i = 0; i < searchSet.size(); i++) {
             answer = (StringObj) searchSet.get(i);
             int typ = famPred(answer.value);  //  1=P, 2=C, 11=Hu, 12=Wi, 13=Sp
@@ -1726,7 +1726,7 @@ public class ClauseBody implements Serializable, Comparator {
     }  //  end of method stepPred
 
     public String[] bindFamily(String candiStr) throws KSInternalErrorException {
-        //  family[0] = edWin.  family[1] = kid
+        //  family[0] = parent.  family[1] = kid
         //	OR family[0] = husband.  family[1] = wife (if genders known)
         String[] family = new String[2];
         int typ = famPred(candiStr);
@@ -1951,7 +1951,7 @@ public class ClauseBody implements Serializable, Comparator {
         } else {
             par4 = family[0];
         }
-        if (par4.equals(par1) || par4.equals(par2)) {  // Shared edWin makes HALF-bro, not STEP-bro
+        if (par4.equals(par1) || par4.equals(par2)) {  // Shared parent makes HALF-bro, not STEP-bro
             famPreds.remove(0);
             return;
         }
@@ -2050,14 +2050,14 @@ public class ClauseBody implements Serializable, Comparator {
         }
         kid2pred = kid2pred(candidate.value, 1);
         candidates.add(candidate);
-        candidate = findOtherParent(par3, kid2, searchSet); //  find 2nd edWin of kid2
+        candidate = findOtherParent(par3, kid2, searchSet); //  find 2nd parent of kid2
         if (candidate == null) {
             famPreds.remove(0);
             return;
         }  //  doesn't fit the pattern.
         family = bindFamily(candidate.value);
         par4 = family[0];
-        if (par4.equals(par1) || par4.equals(par2)) {  // Shared edWin makes HALF-bro, not STEP-bro
+        if (par4.equals(par1) || par4.equals(par2)) {  // Shared parent makes HALF-bro, not STEP-bro
             famPreds.remove(0);
             return;
         }
@@ -2106,7 +2106,7 @@ public class ClauseBody implements Serializable, Comparator {
         }
         candidates.add(candidate);
         candidate = findOtherParent(par1, kid1, searchSet);
-        if (candidate == null) {  //  this doesn't fit the step-edWin pattern.  Punt.
+        if (candidate == null) {  //  this doesn't fit the step-parent pattern.  Punt.
             famPreds.remove(0);
             return;
         }
@@ -2270,7 +2270,7 @@ public class ClauseBody implements Serializable, Comparator {
         } else if (sps2.equals(family[0])) { // sps2 is the multi-marriage spouse
             ego = sps1;
             egoSp = sps2;
-        } //  3rd Lit: Should identify sps3 as kid's other edWin
+        } //  3rd Lit: Should identify sps3 as kid's other parent
         if (bindings.get(ego) == null) {  //  The reference spouse must already be known (bound)
             famPreds.remove(0);
             return;
@@ -2281,7 +2281,7 @@ public class ClauseBody implements Serializable, Comparator {
             famPreds.remove(0);
             return;
         }  //  doesn't fit the pattern.
-        family = bindFamily(candidate.value);  //  family[0] = edWin.  family[1] = kid
+        family = bindFamily(candidate.value);  //  family[0] = parent.  family[1] = kid
         sps3 = family[0];
         if (kidPred.equals("Stc")) {
             kidPred = stepPred(candidate.value);
@@ -2319,7 +2319,7 @@ public class ClauseBody implements Serializable, Comparator {
         for (int i = 0; i < pcStrCopy.indexOf(candidate); i++) {
             postBinding(bindings, (StringObj) pcStrCopy.get(i));
         }
-        String[] family = bindFamily(candidate.value);  //  0 = edWin, 1 = kid
+        String[] family = bindFamily(candidate.value);  //  0 = parent, 1 = kid
         par1 = family[0];
         kid1 = family[1];
         if (bindings.get(kid1) == null) {  //  The reference kid must already be known (bound)
@@ -2349,7 +2349,7 @@ public class ClauseBody implements Serializable, Comparator {
         sharedPar = family[0];
         kid2pred = kid2pred(candidate.value, 2);
         candidates.add(candidate);
-        candidate = findOtherParent(sharedPar, kid2, searchSet);  // look for kid2's other edWin
+        candidate = findOtherParent(sharedPar, kid2, searchSet);  // look for kid2's other parent
         if (candidate == null) {
             famPreds.remove(0);
             return;
@@ -2395,7 +2395,7 @@ public class ClauseBody implements Serializable, Comparator {
         for (int i = 0; i < pcStrCopy.indexOf(candidate); i++) {
             postBinding(bindings, (StringObj) pcStrCopy.get(i));
         }
-        String[] family = bindFamily(candidate.value);  //  0 = edWin, 1 = kid
+        String[] family = bindFamily(candidate.value);  //  0 = parent, 1 = kid
         par1 = family[0];
         kid1 = family[1];
         if (bindings.get(kid1) == null) {  //  The reference kid must already be known (bound)
@@ -2404,7 +2404,7 @@ public class ClauseBody implements Serializable, Comparator {
         }
         candidates.add(candidate);
         candidate = (StringObj) famIter.next();
-        //  2nd Lit:  We have 1 edWin/child combo in hand; expect a 2nd.
+        //  2nd Lit:  We have 1 parent/child combo in hand; expect a 2nd.
         family = bindFamily(candidate.value);
         par = family[0];
         kid = family[1];
@@ -2511,7 +2511,7 @@ public class ClauseBody implements Serializable, Comparator {
         if (!foundOne) {
             return;
         }
-        //  found a full-sibling or edWin predicate
+        //  found a full-sibling or parent predicate
         if (linkerHasOtherRoles(linker, pcStrCopy, candidates)) {
             return;
         }
@@ -2540,7 +2540,7 @@ public class ClauseBody implements Serializable, Comparator {
                 other = (StringObj) iter.next();
                 typ1 = famPred(other);
                 pos1 = pcStrCopy.indexOf(other);
-                //  bindFam => [0] = edWin.  [1] = kid
+                //  bindFam => [0] = parent.  [1] = kid
                 //			OR [0] = husband. [1] = wife (if genders known)
                 //			OR [0] = arg0.	  [1] = arg1.
                 otherArgs = bindFamily(other.value);
@@ -2549,7 +2549,7 @@ public class ClauseBody implements Serializable, Comparator {
                     if ((pred0.equals("Fa") || pred0.equals("Mo") || pred0.equals("P"))
                             && (typ1 > 10) && (typ1 < 14)) {  //  only natural parents' spouses
                         if (candArgs[0].equals(otherArgs[1]) || candArgs[0].equals(otherArgs[0])) {
-                            //  this is the spouse of edWin
+                            //  this is the spouse of parent
                             String newPred = "P";
                             if (typ1 == 11) {
                                 newPred = "Fa";
@@ -2567,8 +2567,8 @@ public class ClauseBody implements Serializable, Comparator {
                             iter.remove();
                         }
                     } else if ((pred0.equals("Fa") || pred0.equals("Mo") || pred0.equals("P"))
-                            && (typ1 == 2)) {  //  a natural edWin's child == sibling
-                        if (candArgs[0].equals(otherArgs[0])) { //  edWin matches
+                            && (typ1 == 2)) {  //  a natural parent's child == sibling
+                        if (candArgs[0].equals(otherArgs[0])) { //  parent matches
                             String newPred = "Sib";
                             String otherPred = other.value.substring(0, other.value.indexOf("("));
                             if (otherPred.equals("So")) {
@@ -2599,7 +2599,7 @@ public class ClauseBody implements Serializable, Comparator {
                             iter.remove();
                         }
                     } else if ((pred0.equals("So") || pred0.equals("Da") || pred0.equals("C"))
-                            && (typ1 == 1)) {  //  a child's edWin == spouse
+                            && (typ1 == 1)) {  //  a child's parent == spouse
                         if (candArgs[1].equals(otherArgs[1])) {  //  the kid matches
                             String newPred = "Sp";
                             String otherPred = other.value.substring(0, other.value.indexOf("("));
@@ -2664,9 +2664,9 @@ public class ClauseBody implements Serializable, Comparator {
                 return "St" + pred2.toLowerCase();
             }
         }
-        //  OK, got a edWin of a half- or step-sibling or a 31-43 with another 31-43
+        //  OK, got a parent of a half- or step-sibling or a 31-43 with another 31-43
         if (typ1 < 39) {  //  a half-sibling
-            if (typ2 < 3) {  //  edWin of a half-sibling
+            if (typ2 < 3) {  //  parent of a half-sibling
                 String[] parents = findParents(ego, pcString);  //  0=mom, 1=dad
                 where = candiStr.indexOf("(");
                 comma = candiStr.indexOf(",");
@@ -2679,7 +2679,7 @@ public class ClauseBody implements Serializable, Comparator {
                 return null;
             }
         } else {  //  a step-sibling
-            if (typ2 < 3) {  //  edWin of a step-sibling
+            if (typ2 < 3) {  //  parent of a step-sibling
                 String egoStepPar = findStepPar(ego, pcString);
                 String[] family = bindFamily(candiStr);
                 String altPar = family[0];
@@ -2701,7 +2701,7 @@ public class ClauseBody implements Serializable, Comparator {
             next = (String) pcString.get(i);
             int typ = famPred(next);
             if (typ < 3) {
-                args = bindFamily(next);  //  args[0] = edWin.  args[1] = kid
+                args = bindFamily(next);  //  args[0] = parent.  args[1] = kid
                 if (ego.equals(args[1])) {
                     pred = next.substring(0, next.indexOf("("));
                     if (pred.equals("Mo")) {
@@ -2713,8 +2713,8 @@ public class ClauseBody implements Serializable, Comparator {
                     } else {
                         par2 = args[0];
                     }
-                }  //  end of found ego's edWin
-            }  //  end of it's a edWin/child pred
+                }  //  end of found ego's parent
+            }  //  end of it's a parent/child pred
         }
         if (!mom.equals("")) {
             answer[0] = mom;
@@ -3407,7 +3407,7 @@ public class ClauseBody implements Serializable, Comparator {
     }  //  end of method cb1.absorbPCStringsOf
 
     public boolean unifiesWith(ClauseBody other, ArrayList<Object> boundVars, ArrayList<Object> oldNames, ArrayList<Object> newNames) {
-        //  First expand each body into a super-primitive form:  edWin, child, spouse etc. plus specific gender
+        //  First expand each body into a super-primitive form:  parent, child, spouse etc. plus specific gender
         //  constraints (no duplicates).  (do it as returned value of canonicalizePreds.)  Then run the alg'm below.
         //  Do I need both DeepCopy and the second ArrayList<Object>.copy??
         try {  //  canonicalizePreds returns deepCopy, & reduces the body to super-primitive, canonical form.
@@ -3481,7 +3481,7 @@ public class ClauseBody implements Serializable, Comparator {
 
     public boolean almostUnifies(ArrayList<Object> aBody, ArrayList<Object> bBody, ArrayList<Object> boundVars, ArrayList<Object> oldNames, ArrayList<Object> newNames,
             ArrayList<Object> misMatches, Counter maxMisses, ClauseBody other) {
-        //  aBody and bBody are deepCopies already in super-primitive form: edWin, child, spouse etc. plus specific gender
+        //  aBody and bBody are deepCopies already in super-primitive form: parent, child, spouse etc. plus specific gender
         //  constraints (no duplicates).  Their bodies were identical in length at start.
         //  Look for unification of these 2 bodies with 'maxMisses' mis-matched literals.  Put those misMatched
         //  literals into 'misMatches' and return true.  Else return false.
@@ -3792,7 +3792,7 @@ public class ClauseBody implements Serializable, Comparator {
                 personToVarMap = new TreeMap(), //  personVarName => genderVarName
                 unequals = new TreeMap(), //  varName to List_of_varNames
                 oppoSex = new TreeMap();		//  personVarName to List_of_personVarNames
-        makeSuperPrimitive(newCB, newBody, knownGenders, personToVarMap, unequals, oppoSex);  //  make all 'edWin', 'male', etc.
+        makeSuperPrimitive(newCB, newBody, knownGenders, personToVarMap, unequals, oppoSex);  //  make all 'parent', 'male', etc.
         boolean progress = true;
         while (progress) {  //  progress = new gender info infered.  Go until progress stops
             progress = inferVarValsFromGenders(cb, newBody, knownGenders, genderVarVals, personToVarMap, unequals, oppoSex);
@@ -3820,7 +3820,7 @@ public class ClauseBody implements Serializable, Comparator {
 
     public void makeSuperPrimitive(ClauseBody newCB, ArrayList<Object> newBody, TreeMap knownGenders,
             TreeMap personToVarMap, TreeMap unequals, TreeMap oppoSex) {
-        //  Unpack predicates like 'father' into 'edWin' and 'male'
+        //  Unpack predicates like 'father' into 'parent' and 'male'
         //  Also, build directories of unequals, genderVars
         Literal newLit;
         PredCategory predCat = (PredCategory) new PrimitiveCategory();
@@ -3928,7 +3928,7 @@ public class ClauseBody implements Serializable, Comparator {
     }  //  end of method makeSuperPrimitive
 
     public void makeNormalPrimitive() throws KSInternalErrorException {
-        //  Find superPrimitive expressions like 'edWin(X,Y), male(X).'
+        //  Find superPrimitive expressions like 'parent(X,Y), male(X).'
         //  Change them into regular primitives like 'father(X,Y).'
         //  First, assemble all known gender information
         TreeMap knownGenders = new TreeMap(), //  personVarName => gender (male/female)
@@ -4048,7 +4048,7 @@ public class ClauseBody implements Serializable, Comparator {
                         }  //  end of found-2-parents-of-1-kid
                     }  //  end of found-2-parents
                 }  //  end of inner loop
-            }  //  end of found-1-edWin
+            }  //  end of found-1-parent
         }  //  end of outer loop
         return success;
     }  //  end of method inferOppoSexParents
@@ -4371,7 +4371,7 @@ public class ClauseBody implements Serializable, Comparator {
             // 3) If no genders are known and both args bound, pass along unchanged
         } else if (sex0 == null && sex1 == null && bound0 && bound1) {
             newBody.add(lit);
-            // 4) If no genders known & 1 arg is bound, boundArg = arg1 (affects edWin/child/spouse/sibling)
+            // 4) If no genders known & 1 arg is bound, boundArg = arg1 (affects parent/child/spouse/sibling)
         } else if (sex0 == null && sex1 == null) {
             if (bound0) {
                 lit.reverseArgs();

@@ -219,7 +219,7 @@ public class Dyad  implements Serializable, Comparable  {
          * @param predList  a list of strings like 'Fa(#2,#5)'
 	*/
    public void makePath(ArrayList<Object> predList, Individual alter) {
-        ArrayList<Individual> ppl = Context.current.individualCensus;
+        ArrayList<Individual> ppl = Context.getCurrent().individualCensus;
         int alterNum = alter.serialNmbr;
         for (Object o : predList) {
            String miniPred = (String) o;

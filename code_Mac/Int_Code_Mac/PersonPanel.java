@@ -88,15 +88,15 @@ public class PersonPanel extends javax.swing.JPanel {
 
     void buildFocusFields() {
         int size = 3, ndx = 0;
-        if (Context.current.surnameNormallyCaptured) size++;
-        if (Context.current.birthDateNormallyCaptured) size++;
+        if (Context.getCurrent().surnameNormallyCaptured) size++;
+        if (Context.getCurrent().birthDateNormallyCaptured) size++;
         if (parent.chart.distinctAdrTerms) size += 2;
         focusFields = new JTextField[size];
         focusFields[ndx++] = alterFirstNames;
-        if (Context.current.surnameNormallyCaptured) {
+        if (Context.getCurrent().surnameNormallyCaptured) {
             focusFields[ndx++] = alterLastName;
         }
-        if (Context.current.birthDateNormallyCaptured) {
+        if (Context.getCurrent().birthDateNormallyCaptured) {
             focusFields[ndx++] = personBirthYr;
         }
         focusFields[ndx++] = alterRefTerm;
@@ -113,21 +113,21 @@ public class PersonPanel extends javax.swing.JPanel {
     public void initUDPCombo() {
         boolean vis = true, chartable = false;
         udpValTextArea.setEditable(false); // Display only.
-        if (Context.current == null
-                || Context.current.userDefinedProperties == null
-                || Context.current.userDefinedProperties.size() == 0) {
+        if (Context.getCurrent() == null
+                || Context.getCurrent().userDefinedProperties == null
+                || Context.getCurrent().userDefinedProperties.size() == 0) {
             vis = false;
         } else {
             parent.chart.loading = true;
             udpComboModel.removeAllElements();
-            for (Object o : Context.current.userDefinedProperties.keySet()) {
+            for (Object o : Context.getCurrent().userDefinedProperties.keySet()) {
                 udpComboModel.addElement((String) o);
             }
             udpComboBox.setSelectedIndex(0);
             udpValTextArea.setText("");
             udpsPresent = true;
             String udNam = (String) udpComboModel.getElementAt(0);
-            UserDefinedProperty udp = (UserDefinedProperty) Context.current.userDefinedProperties.get(udNam);
+            UserDefinedProperty udp = (UserDefinedProperty) Context.getCurrent().userDefinedProperties.get(udNam);
             chartable = udp.chartable;
             parent.chart.loading = false;
         }
@@ -814,12 +814,12 @@ public class PersonPanel extends javax.swing.JPanel {
         }
         String ch = (String) linksComboBox.getSelectedItem();
         if (ch != null) {
-            Context.current.currentChart = ch.substring(0, ch.indexOf(":"));
+            Context.getCurrent().currentChart = ch.substring(0, ch.indexOf(":"));
             if (parent.infoPerson != null) {
                 parent.chart.whichFolk = parent.infoPerson.serialNmbr;
             }
             parent.chartComboUpdateTitle();
-            parent.chart.checkSizeOfChart(Context.current);
+            parent.chart.checkSizeOfChart(Context.getCurrent());
             parent.chart.resizeAndRepaint();
         }
     }//GEN-LAST:event_linksComboBoxActionPerformed
@@ -854,7 +854,7 @@ public class PersonPanel extends javax.swing.JPanel {
         }
         if (udp.typ.equals("individual")) {
             Individual ind, tempInd;
-            ArrayList<Individual> census = Context.current.individualCensus;
+            ArrayList<Individual> census = Context.getCurrent().individualCensus;
             if (choice == DELETE) { 
                 if (udp.value.size() == 1) {
                     ind = (Individual) udp.value.get(0);
@@ -945,7 +945,7 @@ public class PersonPanel extends javax.swing.JPanel {
                 if (confirm == JOptionPane.YES_OPTION) {  //  Go ahead and delete it
                     udp.value.remove(index);
                     if (udp.connects) {
-                        Context.current.deleteConnectingUDPVal(currentInd, udp.starName, val, udp.sameVal);
+                        Context.getCurrent().deleteConnectingUDPVal(currentInd, udp.starName, val, udp.sameVal);
                     }
                 }
             } else {  //  choice = ADD
@@ -982,7 +982,7 @@ public class PersonPanel extends javax.swing.JPanel {
                     return;
                 }
                 if (udp.connects) {
-                    Context.current.addConnectingUDPVal(currentInd, udp.starName, newbie, udp.sameVal);
+                    Context.getCurrent().addConnectingUDPVal(currentInd, udp.starName, newbie, udp.sameVal);
                 }
                 udp.value.add(newObj);                
             }
@@ -1134,7 +1134,7 @@ public class PersonPanel extends javax.swing.JPanel {
         personDeathYear.setText(ind.getDeathYr());
         dataChgDate.setText(ind.dataChangeDate);
         personComments.setText(restoreLineBreaks(ind.comment));
-        if (Context.current.displayGEDCOM) {
+        if (Context.getCurrent().displayGEDCOM) {
             String items = ind.addGEDCOMItems();
             personComments.setText(personComments.getText() + items);
         }
@@ -1169,7 +1169,7 @@ public class PersonPanel extends javax.swing.JPanel {
         } else if (ind.node != null) {
         // There may be kin terms already recorded.
         // Terms on nodes are slashified. fillTextField de-slashifies. 
-            Individual ego = Context.current.individualCensus.get(parent.getCurrentEgo());
+            Individual ego = Context.getCurrent().individualCensus.get(parent.getCurrentEgo());
             checkForAutoDefs(ind.node, ego);
             fillTextField(ind.node, alterRefTerm, false);
             fillTextField(ind.node, alterAdrTerm, parent.chart.distinctAdrTerms);
@@ -1270,19 +1270,19 @@ public class PersonPanel extends javax.swing.JPanel {
      * @param ego the Individual object for Ego
      */
     public void checkForAutoDefs(Node nod, Individual ego) {
-        TreeMap<String, ArrayList<Context.CB_Ptr>> map = Context.current.autoDefRef;
+        TreeMap<String, ArrayList<Context.CB_Ptr>> map = Context.getCurrent().autoDefRef;
         ArrayList<Context.CB_Ptr> list = map.get(nod.pcString);
         DomainTheory dt = null;
         try {
-            dt = Context.current.domTheoryRef();
+            dt = Context.getCurrent().domTheoryRef();
         } catch (Exception ex) {  }  //  nothing can go wrong, go wrong, go wrong...
         applyAutoDef(nod, list, dt, ego);
-        if (Context.current.domTheoryAdrExists() && parent.chart.distinctAdrTerms
-                && Context.current.autoDefAdr != null) {
-            map = Context.current.autoDefAdr;
+        if (Context.getCurrent().domTheoryAdrExists() && parent.chart.distinctAdrTerms
+                && Context.getCurrent().autoDefAdr != null) {
+            map = Context.getCurrent().autoDefAdr;
             list = map.get(nod.pcString);
             try {
-                dt = Context.current.domTheoryAdr();
+                dt = Context.getCurrent().domTheoryAdr();
             } catch (Exception ex) {  }  
             applyAutoDef(nod, list, dt, ego);
         }
@@ -1304,7 +1304,7 @@ public class PersonPanel extends javax.swing.JPanel {
         if (list == null) {
             return;
         }
-        Context ctxt = Context.current;
+        Context ctxt = Context.getCurrent();
         Dyad dad = new Dyad(ego);
         dad.alter = nod.indiv;
         dad.pcString = nod.pcString;
@@ -1603,7 +1603,7 @@ public class PersonPanel extends javax.swing.JPanel {
         String a, b, c;
         int currEgoNum = parent.getCurrentEgo();
         Individual currEgo =
-                    Context.current.individualCensus.get(currEgoNum);
+                    Context.getCurrent().individualCensus.get(currEgoNum);
         a = sanitizeName(alterFirstNames.getText());
         b = sanitizeName(alterLastName.getText());
         if (! infoPerson.name.equals(a + " " + b)) {
@@ -1698,7 +1698,7 @@ public class PersonPanel extends javax.swing.JPanel {
         }
         infoPerson.dataAuthor = Library.currDataAuthor;
         infoPerson.dataChangeDate = UDate.today();
-        Context.current.dateOfLastDataChange = infoPerson.dataChangeDate;
+        Context.getCurrent().dateOfLastDataChange = infoPerson.dataChangeDate;
         parent.chart.dirty = true;
         dirty = false;
         storing = false;
@@ -1756,8 +1756,8 @@ public class PersonPanel extends javax.swing.JPanel {
         }     // only primary terms are being captured. To be Reviewed.
         nod.replaceTerms(newTerms, "primary", (typ.equals("Ref") ? "reference" : "address"));
         try {
-            DomainTheory dt = (typ.equals("Ref") ? Context.current.domTheoryRef()
-                    : Context.current.domTheoryAdr());            
+            DomainTheory dt = (typ.equals("Ref") ? Context.getCurrent().domTheoryRef()
+                    : Context.getCurrent().domTheoryAdr());            
             for (String term : deletedTerms) {
                 if (dt.dyadsDefined.containsKey(term)) {
                     dt.dyadsDefined.removeDyad(term, nod.pcString, currEgo, infoPerson, dt);
@@ -1877,17 +1877,17 @@ public class PersonPanel extends javax.swing.JPanel {
     
     static boolean ktMatrixInBalance(boolean giveUp) {
         int ktmSz = 0, ktmCells = 0, mult = 0, popSz = 0, refSz = 0, adrSz = 0;
-        Context.current.ktm.checkSelfNodes();
+        Context.getCurrent().ktm.checkSelfNodes();
         try {
-            ktmSz = Context.current.ktm.numberOfKinTerms();
-            ktmCells = Context.current.ktm.numberOfCells();
-            mult = (Context.current.domTheoryAdrExists() ? 2 : 1);
+            ktmSz = Context.getCurrent().ktm.numberOfKinTerms();
+            ktmCells = Context.getCurrent().ktm.numberOfCells();
+            mult = (Context.getCurrent().domTheoryAdrExists() ? 2 : 1);
             popSz = popSize();
-            refSz = DomainTheory.countLeaves(Context.current.domTheoryRef().dyadsUndefined)
-                    + DomainTheory.countLeaves(Context.current.domTheoryRef().dyadsDefined);
-            adrSz = (!Context.current.domTheoryAdrExists() ? 0
-                    : DomainTheory.countLeaves(Context.current.domTheoryAdr().dyadsUndefined)
-                    + DomainTheory.countLeaves(Context.current.domTheoryAdr().dyadsDefined));
+            refSz = DomainTheory.countLeaves(Context.getCurrent().domTheoryRef().dyadsUndefined)
+                    + DomainTheory.countLeaves(Context.getCurrent().domTheoryRef().dyadsDefined);
+            adrSz = (!Context.getCurrent().domTheoryAdrExists() ? 0
+                    : DomainTheory.countLeaves(Context.getCurrent().domTheoryAdr().dyadsUndefined)
+                    + DomainTheory.countLeaves(Context.getCurrent().domTheoryAdr().dyadsDefined));
         } catch (Exception exc) {
         }
         boolean ktminBalance = (refSz + adrSz) == (ktmSz - (mult * popSz));
@@ -1897,12 +1897,12 @@ public class PersonPanel extends javax.swing.JPanel {
                     + ktmSz + " - " + (mult * popSz) + " = " + (ktmSz - (mult * popSz)) + "\tktmCells: " + ktmCells;
             MainPane.displayError(msg, "Data Loss Monitoring", JOptionPane.WARNING_MESSAGE);
             System.out.println(msg);
-            System.out.println(Context.current.ktm.printMatrixSummary());
+            System.out.println(Context.getCurrent().ktm.printMatrixSummary());
             try {
                 System.out.println("\nUndefined Dyads");
-                System.out.println(Context.current.domTheoryRef().dyadsUndefined.summaryString());
+                System.out.println(Context.getCurrent().domTheoryRef().dyadsUndefined.summaryString());
                 System.out.println("\n\nDefined Dyads");
-                System.out.println(Context.current.domTheoryRef().dyadsDefined.summaryString());
+                System.out.println(Context.getCurrent().domTheoryRef().dyadsDefined.summaryString());
             }catch(Exception exc) {
             }
             Context.breakpoint();
@@ -1914,7 +1914,7 @@ public class PersonPanel extends javax.swing.JPanel {
     
     static int popSize() {  // Don't count deleted persons
         int census = 0;
-        Iterator censusIter = Context.current.individualCensus.iterator();
+        Iterator censusIter = Context.getCurrent().individualCensus.iterator();
         while (censusIter.hasNext()) {
             Individual ind = (Individual)censusIter.next();
             if (! ind.deleted) {
@@ -1928,7 +1928,7 @@ public class PersonPanel extends javax.swing.JPanel {
         // Always called to regenerate dyads from scratch, thus duR etc. sre cleared
         DyadTMap duR = null, ddR = null, duA = null, ddA = null;
         DomainTheory domThRef = null, domThAdr = null;
-        Context ctxt = Context.current;
+        Context ctxt = Context.getCurrent();
         try {
             if (ctxt.domTheoryRefExists()) {
                 domThRef = ctxt.domTheoryRef();
@@ -1990,7 +1990,7 @@ public class PersonPanel extends javax.swing.JPanel {
         storing = true;
         egoChoiceBox.removeAllItems();
         String newName;
-        for (Individual ind : Context.current.individualCensus) {
+        for (Individual ind : Context.getCurrent().individualCensus) {
             newName = (ind.deleted ? 
                     "deleted" : 
                     ind.homeChart + ": " + ind.name+ " <" + ind.serialNmbr +">");
@@ -2006,7 +2006,7 @@ public class PersonPanel extends javax.swing.JPanel {
         String newChart;        
         for (Link lk : ind.links) {
             newChart = (lk.homeChart + ": ");
-            newChart += Context.current.getChartDescription(lk.homeChart);
+            newChart += Context.getCurrent().getChartDescription(lk.homeChart);
             linksComboModel.addElement(newChart);
         }        
         linksComboBox.setSelectedIndex(0);
@@ -2061,7 +2061,7 @@ public class PersonPanel extends javax.swing.JPanel {
         parent.kinTmAdrBtn.setEnabled(val);
         parent.ltrAdrBtn.setEnabled(val);
         parent.setDistinctAdrMenuItemSelected(val);
-        Library.setStubAdrFileExists(Context.current.languageName, val);
+        Library.setStubAdrFileExists(Context.getCurrent().languageName, val);
     }
 
 

@@ -231,10 +231,10 @@ public class DisplayPickerPanel extends JPanel  {
             try {
                 if (actxt != null) {  //  this-language-is-an-active-context
                     currentContext = actxt;
-                    Context.current = currentContext;
+                    Context.setCurrent(currentContext);
                 }else {
                     currentContext = Library.readContextFromDisk(fileName);  //  load it from disk
-                    Context.current = currentContext;
+                    Context.setCurrent(currentContext);
                 }
                 if (adrFlag == language.length())   //  Reference terms are selected
                      currentDomTh = currentContext.domTheoryRef();
@@ -270,8 +270,8 @@ public class DisplayPickerPanel extends JPanel  {
                 langLoad = false;
                 if (priorContext != null)  {
                     currentContext = priorContext;  //  Revert to priors.
-                    Context.current = priorContext;
-                    System.out.println("3  Current context reset to " + Context.current.languageName);
+                    Context.setCurrent(priorContext);
+                    System.out.println("3  Current context reset to " + Context.getCurrent().languageName);
                     currentDomTh = priorDT;
                     DomainTheory.current = priorDT; 
                 }
@@ -477,329 +477,367 @@ public class DisplayPickerPanel extends JPanel  {
      that record which clauses should be diagramed.  Then call code to create a
      hypothetical population which illustrates the chosen term/clause -- and diagram it.
      */
-    public class DiagramButtonListener implements ActionListener  {
-        
+    public class DiagramButtonListener implements ActionListener {
+
         public void actionPerformed(ActionEvent event) {
             //  If currentContext already has a population (& Ego) , find out if User wants to keep them or not.
-            
-			if (event.getActionCommand().equals("gen examples"))  {
-				
-				//	NOTE:  When inspecting/debugging this activity, don't overlook the 'GenerateAll()'
-				//	method which is called from here.  It parallels much of this logic.
-				
-				Context.current = currentContext;  //  so that the diagram methods can access context
-				DomainTheory.current = currentDomTh;  //  and domTh fields.
-				int nmbrInd = currentContext.individualCensus.size(), choice1 = 2, choice2;
-				int resetInd = currentContext.indSerNumGen,  resetFam = currentContext.famSerNumGen;
-				Individual ego = null;
-				String sex = "M";
-				Object[] options9 = {"ALL", "Single Term"};
-				int choice3 = JOptionPane.showOptionDialog(browser.desktop,
-													   "Do you want examples of ALL the terms in this langauge?",
-													   "Option for ALL KinTerms",
-													   JOptionPane.YES_NO_OPTION,
-													   JOptionPane.QUESTION_MESSAGE,
-													   null,     //don't use a custom Icon
-													   options9,  //the titles of buttons
-													   options9[1]); //default is Single Term
-				if (choice3 == JOptionPane.YES_OPTION) {
-					generateAll();
-					return;
-					}  //  end of Diagram-ALL-option
-				if (nmbrInd > 0) {  //  Existing objects should include an Ego + at least 1 other person: erase or keep?
-					Object[] options1 = {"Fresh Start", "Add On", "Explain Please"};
-					Object[] options2 = {"Now I Understand", "Cancel"};
-					while (choice1 == 2)  {
-						choice1 = JOptionPane.showOptionDialog(browser.desktop,
-								 String.valueOf(nmbrInd) + " 'hypothetical people' were previously" + 
-								 " created to illustrate a Kin Term.  \nDo you want to erase them and start a fresh example?" +
-								 "\nOr add this Kin Term diagram to the previous one?" + 
-								  "\n\n        [To cancel, just close this window.]",
-								 "Erase Existing Hypothetical Population?",
-								 JOptionPane.YES_NO_CANCEL_OPTION,
-								 JOptionPane.QUESTION_MESSAGE,
-								 null,     //don't use a custom Icon
-								 options1,  //the titles of buttons
-								 options1[2]); //default button title
-						if (choice1 == 2)  {
-							choice2 = JOptionPane.showOptionDialog(browser.desktop,
-								 "Examples are created by making up some 'hypothetical people' who illustrate each way" + 
-								 "\nsomeone can meet a definition of the chosen Kin Term.\n\n" + 
-								 "If you erase the previous folks, then the resulting example will show just the Kin Term\n" +
-								 "(and clauses) currently selected.\n\n" + 
-								 "If you don't, the previous example and the new one will be merged." ,
-								 "What Is A Hypothetical Population?",
-								 JOptionPane.OK_CANCEL_OPTION,
-								 JOptionPane.INFORMATION_MESSAGE,
-								 null,     //don't use a custom Icon
-								 options2,  //the titles of buttons
-								 options2[0]); //default button title
-							if ((choice2 == 1) || (choice2 == -1)) 
-								choice1 = JOptionPane.CLOSED_OPTION;  //  2 ways to say 'forget it!'
-						}  //  end of choice1==2 (explain)
-					}  //  end of while-loop
-					if (choice1 == 0)  {  //  Fresh Start
-						reset(0, 0);
-						makeEgo();
-					}
-					if (choice1 == JOptionPane.CLOSED_OPTION) return;
-				}  //  end of if-there-are-existing-individuals
-				else makeEgo();
-				
-			//  Now, one way or another, we have a population with an Ego
-				ArrayList<Object> egoBag = new ArrayList<Object>();	//  Make a bag = 1 ego, for use in cb.generateExamples
-				egoBag.add(currentContext.individualCensus.get(0));
-				String chosenXD = (String)expanPick.getSelectedItem(); // 'All' or a number
-				ClauseBody cb = null;
-				ArrayList<Object> pile = new ArrayList<Object>();
-				if (chosenXD.equals("All"))  {  //  same logic we used to set expanPick menu.  Add to Pile
-					for (int i=0; i < currentKTD.expandedDefs.size(); i++) {
-						cb = (ClauseBody)currentKTD.expandedDefs.get(i);
-						if ((((cb.flags.contains("ext")) && (inclExt)) 
-							 || ((! cb.flags.contains("ext")) && (inclPrim)))
-							&& (cb.isExpansionOf(currentOriginalHC)))
-							pile.add(String.valueOf(i));
-					}  //  end of loop thru all expandedDefs
-				}else   pile.add(chosenXD);   //  parse the chosen exp_Def# & put in Pile.
-				
-			//  Now go thru the pile, unify variables & create examples
-				int finishNow;
-				try  {
-				  ArrayList<Object> round2 = new ArrayList<Object>();
-				  for (int j=0; j < pile.size(); j++)  {
-					cb = (ClauseBody)currentKTD.expandedDefs.get(Integer.parseInt((String)pile.get(j)));
-					cb.unifyVariables();
-					if (cb.flags.contains("chooseLast")) round2.add(cb);
-					else cb.generateExamples(currentContext, egoBag, null, null);
-					}
-					MainPane.fill_In_Flag = true;
-					for (int j=0; j < round2.size(); j++)  {  //  in Round 2, process delayed-ID terms
-						cb = (ClauseBody)round2.get(j);
-						cb.generateExamples(currentContext, egoBag, null, null);
-						}
-					MainPane.fill_In_Flag = false;
-				
-				Object[] finishOptions = {"Done", "Add More Terms" };
-				finishNow = JOptionPane.showOptionDialog(browser.desktop,
-					 "When you are done adding terms to this example, we will\n" +
-					 "tidy up the examples for display or export.",
-					 "Done Adding Terms?",
-					 JOptionPane.OK_CANCEL_OPTION,
-					 JOptionPane.INFORMATION_MESSAGE,
-					 null,     //don't use a custom Icon
-					 finishOptions,  //the titles of buttons
-					 finishOptions[1]); //default button title
-				if (finishNow == 0) {	//  Tidy Up.  with each ego in egoBag		
-					for (int i=0; i < egoBag.size(); i++)  {
-						ego = (Individual)egoBag.get(i);
-						currentDomTh.fillInNames(ego);  //  Tidy up the kinTerms of any extra folks in the diagram
-						//  Following line guilty of clobbering Ego's kinTerms
-						//  Node testNode = currentContext.buildTree(ego);
-						}
-					}
-				}catch (KSBadHornClauseException bhc)  {
-					String msg = "PROBLEM: This clause contains literals that are syntactically correct, but have logical flaws.\n"  + bhc +
-								"\nRECOMMENDATION: Correct or replace this clause in the definition.";
-					JOptionPane.showMessageDialog(browser.desktop, msg, "Bad Horn Clause",
-							 JOptionPane.ERROR_MESSAGE);
-					reset(resetInd, resetFam);
-					if (MainPane.activity == null) MainPane.createActivityLog(browser.desktop, browser.menuView);
-					MainPane.activity.log.append("For clause: " + cb + "\n" + msg + "\n\n");
-					return;
-				}catch  (KSConstraintInconsistency ci)  {
-					String msg = "PROBLEM: The constraints specified or implied in this clause are contradictory.\n" + ci +
-								"\nRECOMMENDATION: Correct or replace this clause in the definition.";
-					JOptionPane.showMessageDialog(browser.desktop, msg, "Constraint Inconsistency",
-							  JOptionPane.ERROR_MESSAGE);
-					reset(resetInd, resetFam);
-					if (MainPane.activity == null) MainPane.createActivityLog(browser.desktop, browser.menuView);
-					MainPane.activity.log.append("For clause: " + cb + "\n" + msg + "\n\n");
-					return;
-				}catch  (ClassNotFoundException ouch)  {       
-					String msg = "PROBLEM: Kinship System internal class-handling error.\n" + ouch +
-								"\nRECOMMENDATION: Send a Bug Report!";
-					JOptionPane.showMessageDialog(browser.desktop, msg, "Internal (Kinship System) Error",
-							  JOptionPane.ERROR_MESSAGE);
-					reset(resetInd, resetFam);
-					if (MainPane.activity == null) MainPane.createActivityLog(browser.desktop, browser.menuView);
-					MainPane.activity.log.append("In: " + cb + "\n" + msg + "\n\n");
-					return;
-				}catch  (KSInternalErrorException ouch)  {       
-					String msg = "PROBLEM: The Kinship System has processed a literal improperly.\n" + ouch +
-								"\nRECOMMENDATION: Send a Bug Report!";
-					JOptionPane.showMessageDialog(browser.desktop, msg, "Internal (Kinship System) Error",
-							  JOptionPane.ERROR_MESSAGE);
-					reset(resetInd, resetFam);
-					if (MainPane.activity == null) MainPane.createActivityLog(browser.desktop, browser.menuView);
-					MainPane.activity.log.append("In: " + cb + "\n" + msg + "\n\n");
-					return;
-				}  //  end of Exception Catch blocks
-				String str = "\nCreated " + currentContext.indSerNumGen + " individuals and " 
-								+ currentContext.famSerNumGen + " familes for this example.";
-				if (egoBag.size() > 1)  {
-					str += "\nMultiple Ego's were used: ";
-					Individual altEgo;
-					for (int i=0; i < egoBag.size() -1; i++)  {
-						altEgo = (Individual)egoBag.get(i);
-						str += "#" + altEgo.serialNmbr + ", ";
-						}  //  end of loop thru all egos except last one
-					altEgo = (Individual)egoBag.get(egoBag.size() -1);
-					str += "and #" + altEgo.serialNmbr + ".";
-					}  //  end of more-than-1-ego
-				((JTextArea)diagramArea).setText(str);
-				return;
-				}
-		if (event.getActionCommand().equals("diagram examples"))  {
+
+            if (event.getActionCommand().equals("gen examples")) {
+
+		//	NOTE:  When inspecting/debugging this activity, don't overlook the 'GenerateAll()'
+                //	method which is called from here.  It parallels much of this logic.
+                Context.setCurrent(currentContext);  //  so that the diagram methods can access context
+                DomainTheory.current = currentDomTh;  //  and domTh fields.
+                int nmbrInd = currentContext.individualCensus.size(), choice1 = 2, choice2;
+                int resetInd = currentContext.indSerNumGen, resetFam = currentContext.famSerNumGen;
+                Individual ego = null;
+                String sex = "M";
+                Object[] options9 = {"ALL", "Single Term"};
+                int choice3 = JOptionPane.showOptionDialog(browser.desktop,
+                        "Do you want examples of ALL the terms in this langauge?",
+                        "Option for ALL KinTerms",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null, //don't use a custom Icon
+                        options9, //the titles of buttons
+                        options9[1]); //default is Single Term
+                if (choice3 == JOptionPane.YES_OPTION) {
+                    generateAll();
+                    return;
+                }  //  end of Diagram-ALL-option
+                if (nmbrInd > 0) {  //  Existing objects should include an Ego + at least 1 other person: erase or keep?
+                    Object[] options1 = {"Fresh Start", "Add On", "Explain Please"};
+                    Object[] options2 = {"Now I Understand", "Cancel"};
+                    while (choice1 == 2) {
+                        choice1 = JOptionPane.showOptionDialog(browser.desktop,
+                                String.valueOf(nmbrInd) + " 'hypothetical people' were previously"
+                                + " created to illustrate a Kin Term.  \nDo you want to erase them and start a fresh example?"
+                                + "\nOr add this Kin Term diagram to the previous one?"
+                                + "\n\n        [To cancel, just close this window.]",
+                                "Erase Existing Hypothetical Population?",
+                                JOptionPane.YES_NO_CANCEL_OPTION,
+                                JOptionPane.QUESTION_MESSAGE,
+                                null, //don't use a custom Icon
+                                options1, //the titles of buttons
+                                options1[2]); //default button title
+                        if (choice1 == 2) {
+                            choice2 = JOptionPane.showOptionDialog(browser.desktop,
+                                    "Examples are created by making up some 'hypothetical people' who illustrate each way"
+                                    + "\nsomeone can meet a definition of the chosen Kin Term.\n\n"
+                                    + "If you erase the previous folks, then the resulting example will show just the Kin Term\n"
+                                    + "(and clauses) currently selected.\n\n"
+                                    + "If you don't, the previous example and the new one will be merged.",
+                                    "What Is A Hypothetical Population?",
+                                    JOptionPane.OK_CANCEL_OPTION,
+                                    JOptionPane.INFORMATION_MESSAGE,
+                                    null, //don't use a custom Icon
+                                    options2, //the titles of buttons
+                                    options2[0]); //default button title
+                            if ((choice2 == 1) || (choice2 == -1)) {
+                                choice1 = JOptionPane.CLOSED_OPTION;  //  2 ways to say 'forget it!'
+                            }
+                        }  //  end of choice1==2 (explain)
+                    }  //  end of while-loop
+                    if (choice1 == 0) {  //  Fresh Start
+                        reset(0, 0);
+                        makeEgo();
+                    }
+                    if (choice1 == JOptionPane.CLOSED_OPTION) {
+                        return;
+                    }
+                } //  end of if-there-are-existing-individuals
+                else {
+                    makeEgo();
+                }
+
+                //  Now, one way or another, we have a population with an Ego
+                ArrayList<Object> egoBag = new ArrayList<Object>();	//  Make a bag = 1 ego, for use in cb.generateExamples
+                egoBag.add(currentContext.individualCensus.get(0));
+                String chosenXD = (String) expanPick.getSelectedItem(); // 'All' or a number
+                ClauseBody cb = null;
+                ArrayList<Object> pile = new ArrayList<Object>();
+                if (chosenXD.equals("All")) {  //  same logic we used to set expanPick menu.  Add to Pile
+                    for (int i = 0; i < currentKTD.expandedDefs.size(); i++) {
+                        cb = (ClauseBody) currentKTD.expandedDefs.get(i);
+                        if ((((cb.flags.contains("ext")) && (inclExt))
+                                || ((!cb.flags.contains("ext")) && (inclPrim)))
+                                && (cb.isExpansionOf(currentOriginalHC))) {
+                            pile.add(String.valueOf(i));
+                        }
+                    }  //  end of loop thru all expandedDefs
+                } else {
+                    pile.add(chosenXD);   //  parse the chosen exp_Def# & put in Pile.
+                }
+                //  Now go thru the pile, unify variables & create examples
+                int finishNow;
+                try {
+                    ArrayList<Object> round2 = new ArrayList<Object>();
+                    for (int j = 0; j < pile.size(); j++) {
+                        cb = (ClauseBody) currentKTD.expandedDefs.get(Integer.parseInt((String) pile.get(j)));
+                        cb.unifyVariables();
+                        if (cb.flags.contains("chooseLast")) {
+                            round2.add(cb);
+                        } else {
+                            cb.generateExamples(currentContext, egoBag, null, null);
+                        }
+                    }
+                    MainPane.fill_In_Flag = true;
+                    for (int j = 0; j < round2.size(); j++) {  //  in Round 2, process delayed-ID terms
+                        cb = (ClauseBody) round2.get(j);
+                        cb.generateExamples(currentContext, egoBag, null, null);
+                    }
+                    MainPane.fill_In_Flag = false;
+
+                    Object[] finishOptions = {"Done", "Add More Terms"};
+                    finishNow = JOptionPane.showOptionDialog(browser.desktop,
+                            "When you are done adding terms to this example, we will\n"
+                            + "tidy up the examples for display or export.",
+                            "Done Adding Terms?",
+                            JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.INFORMATION_MESSAGE,
+                            null, //don't use a custom Icon
+                            finishOptions, //the titles of buttons
+                            finishOptions[1]); //default button title
+                    if (finishNow == 0) {	//  Tidy Up.  with each ego in egoBag		
+                        for (int i = 0; i < egoBag.size(); i++) {
+                            ego = (Individual) egoBag.get(i);
+                            currentDomTh.fillInNames(ego);  //  Tidy up the kinTerms of any extra folks in the diagram
+                            //  Following line guilty of clobbering Ego's kinTerms
+                            //  Node testNode = currentContext.buildTree(ego);
+                        }
+                    }
+                } catch (KSBadHornClauseException bhc) {
+                    String msg = "PROBLEM: This clause contains literals that are syntactically correct, but have logical flaws.\n" + bhc
+                            + "\nRECOMMENDATION: Correct or replace this clause in the definition.";
+                    JOptionPane.showMessageDialog(browser.desktop, msg, "Bad Horn Clause",
+                            JOptionPane.ERROR_MESSAGE);
+                    reset(resetInd, resetFam);
+                    if (MainPane.activity == null) {
+                        MainPane.createActivityLog(browser.desktop, browser.menuView);
+                    }
+                    MainPane.activity.log.append("For clause: " + cb + "\n" + msg + "\n\n");
+                    return;
+                } catch (KSConstraintInconsistency ci) {
+                    String msg = "PROBLEM: The constraints specified or implied in this clause are contradictory.\n" + ci
+                            + "\nRECOMMENDATION: Correct or replace this clause in the definition.";
+                    JOptionPane.showMessageDialog(browser.desktop, msg, "Constraint Inconsistency",
+                            JOptionPane.ERROR_MESSAGE);
+                    reset(resetInd, resetFam);
+                    if (MainPane.activity == null) {
+                        MainPane.createActivityLog(browser.desktop, browser.menuView);
+                    }
+                    MainPane.activity.log.append("For clause: " + cb + "\n" + msg + "\n\n");
+                    return;
+                } catch (ClassNotFoundException ouch) {
+                    String msg = "PROBLEM: Kinship System internal class-handling error.\n" + ouch
+                            + "\nRECOMMENDATION: Send a Bug Report!";
+                    JOptionPane.showMessageDialog(browser.desktop, msg, "Internal (Kinship System) Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    reset(resetInd, resetFam);
+                    if (MainPane.activity == null) {
+                        MainPane.createActivityLog(browser.desktop, browser.menuView);
+                    }
+                    MainPane.activity.log.append("In: " + cb + "\n" + msg + "\n\n");
+                    return;
+                } catch (KSInternalErrorException ouch) {
+                    String msg = "PROBLEM: The Kinship System has processed a literal improperly.\n" + ouch
+                            + "\nRECOMMENDATION: Send a Bug Report!";
+                    JOptionPane.showMessageDialog(browser.desktop, msg, "Internal (Kinship System) Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    reset(resetInd, resetFam);
+                    if (MainPane.activity == null) {
+                        MainPane.createActivityLog(browser.desktop, browser.menuView);
+                    }
+                    MainPane.activity.log.append("In: " + cb + "\n" + msg + "\n\n");
+                    return;
+                }  //  end of Exception Catch blocks
+                String str = "\nCreated " + currentContext.indSerNumGen + " individuals and "
+                        + currentContext.famSerNumGen + " familes for this example.";
+                if (egoBag.size() > 1) {
+                    str += "\nMultiple Ego's were used: ";
+                    Individual altEgo;
+                    for (int i = 0; i < egoBag.size() - 1; i++) {
+                        altEgo = (Individual) egoBag.get(i);
+                        str += "#" + altEgo.serialNmbr + ", ";
+                    }  //  end of loop thru all egos except last one
+                    altEgo = (Individual) egoBag.get(egoBag.size() - 1);
+                    str += "and #" + altEgo.serialNmbr + ".";
+                }  //  end of more-than-1-ego
+                ((JTextArea) diagramArea).setText(str);
+                return;
+            }
+            if (event.getActionCommand().equals("diagram examples")) {
 		//  Call diagram code.  Until it's ready, do a census print in diagramArea.
-        //  TEMPORARY TESTING CODE  -- REMOVE LATER
-            currEgo = (Individual)currentContext.individualCensus.get(0);
-			((JTextArea)diagramArea).setText(censusString());
-			}
+                //  TEMPORARY TESTING CODE  -- REMOVE LATER
+                currEgo = (Individual) currentContext.individualCensus.get(0);
+                ((JTextArea) diagramArea).setText(censusString());
+            }
         }  //  end of method actionPerformed 
-        
-        
-        public void makeEgo()  {
+
+        public void makeEgo() {
             String sex = "M";
             Object[] options2 = {"Male", "Female"};
             int choice1 = JOptionPane.showOptionDialog(browser.desktop,
-							   "Is the Primary Ego Male or Female?",
-							   "Setting Gender of Ego",
-							   JOptionPane.YES_NO_OPTION,
-							   JOptionPane.QUESTION_MESSAGE,
-							   null,     //don't use a custom Icon
-							   options2,  //the titles of buttons
-							   options2[0]); //default is Male
-            if (choice1 == JOptionPane.YES_OPTION) sex = "M";
-            else sex = "F";
+                    "Is the Primary Ego Male or Female?",
+                    "Setting Gender of Ego",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null, //don't use a custom Icon
+                    options2, //the titles of buttons
+                    options2[0]); //default is Male
+            if (choice1 == JOptionPane.YES_OPTION) {
+                sex = "M";
+            } else {
+                sex = "F";
+            }
             Individual ego = new Individual("Ego", sex);
             ego.setDateOfBirth("1970-01-01");
-            if (currentDomTh.addressTerms) ego.node.kinTermsAddr.add("Ego");
-            else ego.node.kinTermsRef.add("Ego");
+            if (currentDomTh.addressTerms) {
+                ego.node.kinTermsAddr.add("Ego");
+            } else {
+                ego.node.kinTermsRef.add("Ego");
+            }
             DomainTheory.addrTerms = currentDomTh.addressTerms;
-            DomainTheory.current = currentDomTh;                            
+            DomainTheory.current = currentDomTh;
         }  //  end of method makeEgo
-        
-        
-        public void generateAll()  {
-            int resetInd = currentContext.indSerNumGen,  resetFam = currentContext.famSerNumGen, jobSize = 0;
-            if (resetInd == 0) makeEgo();	// Individual constructor will place Ego on the Individual.census
+
+        public void generateAll() {
+            int resetInd = currentContext.indSerNumGen, resetFam = currentContext.famSerNumGen, jobSize = 0;
+            if (resetInd == 0) {
+                makeEgo();	// Individual constructor will place Ego on the Individual.census
+            }
             ClauseBody cb = null;
             Individual ego;
-			boolean genIt;
-			ArrayList<Object> egoBag = new ArrayList<Object>();
-			egoBag.add(currentContext.individualCensus.get(0));
+            boolean genIt;
+            ArrayList<Object> egoBag = new ArrayList<Object>();
+            egoBag.add(currentContext.individualCensus.get(0));
             Iterator ktdIter = currentDomTh.theory.values().iterator();
-			try {
+            try {
                 ArrayList<Object> round2 = new ArrayList<Object>();
-				while (ktdIter.hasNext())  {
-                    KinTermDef ktd = (KinTermDef)ktdIter.next();
-					genIt = true;
-					if (ktd.domTh.nonTerms.contains(ktd.kinTerm)) genIt = false;
-					else if ((ktd.flags != null) && (ktd.flags.size() > 0))
-						for (int i=0; i < ktd.flags.size(); i++)
-							if (ktd.domTh.nonTermFlags.contains(ktd.flags.get(i)))
-								genIt = false;
+                while (ktdIter.hasNext()) {
+                    KinTermDef ktd = (KinTermDef) ktdIter.next();
+                    genIt = true;
+                    if (ktd.domTh.nonTerms.contains(ktd.kinTerm)) {
+                        genIt = false;
+                    } else if ((ktd.flags != null) && (ktd.flags.size() > 0)) {
+                        for (int i = 0; i < ktd.flags.size(); i++) {
+                            if (ktd.domTh.nonTermFlags.contains(ktd.flags.get(i))) {
+                                genIt = false;
+                            }
+                        }
+                    }
                     if (genIt) {
-						for (int j=0; j < ktd.expandedDefs.size(); j++)  {
-							cb = (ClauseBody)ktd.expandedDefs.get(j);
-							cb.unifyVariables();
-							if (cb.flags.contains("chooseLast")) round2.add(cb);
-							else cb.generateExamples(currentContext, egoBag, null, null);
-						}  //  end of loop thru all expanded Defs of this kinTerm
-						MainPane.fill_In_Flag = true;
-						for (int j=0; j < round2.size(); j++)  {  //  in Round 2, process delayed-ID terms
-							cb = (ClauseBody)round2.get(j);
-							cb.generateExamples(currentContext, egoBag, null, null);
-							}
-						MainPane.fill_In_Flag = false;
-					}  //  end of gen-it
+                        for (int j = 0; j < ktd.expandedDefs.size(); j++) {
+                            cb = (ClauseBody) ktd.expandedDefs.get(j);
+                            cb.unifyVariables();
+                            if (cb.flags.contains("chooseLast")) {
+                                round2.add(cb);
+                            } else {
+                                cb.generateExamples(currentContext, egoBag, null, null);
+                            }
+                        }  //  end of loop thru all expanded Defs of this kinTerm
+                        MainPane.fill_In_Flag = true;
+                        for (int j = 0; j < round2.size(); j++) {  //  in Round 2, process delayed-ID terms
+                            cb = (ClauseBody) round2.get(j);
+                            cb.generateExamples(currentContext, egoBag, null, null);
+                        }
+                        MainPane.fill_In_Flag = false;
+                    }  //  end of gen-it
                 }  //  end of loop thru all kinTerms in this langauge
-				for (int j=0; j < egoBag.size(); j++)  {
-					ego = (Individual)egoBag.get(j);
-					currentDomTh.fillInNames(ego);  //  Tidy up the kinTerms of any extra folks in the diagram
-					//  Following Line is guilty of clobbering Ego's kinTerms
-					//  Node testNode = currentContext.buildTree(ego);
-					}
-				}catch(KSBadHornClauseException bhc) {
-                String msg = "PROBLEM: This clause contains literals that are syntactically correct, but have logical flaws.\n"  + bhc +
-                            "\nRECOMMENDATION: Correct or replace this clause in the definition.";
+                for (int j = 0; j < egoBag.size(); j++) {
+                    ego = (Individual) egoBag.get(j);
+                    currentDomTh.fillInNames(ego);  //  Tidy up the kinTerms of any extra folks in the diagram
+                    //  Following Line is guilty of clobbering Ego's kinTerms
+                    //  Node testNode = currentContext.buildTree(ego);
+                }
+            } catch (KSBadHornClauseException bhc) {
+                String msg = "PROBLEM: This clause contains literals that are syntactically correct, but have logical flaws.\n" + bhc
+                        + "\nRECOMMENDATION: Correct or replace this clause in the definition.";
                 JOptionPane.showMessageDialog(browser.desktop, msg, "Bad Horn Clause",
-                         JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.ERROR_MESSAGE);
                 reset(resetInd, resetFam);
-                if (MainPane.activity == null) MainPane.createActivityLog(browser.desktop, browser.menuView);
+                if (MainPane.activity == null) {
+                    MainPane.createActivityLog(browser.desktop, browser.menuView);
+                }
                 MainPane.activity.log.append("For clause: " + cb + "\n" + msg + "\n\n");
                 return;
-            }catch  (KSConstraintInconsistency ci)  {
-                String msg = "PROBLEM: The constraints specified or implied in this clause are contradictory.\n" + ci +
-                            "\nRECOMMENDATION: Correct or replace this clause in the definition.";
+            } catch (KSConstraintInconsistency ci) {
+                String msg = "PROBLEM: The constraints specified or implied in this clause are contradictory.\n" + ci
+                        + "\nRECOMMENDATION: Correct or replace this clause in the definition.";
                 JOptionPane.showMessageDialog(browser.desktop, msg, "Constraint Inconsistency",
-                          JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.ERROR_MESSAGE);
                 reset(resetInd, resetFam);
-                if (MainPane.activity == null) MainPane.createActivityLog(browser.desktop, browser.menuView);
+                if (MainPane.activity == null) {
+                    MainPane.createActivityLog(browser.desktop, browser.menuView);
+                }
                 MainPane.activity.log.append("For clause: " + cb + "\n" + msg + "\n\n");
                 return;
-            }catch  (ClassNotFoundException ouch)  {       
-                String msg = "PROBLEM: Kinship System internal class-handling error.\n" + ouch +
-                            "\nRECOMMENDATION: Send a Bug Report!";
+            } catch (ClassNotFoundException ouch) {
+                String msg = "PROBLEM: Kinship System internal class-handling error.\n" + ouch
+                        + "\nRECOMMENDATION: Send a Bug Report!";
                 JOptionPane.showMessageDialog(browser.desktop, msg, "Internal (Kinship System) Error",
-                          JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.ERROR_MESSAGE);
                 reset(resetInd, resetFam);
-                if (MainPane.activity == null) MainPane.createActivityLog(browser.desktop, browser.menuView);
+                if (MainPane.activity == null) {
+                    MainPane.createActivityLog(browser.desktop, browser.menuView);
+                }
                 MainPane.activity.log.append("In: " + cb + "\n" + msg + "\n\n");
                 return;
-            }catch  (KSInternalErrorException ouch)  {       
-                String msg = "PROBLEM: The Kinship System has processed a literal improperly.\n" + ouch +
-                            "\nRECOMMENDATION: Send a Bug Report!";
+            } catch (KSInternalErrorException ouch) {
+                String msg = "PROBLEM: The Kinship System has processed a literal improperly.\n" + ouch
+                        + "\nRECOMMENDATION: Send a Bug Report!";
                 JOptionPane.showMessageDialog(browser.desktop, msg, "Internal (Kinship System) Error",
-                          JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.ERROR_MESSAGE);
                 reset(resetInd, resetFam);
-                if (MainPane.activity == null) MainPane.createActivityLog(browser.desktop, browser.menuView);
+                if (MainPane.activity == null) {
+                    MainPane.createActivityLog(browser.desktop, browser.menuView);
+                }
                 MainPane.activity.log.append("In: " + cb + "\n" + msg + "\n\n");
                 return;
             }  //  end of Exception Catch blocks
-			String str = "Created " + currentContext.indSerNumGen + " individuals and " 
-                            + currentContext.famSerNumGen + " familes for a complete domain theory example.";
-            if (egoBag.size() > 1)  {
-					str += "\nMultiple Ego's were used: ";
-					Individual altEgo;
-					for (int i=0; i < egoBag.size() -1; i++)  {
-						altEgo = (Individual)egoBag.get(i);
-						str += "#" + altEgo.serialNmbr + ", ";
-						}  //  end of loop thru all egos except last one
-					altEgo = (Individual)egoBag.get(egoBag.size() -1);
-					str += "and #" + altEgo.serialNmbr + ".";
-					}  //  end of more-than-1-ego
-				((JTextArea)diagramArea).setText(str);
-		}  //  end of method generateAll
-        
-        
-        public String censusString()  {
+            String str = "Created " + currentContext.indSerNumGen + " individuals and "
+                    + currentContext.famSerNumGen + " familes for a complete domain theory example.";
+            if (egoBag.size() > 1) {
+                str += "\nMultiple Ego's were used: ";
+                Individual altEgo;
+                for (int i = 0; i < egoBag.size() - 1; i++) {
+                    altEgo = (Individual) egoBag.get(i);
+                    str += "#" + altEgo.serialNmbr + ", ";
+                }  //  end of loop thru all egos except last one
+                altEgo = (Individual) egoBag.get(egoBag.size() - 1);
+                str += "and #" + altEgo.serialNmbr + ".";
+            }  //  end of more-than-1-ego
+            ((JTextArea) diagramArea).setText(str);
+        }  //  end of method generateAll
+
+        public String censusString() {
             String image = "A Listing of the objects that soon will be diagrammed in this space.\n";
             int size = currentContext.individualCensus.size();
             image += "Individuals:\n";
-            for (int i=0; i < size; i++)
+            for (int i = 0; i < size; i++) {
                 image += currentContext.individualCensus.get(i).toString() + "\n";
+            }
             image += "\nFamilies:\n";
             size = currentContext.familyCensus.size();
-            for (int i=0; i < size; i++)
+            for (int i = 0; i < size; i++) {
                 image += currentContext.familyCensus.get(i).toString() + "\n";
+            }
             image += "\n-------End------\n";
             return image;
         }
-        
-        public void reset(int resetInd, int resetFam)  {
+
+        public void reset(int resetInd, int resetFam) {
             try {
-                Context.current.resetTo(resetInd, resetFam);
-            }catch (KSInternalErrorException ouch)  {
+                Context.getCurrent().resetTo(resetInd, resetFam);
+            } catch (KSInternalErrorException ouch) {
                 JOptionPane.showMessageDialog(browser.desktop,
-                      "PROBLEM: The Kinship System has corrupted data.\n" + ouch +
-                      "\nRECOMMENDATION: Send a Bug Report!",
-                      "Internal (Kinship System) Error",
-                      JOptionPane.ERROR_MESSAGE);
+                        "PROBLEM: The Kinship System has corrupted data.\n" + ouch
+                        + "\nRECOMMENDATION: Send a Bug Report!",
+                        "Internal (Kinship System) Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }  //  end of method reset
-        
-                
+
     }  //  end of inner class DiagramButtonListener
     
     

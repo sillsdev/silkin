@@ -176,72 +176,128 @@ public class KinTermDef implements Serializable, Comparable {
 		}  //  end of compareTo method; required for the Comparable interface
 	
 	
-	public boolean isEquivalent(KinTermDef otherDef, ArrayList<Object> refutation) 
-			throws KSParsingErrorException, JavaSystemException, KSInternalErrorException, FileNotFoundException, 
-					KSConstraintInconsistency, KSBadHornClauseException, KSNoChainOfRelations2Alter, 
-					ClassNotFoundException  {
-		//  We know that otherDef is a complete, correct KTD: the 'right answer'
-		Library.KTD_EQC eqc = new Library.KTD_EQC(eqcSigExact, this);
-		boolean answer = eqc.canAssimilate(otherDef, refutation);
-		if (! answer && refutation.isEmpty())  {
+    public boolean isEquivalent(KinTermDef otherDef, ArrayList<Object> refutation)
+            throws KSParsingErrorException, JavaSystemException, KSInternalErrorException, FileNotFoundException,
+            KSConstraintInconsistency, KSBadHornClauseException, KSNoChainOfRelations2Alter,
+            ClassNotFoundException {
+        //  We know that otherDef is a complete, correct KTD: the 'right answer'
+        Library.KTD_EQC eqc = new Library.KTD_EQC(eqcSigExact, this);
+        boolean answer = eqc.canAssimilate(otherDef, refutation);
+        if (!answer && refutation.isEmpty()) {
 			//  We know the problem is unequal sigStrings or unequal sizes of ExpDefs.
-			//  Almost certainly unequal sigStrings.
-			 //  refutation = A pair = {(String)type, CB}
-			if (! eqcSigExact.equals(otherDef.eqcSigExact))  {
-				ArrayList<Object> thisList = decodeString(eqcSigExact),
-						  otherList = decodeString(otherDef.eqcSigExact);
-				Iterator iter = thisList.iterator();
-				while (iter.hasNext())  {  //  Subtract the set-intersection from each set of pcStrings
-					String thisString = (String)iter.next();
-					int where = otherList.indexOf(thisString);
-					if (where > -1)  {
-						iter.remove();
-						otherList.remove(where);
-						}
-					}  //  end of loop thru exact strings
-				String refer = null;
-				if (otherList.size() > 0)  {
-					int where = 0;
-					refer = (String)otherList.get(where++);
-					while (where < otherList.size() && refer.indexOf("*") > -1)  //  UDPs not allowed in refutation
-						refer = (String)otherList.get(where++);
-					if (refer.indexOf("*") == -1) for (int i=0; i < otherDef.expandedDefs.size(); i++)  {
-						ClauseBody cb = (ClauseBody)otherDef.expandedDefs.get(i);
-						if (cb.pcString.equals(refer)) {
-							refutation.add("missingCB");
-							refutation.add(cb);
-							i = otherDef.expandedDefs.size();
-							}
-						}  //  end of search for matching CB
-					}  //  end of search in otherList
-				if (refutation.isEmpty() && thisList.size() > 0)  {
-					int where = 0;
-					refer = (String)thisList.get(where++);
-					while (where < thisList.size() && refer.indexOf("*") > -1)
-						refer = (String)thisList.get(where++);
-					if (refer.indexOf("*") == -1) for (int i=0; i < expandedDefs.size(); i++)  {
-						ClauseBody cb = (ClauseBody)expandedDefs.get(i);
-						if (cb.pcString.equals(refer)) {
-							refutation.add("extraCB");
-							refutation.add(cb);
-							i = expandedDefs.size();
-							}
-						}  //  end of search for matching CB
-					}
-				if (refutation.size() > 0 || refer != null) //  Refutations found, or exist but contain UDPs. 
-					return answer;   
-				else throw new KSInternalErrorException("KTD.isEquivalent failed to find refutation."); 
-			}
-/*			else {
-				System.out.println("\n***** NOTICE:  2 KTDs with identical kin Types are not equal."); 
-				System.out.print("\t" + domTh.languageName + ":" + kinTerm);
-				System.out.println(" and " + otherDef.domTh.languageName + ":" + otherDef.kinTerm);
-				System.out.println("\tboth have ExactString = " + eqcSigExact);
-				}
-*/			}
-		return answer;
-		}  //  end of method isEquivalent
+            //  Almost certainly unequal sigStrings.
+            //  refutation = A pair = {(String)type, CB}
+            if (!eqcSigExact.equals(otherDef.eqcSigExact)) {
+                ArrayList<Object> thisList = decodeString(eqcSigExact),
+                        otherList = decodeString(otherDef.eqcSigExact);
+                Iterator iter = thisList.iterator();
+                while (iter.hasNext()) {  //  Subtract the set-intersection from each set of pcStrings
+                    String thisString = (String) iter.next();
+                    int where = otherList.indexOf(thisString);
+                    if (where > -1) {
+                        iter.remove();
+                        otherList.remove(where);
+                    }
+                }  //  end of loop thru exact strings
+                String refer = null;
+                if (otherList.size() > 0) {
+                    int where = 0;
+                    refer = (String) otherList.get(where++);
+                    while (where < otherList.size() && refer.indexOf("*") > -1) //  UDPs not allowed in refutation
+                    {
+                        refer = (String) otherList.get(where++);
+                    }
+                    if (refer.indexOf("*") == -1) {
+                        for (int i = 0; i < otherDef.expandedDefs.size(); i++) {
+                            ClauseBody cb = (ClauseBody) otherDef.expandedDefs.get(i);
+                            if (cb.pcString.equals(refer)) {
+                                refutation.add("missingCB");
+                                refutation.add(cb);
+                                i = otherDef.expandedDefs.size();
+                            }
+                        }  //  end of search for matching CB
+                    }
+                }  //  end of search in otherList
+                if (refutation.isEmpty() && thisList.size() > 0) {
+                    int where = 0;
+                    refer = (String) thisList.get(where++);
+                    while (where < thisList.size() && refer.indexOf("*") > -1) {
+                        refer = (String) thisList.get(where++);
+                    }
+                    if (refer.indexOf("*") == -1) {
+                        for (int i = 0; i < expandedDefs.size(); i++) {
+                            ClauseBody cb = (ClauseBody) expandedDefs.get(i);
+                            if (cb.pcString.equals(refer)) {
+                                refutation.add("extraCB");
+                                refutation.add(cb);
+                                i = expandedDefs.size();
+                            }
+                        }  //  end of search for matching CB
+                    }
+                }
+                if (refutation.size() > 0 || refer != null) //  Refutations found, or exist but contain UDPs. 
+                {
+                    return answer;
+                } else {
+                    throw new KSInternalErrorException("KTD.isEquivalent failed to find refutation.");
+                }
+            }
+        }
+        return answer;
+    }  //  end of method isEquivalent
 	
+    /**Assure that the definitions of ktd contain only primitive or standard 
+     * macro predicates. If any ClauseBody in the definitions contains a cultural
+     * predicate, replace it with all the ClauseBodies in expandedDefs that are
+     * expansions of it.
+     * 
+     * @param ktd the kin term definition to be generified.
+     */
+    static void makeGeneric(KinTermDef ktd, Context ctxt) {
+        ArrayList<Object> newDefs = new ArrayList<>(),
+                oldExpandedDefs = new ArrayList<>();
+        for (Object obj : ktd.definitions) {
+            ClauseBody cb = (ClauseBody)obj;
+            if (noCulturalPreds(cb)) {
+                newDefs.add(cb);                
+            }else {
+                newDefs.addAll(allExpansionsOf(cb, ktd));
+            }
+        }  // end of loop thru all definitions
+        ktd.definitions = newDefs;
+        oldExpandedDefs = ktd.expandedDefs;  // in case of exceptions
+        ktd.expandedDefs.clear();
+        try {
+            ktd.expandClauses(ctxt);
+        }catch (Exception exc) {
+            ktd.expandedDefs = oldExpandedDefs;
+        }
+    }
+    
+    static boolean noCulturalPreds(ClauseBody cb) {
+        for (Object obj : cb.body) {
+            Literal lit = (Literal) obj;
+            if (lit.predicate.category instanceof CulturalCategory) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    static ArrayList<Object> allExpansionsOf(ClauseBody cb, KinTermDef ktd) {
+        ArrayList<Object> expansions = new ArrayList<>();
+        int clauseNmbr = cb.seqNmbr;
+        for (Object obj : ktd.expandedDefs) {
+            ClauseBody expcb = (ClauseBody)obj;
+            String firstExpansion = (String)expcb.expansionPath.get(0);
+            int colon = firstExpansion.lastIndexOf(":");
+            int baseClause = Integer.parseInt(firstExpansion.substring(colon +1));
+            if (baseClause == clauseNmbr) {
+                expansions.add(expcb);
+            }
+        }
+        return expansions;
+    }
 	
 	ArrayList<Object> decodeString(String sigString)  {
 		//  An eqcSigExact is a concatenation of PCStrings separated by _'s
@@ -844,7 +900,7 @@ public class KinTermDef implements Serializable, Comparable {
             } catch (Exception exc) {  // ignore failures, leave empty
                 System.err.println("While computing eqcSigEact for a gloss:\n" + exc);
             }
-            Context.current = permCtxt;
+            Context.setCurrent(permCtxt);
             domTh.ctxt = permCtxt;
         }
     }
@@ -1175,7 +1231,7 @@ public class KinTermDef implements Serializable, Comparable {
         boolean needAnEgo = false;
         ClauseBody cb;
         if (expandedDefs == null || expandedDefs.isEmpty()) {
-            expandClauses(Context.current);
+            expandClauses(Context.getCurrent());
         }
         for (int i = 0; i < expandedDefs.size(); i++) {
             cb = (ClauseBody) expandedDefs.get(i);  //  See if computed by generation
@@ -1185,7 +1241,7 @@ public class KinTermDef implements Serializable, Comparable {
             }  //  end of need to generate examples
         }  //  end of loop thru expandedDefs
         if (needAnEgo) {
-            generateExamples(Context.current, egoBag, null);
+            generateExamples(Context.getCurrent(), egoBag, null);
             domTh.ctxt.saveState = true;
         }
     }  //  end of method assureExamplesGenerated

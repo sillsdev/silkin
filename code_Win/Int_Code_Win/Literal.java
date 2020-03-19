@@ -419,7 +419,7 @@ public class Literal extends LiteralAbstract2  {
         else {  //  person-is-unbound.  So recurse on each person in population that has the prescribed value
             //  NOTE:  It is possible to reach this point with person unbound and arg0 bound to an empty list = arg0.value
             //  In that case, there is no prescribed value EXCEPT for the constraints on the value of the MathVarible arg0
-            ArrayList<Individual> census = Context.current.individualCensus;
+            ArrayList<Individual> census = Context.getCurrent().individualCensus;
             ArrayList<Object> requiredVal = arg0.getVal(), 
                               starBindings = new ArrayList<Object>();  //  starBindings is a throwaway list
             if (requiredVal == null) {
@@ -1069,7 +1069,7 @@ public class Literal extends LiteralAbstract2  {
         else {  //  person-is-unbound.  So recurse on each person in population that has the prescribed value
             //  NOTE:  It is possible to reach this point with person unbound and arg0 bound to an empty list = arg0.value
             //  In that case, there is no prescribed value EXCEPT for the constraints on the value of the MathVarible arg0
-            ArrayList<Individual> census = Context.current.individualCensus;
+            ArrayList<Individual> census = Context.getCurrent().individualCensus;
             ArrayList<Object> requiredVal = arg0.getVal(), starBindings = new ArrayList<Object>();  //  starBindings is a throwaway list
             Individual guy, valPerson = null;
             UserDefinedProperty udp;

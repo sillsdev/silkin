@@ -69,8 +69,8 @@ public class Anomaly extends Issue {
             Dyad d = (Dyad)o;
             img += "\nEgo: " + d.ego.serialNmbr + "  Alter: " + d.alter.serialNmbr;
             img += "  Kin term: " + d.kinTerm;
-            Individual ego = Context.current.individualCensus.get(d.ego.serialNmbr),
-                       alter = Context.current.individualCensus.get(d.alter.serialNmbr);
+            Individual ego = Context.getCurrent().individualCensus.get(d.ego.serialNmbr),
+                       alter = Context.getCurrent().individualCensus.get(d.alter.serialNmbr);
             img += msgs.getString("egoName") + ": " + ego.name + 
                     msgs.getString("alterName") + ": " + alter.name + "\n";
         }

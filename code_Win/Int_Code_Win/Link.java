@@ -44,10 +44,10 @@ public class Link implements Locatable, Serializable {
         sex = ind.sex;
         homeChart = chart;
         location = loc;
-        serialNmbr = Context.current.linkSerNumGen++;
+        serialNmbr = Context.getCurrent().linkSerNumGen++;
         dataChangeDate = UDate.today();
         dataAuthor = Library.currDataAuthor;
-        Context.current.linkCensus.add(this);
+        Context.getCurrent().linkCensus.add(this);
     }
 
     public String getHomeChart() { return homeChart; }
@@ -133,14 +133,14 @@ public class Link implements Locatable, Serializable {
     }
 
     static int findLink(int x, int y) {
-        if (Context.current == null || Context.current.linkCensus.isEmpty()) {
+        if (Context.getCurrent() == null || Context.getCurrent().linkCensus.isEmpty()) {
             return -1;
         }
-        int size = Context.current.linkCensus.size();
+        int size = Context.getCurrent().linkCensus.size();
         for (int i = size - 1; i >= 0; i--) {
-            Link lk = Context.current.linkCensus.get(i);
+            Link lk = Context.getCurrent().linkCensus.get(i);
             if (lk.bounds().contains(x, y) && 
-                    lk.homeChart.equals(Context.current.currentChart)) {
+                    lk.homeChart.equals(Context.getCurrent().currentChart)) {
                 return i;
             }
         }
@@ -148,9 +148,9 @@ public class Link implements Locatable, Serializable {
     }
     
     static void delete(Link lk) {
-        if (lk.serialNmbr == Context.current.linkCensus.size() -1) {
-            Context.current.linkCensus.remove(lk);
-            Context.current.linkSerNumGen--;
+        if (lk.serialNmbr == Context.getCurrent().linkCensus.size() -1) {
+            Context.getCurrent().linkCensus.remove(lk);
+            Context.getCurrent().linkSerNumGen--;
         }else {
             lk.deleted = true;
             lk.homeChart = "";

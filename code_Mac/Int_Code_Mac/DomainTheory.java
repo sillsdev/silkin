@@ -2299,7 +2299,7 @@ public class DomainTheory extends DT_Abstract2 {
             }
             ctxt.simDataGen = false;
             ArrayList<Object> expandedDefs = new ArrayList<Object>();
-            Context.current = ctxt;
+            Context.setCurrent(ctxt);
 //			int oldLimit = levelsOfRecursion;
 //			levelsOfRecursion = 1;
             DomainTheory.current = this;
@@ -3672,7 +3672,7 @@ public class DomainTheory extends DT_Abstract2 {
         recursCB.reassignArgNames_NewFront(ctxt);
         ktd.addClause(recursCB);
         theory.put(ktd.kinTerm, ktd);  //  recursive ktd must be in theory for expansion of itself & its users
-        Context.current = ctxt;
+        Context.setCurrent(ctxt);
         boolean oldSDG = ctxt.simDataGen;
         ctxt.simDataGen = true;	
         ktd.assureExamplesGenerated(ctxt.getPair());
@@ -4108,7 +4108,7 @@ public class DomainTheory extends DT_Abstract2 {
             throws KSParsingErrorException, KSBadHornClauseException, KSNoChainOfRelations2Alter,
             KSInternalErrorException, KSConstraintInconsistency, ClassNotFoundException, JavaSystemException {
         float maxN = maxNoise / 100f;
-        Context.current = ctxt;
+        Context.setCurrent(ctxt);
         Iterator candIter = candidates.entrySet().iterator();
         while (candIter.hasNext()) {
             Map.Entry entry = (Map.Entry) candIter.next();

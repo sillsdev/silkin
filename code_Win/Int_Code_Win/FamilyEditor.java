@@ -702,7 +702,7 @@ public class FamilyEditor extends KSJInternalFrame {
                 int which = childPicker.getSelectedIndex();
                 Individual kiddie = (Individual) fam.children.get(which);
                 PersonEditor ped = new PersonEditor(ctxt, ed, 
-                        msgs.getString("viewEditChild"), kiddie, "child", 0);
+                        se.getString("viewEditChild"), kiddie, "child", 0);
                 if (!ped.dupEditor) {
                     ped.desktop = desktop;
                     desktop.add(ped);

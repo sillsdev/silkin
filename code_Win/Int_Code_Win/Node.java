@@ -518,7 +518,7 @@ public class Node implements Serializable {
      @param     miniPred    e.g. Fa(#2,#9). arg0 = #2 and arg1 = #9
      @return    the reverse, e.g. Da(#9,#2)      */
     public String reversePred(String miniPred) {
-        ArrayList<Individual> ppl = Context.current.individualCensus;
+        ArrayList<Individual> ppl = Context.getCurrent().individualCensus;
         int left = miniPred.indexOf("("),
             comma = miniPred.indexOf(","),
             end = miniPred.indexOf(")");

@@ -544,12 +544,12 @@ public abstract class DT_Abstract1 implements Serializable {
      */
     public ArrayList<Object> maleAndFemaleCreatedHeThem() {
         Individual malEgo = new Individual("Ego", "M"), femalEgo = new Individual("Ego", "F");
-        //  NOTE:  May be creating egos for some other DT & Context.current
-        if (Context.current.domTheoryAdrExists()) {
+        //  NOTE:  May be creating egos for some other DT & Context.current()
+        if (Context.getCurrent().domTheoryAdrExists()) {
             malEgo.node.kinTermsAddr.add("Ego");
             femalEgo.node.kinTermsAddr.add("Ego");
         }
-        if (Context.current.domTheoryRefExists()) {
+        if (Context.getCurrent().domTheoryRefExists()) {
             malEgo.node.kinTermsRef.add("Ego");
             femalEgo.node.kinTermsRef.add("Ego");
         }
@@ -676,7 +676,7 @@ public abstract class DT_Abstract1 implements Serializable {
                     }
                 }
                 if ((!(nonTerms.contains(ktd.kinTerm) || suppressPrint))
-                        && (selectAll || (Context.current.selectedKinTerms.contains(ktd.kinTerm)))) {
+                        && (selectAll || (Context.getCurrent().selectedKinTerms.contains(ktd.kinTerm)))) {
                     if (ktd.hasDelayFlags()) {
                         round2.add(ktd);
                     } else {
@@ -780,8 +780,8 @@ public abstract class DT_Abstract1 implements Serializable {
 
     public Dyad makeExampleDyad(ClauseBody cb, Context workingCtxt, ArrayList<Object> egoBag) throws KSBadHornClauseException,
             KSInternalErrorException, KSConstraintInconsistency, ClassNotFoundException {
-        Context oldCurrent = Context.current;
-        Context.current = workingCtxt;
+        Context oldCurrent = Context.getCurrent();
+        Context.setCurrent(workingCtxt);
         if (egoBag == null) {
             egoBag = maleAndFemaleCreatedHeThem();
         }
@@ -792,7 +792,7 @@ public abstract class DT_Abstract1 implements Serializable {
         MainPane.fill_In_Flag = true;
         cb.generateExamples(workingCtxt, egoBag, dyad, null); //  ego & alter will be set by CB.genExamples
         MainPane.fill_In_Flag = false;
-        Context.current = oldCurrent;
+        Context.setCurrent(oldCurrent);
         return dyad;
     }  //  end of method makeExampleDyad()
 

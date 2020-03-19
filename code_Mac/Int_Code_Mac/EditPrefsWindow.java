@@ -31,7 +31,7 @@ public class EditPrefsWindow extends JFrame {
     }
 
     void loadValues() {
-        Context ctxt = Context.current;
+        Context ctxt = Context.getCurrent();
         int igVal = ctxt.ignorableP,
             mxVal = ctxt.maxNoiseP;
         ignorableSlider.setMinimum(ignorMinVal);
@@ -533,7 +533,7 @@ public class EditPrefsWindow extends JFrame {
         if (loading) {
             return;
         }
-        Context.current.polygamyPermit = polygamyCkBox.isSelected();
+        Context.getCurrent().polygamyPermit = polygamyCkBox.isSelected();
         SIL_Edit.edWin.chart.dirty = true;
     }
         private void ignorableFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ignorableFieldActionPerformed
@@ -548,7 +548,7 @@ public class EditPrefsWindow extends JFrame {
                 int val = (int) iggy.getValue();
                 ignorableField.setText(val + "%");
                 SIL_Edit.edWin.chart.dirty = true;
-                Context.current.ignorableP = val;
+                Context.getCurrent().ignorableP = val;
             }
     }//GEN-LAST:event_ignorableSliderStateChanged
 
@@ -560,7 +560,7 @@ public class EditPrefsWindow extends JFrame {
         if (!maxy.getValueIsAdjusting()) {
             int val = (int) maxy.getValue();
             maxField.setText(val + "%");
-            Context.current.maxNoiseP = val;
+            Context.getCurrent().maxNoiseP = val;
             SIL_Edit.edWin.chart.dirty = true;
         }
     }//GEN-LAST:event_maxSliderStateChanged
@@ -569,7 +569,7 @@ public class EditPrefsWindow extends JFrame {
         if (loading) {
             return;
         }
-        Context.current.doBaseCBs = subpatternCkBox.isSelected();
+        Context.getCurrent().doBaseCBs = subpatternCkBox.isSelected();
         SIL_Edit.edWin.chart.dirty = true;
     }//GEN-LAST:event_subpatternCkBoxActionPerformed
 
@@ -577,7 +577,7 @@ public class EditPrefsWindow extends JFrame {
         if (loading) {
             return;
         }
-        Context.current.doInduction = inductionCkBox.isSelected();
+        Context.getCurrent().doInduction = inductionCkBox.isSelected();
         SIL_Edit.edWin.chart.dirty = true;
     }//GEN-LAST:event_inductionCkBoxActionPerformed
 
@@ -613,7 +613,7 @@ public class EditPrefsWindow extends JFrame {
          if (loading) {
             return;
         }
-        Context.current.surnameNormallyCaptured = surnameCheckBox.isSelected();
+        Context.getCurrent().surnameNormallyCaptured = surnameCheckBox.isSelected();
         SIL_Edit.edWin.getPPanel().buildFocusFields();
         SIL_Edit.edWin.chart.dirty = true;
     }//GEN-LAST:event_surnameCheckBoxActionPerformed
@@ -622,7 +622,7 @@ public class EditPrefsWindow extends JFrame {
         if (loading) {
             return;
         }
-        Context.current.birthDateNormallyCaptured = birthdateCheckBox.isSelected();
+        Context.getCurrent().birthDateNormallyCaptured = birthdateCheckBox.isSelected();
         SIL_Edit.edWin.getPPanel().buildFocusFields();
         SIL_Edit.edWin.chart.dirty = true;
     }//GEN-LAST:event_birthdateCheckBoxActionPerformed
@@ -713,8 +713,8 @@ public class EditPrefsWindow extends JFrame {
     }//GEN-LAST:event_sizeComboBoxActionPerformed
 
     private void adoptionHelpCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adoptionHelpCheckBoxActionPerformed
-        if (Context.current != null) {
-            Context.current.adoptionHelp = adoptionHelpCheckBox.isSelected();
+        if (Context.getCurrent() != null) {
+            Context.getCurrent().adoptionHelp = adoptionHelpCheckBox.isSelected();
         }
     }//GEN-LAST:event_adoptionHelpCheckBoxActionPerformed
 

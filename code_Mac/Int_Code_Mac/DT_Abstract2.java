@@ -228,8 +228,8 @@ public abstract class DT_Abstract2 extends DT_Abstract1  {
             System.out.println("\nTotal clauses for " + languageName + " is " + ClauseBody.seqTotal
                     + " - " + ClauseBody.dupTotal + " = " + (ClauseBody.seqTotal - ClauseBody.dupTotal) + "\n\n");
         }
-        if (Context.current != Library.contextUnderConstruction) {
-            Context.current.resetTo(0, 0);  //  get rid of all hypothetical people created
+        if (Context.getCurrent() != Library.contextUnderConstruction) {
+            Context.getCurrent().resetTo(0, 0);  //  get rid of all hypothetical people created
         }
     }  //  end of method generateIndexes
 

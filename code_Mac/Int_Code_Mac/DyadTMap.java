@@ -244,8 +244,8 @@ public class DyadTMap extends TreeMap implements Serializable {
         if (dyList == null) {
             return;
         }
-        Individual ego = Context.current.individualCensus.get(egoInt),
-                   alter = Context.current.individualCensus.get(alterInt);
+        Individual ego = Context.getCurrent().individualCensus.get(egoInt),
+                   alter = Context.getCurrent().individualCensus.get(alterInt);
         Dyad target = null;
         for (Object o : dyList) {
             Dyad dy = (Dyad)o;

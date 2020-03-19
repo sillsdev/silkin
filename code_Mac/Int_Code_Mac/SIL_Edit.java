@@ -686,16 +686,16 @@ public class SIL_Edit extends JFrame {
         chartComboBox.removeAllItems();
         MyResBundle labels = Library.screenElements;
         String newItem = labels.getString("drawBelow");
-        if (Context.current != null && Context.current.chartDescriptions != null) {
+        if (Context.getCurrent() != null && Context.getCurrent().chartDescriptions != null) {
             int ndx = 0;
             newItem = labels.getString("createNewChart");
             chartComboModel.addElement(newItem);
-            for (int i = 0; i < Context.current.chartDescriptions.size(); i++) {
-                newItem = Context.current.chartLtrs[i];
-                if (newItem.equals(Context.current.currentChart)) {
+            for (int i = 0; i < Context.getCurrent().chartDescriptions.size(); i++) {
+                newItem = Context.getCurrent().chartLtrs[i];
+                if (newItem.equals(Context.getCurrent().currentChart)) {
                     ndx = i + 1;
                 }
-                newItem += ": " + Context.current.chartDescriptions.get(i);
+                newItem += ": " + Context.getCurrent().chartDescriptions.get(i);
                 if (newItem.length() > 85) {
                     newItem = newItem.substring(0, 84);
                 }
@@ -704,7 +704,7 @@ public class SIL_Edit extends JFrame {
             if (ndx == 0)  {  //  0 means chart descriptions are empty
                 newItem = labels.getString("defaultChart");
                 chartComboModel.addElement(newItem);
-                Context.current.chartDescriptions.add(newItem);
+                Context.getCurrent().chartDescriptions.add(newItem);
                 ndx = 1;
             }
             chartComboBox.setSelectedIndex(ndx);
@@ -736,11 +736,11 @@ public class SIL_Edit extends JFrame {
 
     private void newLiBrowserActionPerformed(ActionEvent evt) {
         Library.currentActivity = Library.BROWSING;
-        if (Context.current != null) {
-            editingCtxt = Context.current;
+        if (Context.getCurrent() != null) {
+            editingCtxt = Context.getCurrent();
         }
         SILKin.createAndShowGUI();
-        if (Context.current != null) {
+        if (Context.getCurrent() != null) {
             MainPane.topPane.browseCurrentContext();
         } else {
             MainPane.topPane.browseLibrary();
@@ -766,7 +766,7 @@ public class SIL_Edit extends JFrame {
      */
     public void importGEDCOMItemActionPerformed(ActionEvent evt) {
         MainPane.topPane.importGEDCOM();
-        Context ctxt = Context.current;
+        Context ctxt = Context.getCurrent();
         if (ctxt == null) { // action cancelled
             return;
         }
@@ -887,8 +887,8 @@ public class SIL_Edit extends JFrame {
      */
     public void printAllChartsItemActionPerformed(ActionEvent evt) {
         PrintChart pc = new PrintChart(chartScrollPane, true);
-        for (int i = 0; i < Context.current.chartDescriptions.size(); i++) {
-            Context.current.currentChart = Context.current.getChartLtr(i);
+        for (int i = 0; i < Context.getCurrent().chartDescriptions.size(); i++) {
+            Context.getCurrent().currentChart = Context.getCurrent().getChartLtr(i);
             pc.printTheChart();
         }
     }
@@ -928,20 +928,20 @@ public class SIL_Edit extends JFrame {
      * @param evt the menu choice event
      */
     public void editChartDescriptionItemActionPerformed(ActionEvent evt) {
-        String ch = Context.current.currentChart;
+        String ch = Context.getCurrent().currentChart;
         String msg = Library.messages.getString("newChartDescription") + " " + ch + ":\n";
-        int ndx = Context.current.getChartIndex(ch);
-        msg += Context.current.chartDescriptions.get(ndx);
+        int ndx = Context.getCurrent().getChartIndex(ch);
+        msg += Context.getCurrent().chartDescriptions.get(ndx);
         String newDescription = JOptionPane.showInputDialog(this, msg);
         if (newDescription != null) {
-            Context.current.chartDescriptions.set(ndx, 
+            Context.getCurrent().chartDescriptions.set(ndx, 
                     FamilyPanel.convertBannedCharacters(newDescription));
             rebuildChartCombo();
         }
     }
 
     public void deleteCurrentChartItemActionPerformed(ActionEvent evt) {
-        String chrt = Context.current.currentChart;
+        String chrt = Context.getCurrent().currentChart;
         MyResBundle rb = Library.messages;
         String msg = rb.getString("chart") + " " + chrt + " " + rb.getString("contains"), 
                comma = "";
@@ -949,17 +949,17 @@ public class SIL_Edit extends JFrame {
         ArrayList<Family> fams = new ArrayList<Family>();
         ArrayList<Individual> inds = new ArrayList<Individual>();
         ArrayList<Link> linx = new ArrayList<Link>();
-        for (Family fam : Context.current.familyCensus) {
+        for (Family fam : Context.getCurrent().familyCensus) {
             if (fam.homeChart.equals(chrt)) {
                 fams.add(fam);
             }
         }
-        for (Individual ind : Context.current.individualCensus) {
+        for (Individual ind : Context.getCurrent().individualCensus) {
             if (ind.homeChart.equals(chrt)) {
                 inds.add(ind);
             }
         }
-        for (Link lk : Context.current.linkCensus) {
+        for (Link lk : Context.getCurrent().linkCensus) {
             if (lk.homeChart.equals(chrt)) {
                 linx.add(lk);
             }
@@ -1027,7 +1027,7 @@ public class SIL_Edit extends JFrame {
     }
     
     void deleteChart(String chrt) {
-        Context ctxt = Context.current;
+        Context ctxt = Context.getCurrent();
         int ndx = ctxt.getChartIndex(chrt);
         ctxt.chartDescriptions.remove(ndx);
         if (ndx != ctxt.chartDescriptions.size()) {
@@ -1092,7 +1092,7 @@ public class SIL_Edit extends JFrame {
     }
 
     public void editPrefsItemActionPerformed(ActionEvent evt) {
-        if (chart.saveFile == null || Context.current == null) {
+        if (chart.saveFile == null || Context.getCurrent() == null) {
             MyResBundle rb = Library.messages;
             String msg3 = rb.getString("particularPrefs");
             msg3 += rb.getString("firstOPEN");;
@@ -1233,7 +1233,7 @@ public class SIL_Edit extends JFrame {
     }
 
     void activateDomThAdr(boolean copy) {
-        Context ctxt = Context.current;
+        Context ctxt = Context.getCurrent();
         DomainTheory dtRef = null, dtAdr = null;
         try {
             dtRef = ctxt.domTheoryRef();
@@ -1262,7 +1262,7 @@ public class SIL_Edit extends JFrame {
     }
 
     void deactivateDomThAdr() {
-        Context ctxt = Context.current;
+        Context ctxt = Context.getCurrent();
         ctxt.domTheoryAdrNullify();
         ctxt.autoDefAdr = null;
         ctxt.learningHistoryAdr = null;
@@ -1272,10 +1272,10 @@ public class SIL_Edit extends JFrame {
     private void editableItemActionPerformed(ActionEvent evt) {
         if (editableItem.isSelected()) {
             chart.editable = true;
-            Context.current.editable = true;
+            Context.getCurrent().editable = true;
         } else {
             chart.editable = false;
-            Context.current.editable = false;
+            Context.getCurrent().editable = false;
         }
     }
 
@@ -1289,7 +1289,7 @@ public class SIL_Edit extends JFrame {
     
     // 
     private void displayGEDCOMActionPerformed(ActionEvent evt) {
-        Context.current.displayGEDCOM = displayGEDCOM.isSelected();
+        Context.getCurrent().displayGEDCOM = displayGEDCOM.isSelected();
         personPanel1.repaint();
     }
     
@@ -1320,7 +1320,7 @@ public class SIL_Edit extends JFrame {
                 Library.readPredDecodings();
             }
             Library.synUmbDetectOn = true;
-            Context ctxt = Context.current;
+            Context ctxt = Context.getCurrent();
             if (ctxt == null) {
                 String msg = rb.getString("mustCreateData");
                 MainPane.displayError(msg, rb.getString("cannotPerform"), JOptionPane.PLAIN_MESSAGE);
@@ -1405,36 +1405,35 @@ public class SIL_Edit extends JFrame {
         File htmlFile = makeHTMLfile(chart.saveFile);
         if (!htmlFile.exists()) { // 1st tried name of edited file - failed
             try {
-            String msg = rb.getString("cannotFindFile") + " '" + htmlFile.getName()
-                    + "' " + rb.getString("inSuggsDir");
-            String baseName = Context.current.languageName;
-            htmlFile = makeHTMLfile(baseName);
-            if (!htmlFile.exists()) {  // 2nd tried langName - failed
-                msg += "\n" + rb.getString("cannotFindFile") + " " + htmlFile.getName() + ".";
-                msg += "\n" + rb.getString("maybeGetSuggs");
-                MainPane.displayError(msg, rb.getString("noSuggs"), JOptionPane.ERROR_MESSAGE);
-                return;
-            } else { // maybe this is it
-                msg += "\n" + rb.getString("errorAccessingRef");
-                String uz = rb.getString("use") + " " + htmlFile.getName(); 
-                Object[] btns = {uz, rb.getString("cancel")};
-                int ch = JOptionPane.showOptionDialog(this,
-                        msg, rb.getString("looking4Suggs"),
-                        JOptionPane.YES_NO_CANCEL_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        null, btns, btns[0]);
-                if (ch == JOptionPane.NO_OPTION) {
+                String msg = rb.getString("cannotFindFile") + " '" + htmlFile.getName()
+                        + "' " + rb.getString("inSuggsDir");
+                String baseName = Context.getCurrent().languageName;
+                htmlFile = makeHTMLfile(baseName);
+                if (!htmlFile.exists()) {  // 2nd tried langName - failed
+                    msg += "\n" + rb.getString("cannotFindFile") + " " + htmlFile.getName() + ".";
+                    msg += "\n" + rb.getString("maybeGetSuggs");
+                    MainPane.displayError(msg, rb.getString("noSuggs"), JOptionPane.ERROR_MESSAGE);
                     return;
+                } else { // maybe this is it
+                    msg += "\n" + rb.getString("errorAccessingRef");
+                    String uz = rb.getString("use") + " " + htmlFile.getName();
+                    Object[] btns = {uz, rb.getString("cancel")};
+                    int ch = JOptionPane.showOptionDialog(this,
+                            msg, rb.getString("looking4Suggs"),
+                            JOptionPane.YES_NO_CANCEL_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null, btns, btns[0]);
+                    if (ch == JOptionPane.NO_OPTION) {
+                        return;
+                    }
                 }
-            }
-            }catch(Exception exc) {
-            // UTF-8 is not going to cause an exception.    
+            } catch (Exception exc) {
+                // UTF-8 is not going to cause an exception.    
             }
         }
-        decisionFrame = new DecisionFrame(suggs, suggsInFocus, htmlFile);        
+        decisionFrame = new DecisionFrame(suggs, suggsInFocus, htmlFile);
         decisionFrame.setVisible(true);
         returnToSuggsItem.setEnabled(true);
-            
     }
     
     
@@ -1452,7 +1451,7 @@ public class SIL_Edit extends JFrame {
 
     public void chartComboUpdateTitle() {
         loadingCharts = true;
-        Context c = Context.current;
+        Context c = Context.getCurrent();
         chartComboBox.setSelectedIndex(c.getChartIndex(c.currentChart) + 1);
         loadingCharts = false;
     }
@@ -1462,7 +1461,7 @@ public class SIL_Edit extends JFrame {
     }
     
     public void goToChart(String ltr) {
-        Context c = Context.current;
+        Context c = Context.getCurrent();
         chartComboBox.setSelectedIndex(c.getChartIndex(ltr) + 1);
         chartComboBoxActionPerformed(new ActionEvent(this, 0, ltr));
     }
@@ -1483,7 +1482,7 @@ public class SIL_Edit extends JFrame {
                        items = Library.menuItems;
         String choice = (String) chartComboBox.getSelectedItem(), nxtLtr, msg;
         if (choice.equals(items.getString("createNewChart"))) {
-            nxtLtr = Context.current.getNextChartLtr();
+            nxtLtr = Context.getCurrent().getNextChartLtr();
             if (nxtLtr == null) { // unlikely - 52 chart letters available
                 msg = msgs.getString("52Charts");
                 JOptionPane.showInternalMessageDialog(this, msg, 
@@ -1493,18 +1492,18 @@ public class SIL_Edit extends JFrame {
             }
             String newDescription = JOptionPane.showInputDialog(this, msgs.getString("shortDescr"));
             if (newDescription == null) {
-                chartComboBox.setSelectedIndex(Context.current.getChartIndex(Context.current.currentChart) +1);
+                chartComboBox.setSelectedIndex(Context.getCurrent().getChartIndex(Context.getCurrent().currentChart) +1);
                 return;
             }
             newDescription = FamilyPanel.convertBannedCharacters(newDescription);
-            Context.current.chartDescriptions.add(newDescription);
-            Context.current.currentChart = nxtLtr;
+            Context.getCurrent().chartDescriptions.add(newDescription);
+            Context.getCurrent().currentChart = nxtLtr;
             rebuildChartCombo();
         } else {
             int colon = choice.indexOf(":");
-            Context.current.currentChart = choice.substring(0, colon);
+            Context.getCurrent().currentChart = choice.substring(0, colon);
         }
-        chart.checkSizeOfChart(Context.current);
+        chart.checkSizeOfChart(Context.getCurrent());
         chart.resizeAndRepaint();
         getPPanel().storing = false;
     }
@@ -1684,17 +1683,17 @@ public class SIL_Edit extends JFrame {
     public void rebuildKTMatrixEtc() {
         KinTermMatrix oldKTM = ktm;
         ktm = new KinTermMatrix();
-        for (Individual pers : Context.current.individualCensus) {
+        for (Individual pers : Context.getCurrent().individualCensus) {
             pers.node = null;
         }
         int oldEgo = currentEgo;
-        for (Individual pers : Context.current.individualCensus) {
+        for (Individual pers : Context.getCurrent().individualCensus) {
             if (!pers.deleted) {
                 int id = pers.serialNmbr;
                 TreeMap newRow = new TreeMap();
                 ktm.matrix.put(id, newRow);
                 currentEgo = id;
-                pers.node = Node.makeSelfNode(Context.current.distinctAdrTerms);
+                pers.node = Node.makeSelfNode(Context.getCurrent().distinctAdrTerms);
                 pers.node.indiv = pers;
                 newRow.put(id, pers.node);
                 KSQ bfq = new KSQ();
@@ -1709,7 +1708,7 @@ public class SIL_Edit extends JFrame {
                 }
             }
         }  //  KTM is now regenerated. Install as official.
-        Context.current.ktm = ktm;
+        Context.getCurrent().ktm = ktm;
         PersonPanel.fillDyadsFromMatrix();
         regenerateKTI();  // rebuild Kin Type Index
         edWin.hideEgoChange = true;
@@ -1718,7 +1717,7 @@ public class SIL_Edit extends JFrame {
     }
 
     void regenerateKTI() {
-        KinTypeIndex kti = (Context.current.kti = new KinTypeIndex());
+        KinTypeIndex kti = (Context.getCurrent().kti = new KinTypeIndex());
         Iterator ktmIter = ktm.matrix.entrySet().iterator();
         while (ktmIter.hasNext()) {
             Map.Entry entry = (Map.Entry) ktmIter.next();
@@ -1741,7 +1740,7 @@ public class SIL_Edit extends JFrame {
             //  Do nothing. This is a "safety" storage.
         }
         
-        Individual ind = Context.current.individualCensus.get(egoNum);
+        Individual ind = Context.getCurrent().individualCensus.get(egoNum);
         if (ind.deleted) {
             MyResBundle rb = Library.messages;
             String msg = rb.getString("noDelEgo");
@@ -1755,7 +1754,7 @@ public class SIL_Edit extends JFrame {
             Iterator altIter = ktm.getRow(currentEgo).keySet().iterator();
             while (altIter.hasNext()) {
                 Integer alter = (Integer) altIter.next();
-                ind = Context.current.individualCensus.get(alter);
+                ind = Context.getCurrent().individualCensus.get(alter);
                 ind.node = null;
             }
         }
@@ -1775,8 +1774,8 @@ public class SIL_Edit extends JFrame {
         }
         //  Must build NEW nodes for each person who is connected to currentEgo
         ChartPanel.doIndexes = true;
-        Individual ego = Context.current.individualCensus.get(egoNum);
-        ego.node = Node.makeSelfNode(Context.current.distinctAdrTerms);
+        Individual ego = Context.getCurrent().individualCensus.get(egoNum);
+        ego.node = Node.makeSelfNode(Context.getCurrent().distinctAdrTerms);
         if (oldRow == null) {
             ktm.addNode(egoNum, egoNum, ego.node);
         }
@@ -1815,7 +1814,7 @@ public class SIL_Edit extends JFrame {
                     oldNode = oldNode.clone();
                 }
                 newRow.put(alterInt, oldNode);
-                Individual al = Context.current.individualCensus.get(alterInt);
+                Individual al = Context.getCurrent().individualCensus.get(alterInt);
                 al.node = oldNode;
             }
         }
@@ -1824,8 +1823,8 @@ public class SIL_Edit extends JFrame {
     
     
     public static void propagateNodes(KSQ bfq, TreeMap newRow, Individual target) {
-        ArrayList<String> kinTypeOrder = Context.current.kinTypeOrder;
-        TreeMap<String, String> priorities = Context.current.kinTypePriorityTMap;
+        ArrayList<String> kinTypeOrder = Context.getCurrent().kinTypeOrder;
+        TreeMap<String, String> priorities = Context.getCurrent().kinTypePriorityTMap;
         Iterator kinTypeIter = kinTypeOrder.iterator();
         try {
             while (!bfq.isEmpty()) {
@@ -1861,7 +1860,7 @@ public class SIL_Edit extends JFrame {
         if (nextInd == null) {
             return;
         }
-        Context ctxt = Context.current;
+        Context ctxt = Context.getCurrent();
         Node fromNode = currInd.node,
                 toNode = nextInd.node;
         if (toNode != null) {
@@ -1930,7 +1929,7 @@ public class SIL_Edit extends JFrame {
         // Insert the new kin type pair into KTI
         String newKinType = toNode.pcString;
         Integer[] pair = KinTermDef.pluckEgoAndAlter(toNode.miniPreds);
-        Context.current.kti.addPair(newKinType, pair);
+        Context.getCurrent().kti.addPair(newKinType, pair);
     }  //  end of method propagate
 
     public static boolean higherPriority(ArrayList<String> newPCS,
@@ -2063,7 +2062,7 @@ public class SIL_Edit extends JFrame {
     void applyDef(KinTermDef newDef, DomainTheory dt) {
         chart.recomputingDyads = true;
         DomainTheory.current = dt;
-        Context ctxt = Context.current;
+        Context ctxt = Context.getCurrent();
         for (Object o : newDef.expandedDefs) {
             ClauseBody cb = (ClauseBody) o;
             ArrayList<Integer[]> candidates = ctxt.kti.getList(cb.pcString);
@@ -2108,7 +2107,7 @@ public class SIL_Edit extends JFrame {
         String clas = (dt.addressTerms ? "address" : "reference");
         nod.removeTerm(term, "primary", clas);
         dt.dyadsDefined.removeDyad(dt, egoInt, alterInt, term, pcString);
-        Individual alter = Context.current.individualCensus.get(alterInt);
+        Individual alter = Context.getCurrent().individualCensus.get(alterInt);
         if (infoPerson == alter && currentEgo == egoInt) {
             personPanel1.fillTextField(nod, "primary", dt.addressTerms);
             personPanel1.dirty = true;
@@ -2173,7 +2172,7 @@ public class SIL_Edit extends JFrame {
         //	   activity dyads have been corrected.  that is currently done in DyadTMap.summaryString()
         int maxConf = learner.ctxt.ignorableP / 2;
         learner.ctxt.simDataGen = true;
-        Context.current = learner.ctxt;
+        Context.setCurrent(learner.ctxt);
         DomainTheory.current = learner;
         if (Library.synUmbDetectOn) {
             learner.resolveSynonymsInDyads();
@@ -2341,19 +2340,19 @@ public class SIL_Edit extends JFrame {
             // When target != null, we are building PC strings for CB.createExamples
             if (kinTyp.startsWith("*inverse")) {  // propagate to adoptive parents
                 String origKinTyp = "*" + kinTyp.substring(8);
-                if (Context.current.inverseSpecialRelationships == null
-                        || Context.current.inverseSpecialRelationships.get(currInd) == null) {
+                if (Context.getCurrent().inverseSpecialRelationships == null
+                        || Context.getCurrent().inverseSpecialRelationships.get(currInd) == null) {
                     return;
                 }
-                ArrayList<Individual> ir = Context.current.inverseSpecialRelationships.get(currInd).get(origKinTyp);
+                ArrayList<Individual> ir = Context.getCurrent().inverseSpecialRelationships.get(currInd).get(origKinTyp);
                 if (ir != null) {                    
                     for (Individual next : ir) {
                         propagate(currInd, next, kinTyp, bfq, newRow, target, priorities);
                     } //  end of propagation to adoptive parents
                 }  
             } else {  // propagate to adopted children
-                if (Context.current.specialRelationships == null
-                        || Context.current.specialRelationships.isEmpty()) {
+                if (Context.getCurrent().specialRelationships == null
+                        || Context.getCurrent().specialRelationships.isEmpty()) {
                     return;
                 }
                 Individual nextInd;
@@ -2571,11 +2570,11 @@ public class SIL_Edit extends JFrame {
     static class FocusListener implements WindowFocusListener {
         
         public void windowGainedFocus(WindowEvent we) {
-            Context.current = editingCtxt;
+            Context.setCurrent(editingCtxt);
         }
         
         public void windowLostFocus(WindowEvent we) {
-            editingCtxt = Context.current;
+            editingCtxt = Context.getCurrent();
         }
     }
     

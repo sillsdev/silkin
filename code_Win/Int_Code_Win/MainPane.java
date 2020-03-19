@@ -702,7 +702,7 @@ public class MainPane extends JFrame implements ActionListener {
                         if (fName.indexOf(".") != 0) {
                             Library.loadNewDomTh(file);
                             dt = DomainTheory.current;
-                            Context.current = dt.ctxt;
+                            Context.setCurrent(dt.ctxt);
                             Context.simulation = false;
                             dt.ctxt.simDataGen = false;
                             if (keep == JOptionPane.NO_OPTION) {
@@ -756,7 +756,7 @@ public class MainPane extends JFrame implements ActionListener {
                             out = new PrintWriter(new BufferedWriter(new FileWriter(filePath)));
                             dt.toThyFile(out);
                             System.out.println("Wrote: " + filePath);
-                            Library.saveContextToDisk(Context.current);
+                            Library.saveContextToDisk(Context.getCurrent());
                         }  //  end of it's not an invisible file (e.g. .DSxxxx)
                     }  //  end of loop thru DT files
                     for (int i = 0; i < MainPane.openBrowsers.size(); i++) {
@@ -940,11 +940,11 @@ public class MainPane extends JFrame implements ActionListener {
         else if (e.getActionCommand().equals("Make Curr Lang dyadsUndefined")) {
             // This command used during development only. Therefore no translation
             try {
-                if (Context.current != null) {
-                    System.out.println("Generating dyadsUndefined for " + Context.current.languageName);
+                if (Context.getCurrent() != null) {
+                    System.out.println("Generating dyadsUndefined for " + Context.getCurrent().languageName);
                     DomainTheory.current.dyadsUndefined = new DyadTMap();
 //                currentContext.cleanNodeFields();
-                    Context.current.addDyads((Individual) Context.current.individualCensus.get(0));
+                    Context.getCurrent().addDyads((Individual) Context.getCurrent().individualCensus.get(0));
                 }
                 //     ((JTextArea)diagramArea).setText(censusString() + dtm.summaryString());
             } catch (Exception exc) {
@@ -1154,7 +1154,7 @@ public class MainPane extends JFrame implements ActionListener {
                 DomainTheory sourceDT = (learner.languageName.contains("(Adr)")
                         ? learner.ctxt.domTheoryAdr()
                         : learner.ctxt.domTheoryRef());
-                Context.current = learner.ctxt;
+                Context.setCurrent(learner.ctxt);
                 nmbrOfRounds = Integer.parseInt(inFile.readLine());
                 Library.baseCB_Wait = Integer.parseInt(inFile.readLine());
                 Library.inductionWait = Integer.parseInt(inFile.readLine());
@@ -1331,7 +1331,7 @@ public class MainPane extends JFrame implements ActionListener {
             // Development Only. Not translated.
             try {
                 Context cuc = Library.contextUnderConstruction;
-                Context.current = cuc;
+                Context.setCurrent(cuc);
                 DomainTheory.current = cuc.domTheoryRef();
                 Individual indie;
                 String gender;
@@ -1381,10 +1381,10 @@ public class MainPane extends JFrame implements ActionListener {
             activity.log.append(msg + "\n\n");
             return;
         }
-        String lang = Context.current.languageName;
+        String lang = Context.getCurrent().languageName;
         Library.ContextStub newStub = Library.retrieveOrCreateStub(lang);
-        newStub.refThyExists = Context.current.domTheoryRefExists();
-        newStub.adrThyExists = Context.current.domTheoryAdrExists();
+        newStub.refThyExists = Context.getCurrent().domTheoryRefExists();
+        newStub.adrThyExists = Context.getCurrent().domTheoryAdrExists();
         Library.currentLanguage = lang;
         browseLibrary();
     }
@@ -1455,14 +1455,14 @@ public class MainPane extends JFrame implements ActionListener {
     public void exportGEDCOM() {
         String msg;
         boolean realData;
-        if (Context.current == null) {
+        if (Context.getCurrent() == null) {
             msg = msgs.getString("chooseThenExport");
             JOptionPane.showMessageDialog(desktop, msg,
                     msgs.getString("nothingToExport"),
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
-        int population = Context.current.indSerNumGen + Context.current.famSerNumGen;
+        int population = Context.getCurrent().indSerNumGen + Context.getCurrent().famSerNumGen;
         if (population < 2) {
             JOptionPane.showMessageDialog(desktop,
                     msgs.getString("exportingOnly") + " " + population 
@@ -1522,7 +1522,7 @@ public class MainPane extends JFrame implements ActionListener {
             }
             try {
                 PrintWriter outFile = new PrintWriter(fPath, "UTF-8");
-                Context.current.exportGEDCOM(outFile, fName, realData, destination, (String) options[choice]);
+                Context.getCurrent().exportGEDCOM(outFile, fName, realData, destination, (String) options[choice]);
                 outFile.flush();
                 outFile.close();
             } catch (IOException exc) {
@@ -1621,7 +1621,7 @@ public class MainPane extends JFrame implements ActionListener {
             Library.readPredDecodings();
         }
         learner.ctxt.simDataGen = true;
-        Context.current = learner.ctxt;
+        Context.setCurrent(learner.ctxt);
         DomainTheory.current = learner;
         if (Library.synUmbDetectOn) {
             learner.resolveSynonymsInDyads();
@@ -1759,7 +1759,7 @@ public class MainPane extends JFrame implements ActionListener {
         //  For 'nmbrOfEgos' iterations, pick an ego and generate complete set of examples for them of dt's
         //  kinTerms.  Add to the KinTermMatrix & DyadTMap as we go.
         Oracle orca = learner.wiseGuy;
-        Context.current = ctxt;
+        Context.setCurrent(ctxt);
         ctxt.simDataGen = true;
         boolean oldSimVal = Context.simulation;
         Context.simulation = true;
@@ -2142,7 +2142,7 @@ public class MainPane extends JFrame implements ActionListener {
                     && SIL_Edit.edWin.chart.saveFile != null) {
                 try {
                     if (SIL_Edit.editingCtxt != null) {
-                        Context.current = SIL_Edit.editingCtxt;
+                        Context.setCurrent(SIL_Edit.editingCtxt);
                     }
                     if (!emergencyExit) {
                         SIL_Edit.edWin.chart.saveSILKFile();

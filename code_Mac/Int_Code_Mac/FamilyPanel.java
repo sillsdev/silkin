@@ -447,7 +447,7 @@ public class FamilyPanel extends JPanel {
         currentFam = fam;
         parent.loadingCharts = false;
         famComments.setText(PersonPanel.restoreLineBreaks(fam.comment));
-        if (Context.current.displayGEDCOM) {
+        if (Context.getCurrent().displayGEDCOM) {
             String items = fam.makeGEDCOMItems();
             famComments.setText(famComments.getText() + items);
         }
@@ -566,7 +566,7 @@ public class FamilyPanel extends JPanel {
         infoMarriage.comment = convertBannedCharacters(famComments.getText());
         infoMarriage.dataAuthor = Library.currDataAuthor;
         infoMarriage.dataChangeDate = UDate.today();
-        Context.current.dateOfLastDataChange = infoMarriage.dataChangeDate;
+        Context.getCurrent().dateOfLastDataChange = infoMarriage.dataChangeDate;
         parent.chart.dirty = true;
         if (++Library.changeCounter % Library.saveInterval == 0) {
             parent.chart.saveSILKFile();

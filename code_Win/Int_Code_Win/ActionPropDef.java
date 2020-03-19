@@ -162,7 +162,7 @@ public class ActionPropDef extends JPanel {
 
 
     private void doneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneButtonActionPerformed
-        Context currCtxt = Context.current;
+        Context currCtxt = Context.getCurrent();
         if (accepted) {  
             try {
                 String sourceContextName = propDef.ktd.domTh.languageName;
@@ -176,8 +176,9 @@ public class ActionPropDef extends JPanel {
                 newDef.comments = FamilyPanel.convertBannedCharacters(notesText.getText());
                 newDef.definitions = propDef.ktd.definitions;
                 newDef.expandClauses(sourceCtxt);
+                KinTermDef.makeGeneric(newDef, currCtxt);             
                 makePCStrings(newDef, propDef.eqc.sigString);
-                updateCBPtrs(newDef);
+                updateCBPtrs(newDef);  //  needed???
                 newDef.makeSigStrings();
                 dt.addTerm(newDef);
                 Context.AcceptedDefPtr ptr;
@@ -200,7 +201,6 @@ public class ActionPropDef extends JPanel {
                     ArrayList<Context.CB_Ptr> defList = autoDef.get(kinType);
                     defList.add(new Context.CB_Ptr(newDef.kinTerm, cb.seqNmbr));
                 }
-//                Context.current = currCtxt;  // It was reset by updates to SourceCtxt
                 String msg = msgs.getString("applyToAll");
                 Object[] btns = {se.getString("yes"), se.getString("no")};        
                 int decision = JOptionPane.showOptionDialog(this, msg, 

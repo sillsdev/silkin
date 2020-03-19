@@ -108,7 +108,7 @@ public class PrintChart implements Printable {
 
     public int print(Graphics g, PageFormat pf, int page) throws PrinterException {
         Graphics2D g2d = (Graphics2D) g;
-        Context ctxt = Context.current;
+        Context ctxt = Context.getCurrent();
         int chartPageNmbr = page + 1;
         String chartTitle = ctxt.currentChart;
         chartTitle += ": " + ctxt.getChartDescription(ctxt.currentChart);

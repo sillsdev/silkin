@@ -41,16 +41,16 @@ public class LibBrowserChart extends JPanel implements Scrollable {
         g.setFont(boldFont);
         if (currentContext != null && !noRefresh) {
             // Store prior values
-            Context oldCtxt = Context.current;
+            Context oldCtxt = Context.getCurrent();
             int oldNameLabel = Person.nameLabel;
             int oldKinTermLabel = Person.kinTermLabel;
-            Context.current = currentContext;
+            Context.setCurrent(currentContext);
             Person.nameLabel = nameLabel;
             Person.kinTermLabel = kinTermLabel;
             // temporarily set values needed for this chart
             paintTree(g);
             //  restore to prior state
-            Context.current = oldCtxt;
+            Context.setCurrent(oldCtxt);
             Person.nameLabel = oldNameLabel;
             Person.kinTermLabel = oldKinTermLabel;            
         }
@@ -131,7 +131,7 @@ public class LibBrowserChart extends JPanel implements Scrollable {
                         kidMidX = kr.x + (kr.width / 2),
                         parBotY = pr.y + pr.height + GAP,
                         kidTopY = kr.y;
-                Color clr = ((UserDefinedProperty) Context.current.userDefinedProperties.get(sr.udpName)).chartColor;
+                Color clr = ((UserDefinedProperty) Context.getCurrent().userDefinedProperties.get(sr.udpName)).chartColor;
                 g.setColor(clr);
                 g.drawLine(parentMidX, parBotY, kidMidX, kidTopY);
             }
@@ -215,7 +215,7 @@ public class LibBrowserChart extends JPanel implements Scrollable {
         if (viewArea != null) {
             printArea = viewArea;
         }
-        for (Family f : Context.current.familyCensus) {
+        for (Family f : Context.getCurrent().familyCensus) {
             if (!f.deleted && f.homeChart.equals(chartID)
                     && printArea.contains(f.location)) {
                 if (f.location.x < minX) {
@@ -232,7 +232,7 @@ public class LibBrowserChart extends JPanel implements Scrollable {
                 }
             }
         }
-        for (Individual ind : Context.current.individualCensus) {
+        for (Individual ind : Context.getCurrent().individualCensus) {
             if (!ind.deleted && ind.homeChart.equals(chartID)
                     && printArea.contains(ind.location)) {
                 if (ind.location.x < minX) {
@@ -249,7 +249,7 @@ public class LibBrowserChart extends JPanel implements Scrollable {
                 }
             }
         }
-        for (Link lk : Context.current.linkCensus) {
+        for (Link lk : Context.getCurrent().linkCensus) {
             if (!lk.deleted && lk.homeChart.equals(chartID)
                     && printArea.contains(lk.location)) {
                 if (lk.location.x < minX) {

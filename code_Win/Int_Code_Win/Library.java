@@ -448,9 +448,9 @@ public class Library {
         if (choice == 0) {
             dt.polygamyOK = false;
         }
-        Context userCtxt, formerCurrentContext = Context.current;
+        Context userCtxt, formerCurrentContext = Context.getCurrent();
         userCtxt = new Context(dt);  //  the constructor automatically sets 'current' to the new context
-        Context.current = formerCurrentContext;
+        Context.setCurrent(formerCurrentContext);
         File trial;
         int returnVal;
         boolean redo = true, writeIt;
@@ -1739,7 +1739,7 @@ public class Library {
             Counter[] counters = (Counter[]) get(langTerm);
             String pcString = cb.pcString;
             ArrayList<String> symbols = KinTermDef.explodePCSymbols(pcString);
-            pcString = DyadTMap.truncate(symbols, Context.current);             
+            pcString = DyadTMap.truncate(symbols, Context.getCurrent());             
             int strDist = Math.min(Math.max((pcString.length() / 2) - 1, 0), maxDist);
             //  strDist = (half the length of the pcStr, rounded down) - 1.  With min of 0 and max of maxDist
             for (int i = strDist; i <= maxDist; i++) {
@@ -1861,7 +1861,7 @@ public class Library {
             nmbrOfCBs++;  //  no matter what happens
             String pcString = ptr.getClause().pcString;
             ArrayList<String> symbols = KinTermDef.explodePCSymbols(pcString);
-            pcString = DyadTMap.truncate(symbols, Context.current);
+            pcString = DyadTMap.truncate(symbols, Context.getCurrent());
             ArrayList<Object> cbEQCList = (ArrayList<Object>) tMap.get(pcString);
             boolean slurp = false;
             if (cbEQCList != null) {
@@ -2867,9 +2867,9 @@ public class Library {
                 throw new KSInternalErrorException("This will over-write an already-active domain theory.");
             }
             actxt.addDomainTheory(dt);
-            Context.current = actxt;
+            Context.setCurrent(actxt);
         }else if (actxt != null && allowOverWrite) {
-            Context.current = actxt;
+            Context.setCurrent(actxt);
         } else {
             actxt = new Context(dt); // new context automatically is current & active
         }
@@ -3099,7 +3099,7 @@ public class Library {
         }
         
         contextUnderConstruction.saveState = false;  //  will change if any edits made
-        Context.current = contextUnderConstruction;
+        Context.setCurrent(contextUnderConstruction);
         retrieveOrCreateStub(contextUnderConstruction.languageName);
         activeContexts.put(contextUnderConstruction.languageName, contextUnderConstruction);
     }  //  end of method loadSILKFile()
@@ -3196,7 +3196,7 @@ public class Library {
             KSParsingErrorException, JavaSystemException, NotSerializableException, IOException {
 
 //  First, make/find the context & expand the definitions (so final activity-checking occurs).
-        Context oldCtxt = Context.current, ctxt, actxt;
+        Context oldCtxt = Context.getCurrent(), ctxt, actxt;
         DomainTheory oldDT = DomainTheory.current;
         String languageName = dt.languageName;
         int end = languageName.indexOf("(");
@@ -3207,7 +3207,7 @@ public class Library {
         if (actxt != null) {
             ctxt = actxt;
             ctxt.addDomainTheory(dt);
-            Context.current = ctxt;
+            Context.setCurrent(ctxt);
         } else {
             ctxt = new Context(dt); // new context automatically becomes current & active
         }
@@ -3360,7 +3360,7 @@ public class Library {
                 String fileName = libraryCtxtDirectory + langName + ".ctxt";
                 ctxt = readContextFromDisk(fileName);
             }  //  end of need to load from disk
-            Context.current = ctxt;
+            Context.setCurrent(ctxt);
             ContextStub cStub = retrieveOrCreateStub(langName);  //  we know it exists
             if (cStub.refThyExists) {
                 ctxt.domTheoryRef().generateIndexes();
@@ -3507,7 +3507,7 @@ public class Library {
             BufferedReader inFile = new BufferedReader(new FileReader(fileName));
             return new FeatureVectorObj(inFile);
         } catch (Exception exc) {
-            Context oldCtxtCurrent = Context.current;
+            Context oldCtxtCurrent = Context.getCurrent();
             DomainTheory dt, oldDTCurrent = DomainTheory.current;
             Context actxt = (Context) activeContexts.get(langName);
             if (actxt != null) {
@@ -3516,7 +3516,7 @@ public class Library {
                     dt = (adr ? actxt.domTheoryAdr() : actxt.domTheoryRef());
                     ArrayList<Object> egoList = new ArrayList<Object>();
                     fv = dt.computeFeatureVector(egoList);
-                    Context.current = oldCtxtCurrent;
+                    Context.setCurrent(oldCtxtCurrent);
                     DomainTheory.current = oldDTCurrent;
                     return fv;
                 } catch (Exception dtx) {
@@ -3528,7 +3528,7 @@ public class Library {
                 dt = readThyFile(fileName);
                 ArrayList<Object> egoList = new ArrayList<Object>();
                 fv = dt.computeFeatureVector(egoList);
-                Context.current = oldCtxtCurrent;
+                Context.setCurrent(oldCtxtCurrent);
                 DomainTheory.current = oldDTCurrent;
                 return fv;
             } catch (Exception ex) {
@@ -3538,12 +3538,12 @@ public class Library {
                     dt = readThyFile(fileName);
                     ArrayList<Object> egoList = new ArrayList<Object>();
                     fv = dt.computeFeatureVector(egoList);
-                    Context.current = oldCtxtCurrent;
+                    Context.setCurrent(oldCtxtCurrent);
                     DomainTheory.current = oldDTCurrent;
                     return fv;
                 } catch (Exception dtx) {
                     String msg = "Unable to find/create Feature Vector for " + langName + suffix;
-                    Context.current = oldCtxtCurrent;
+                    Context.setCurrent(oldCtxtCurrent);
                     DomainTheory.current = oldDTCurrent;
                     throw new JavaSystemException(msg);
                 }

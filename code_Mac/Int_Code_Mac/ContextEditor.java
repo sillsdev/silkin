@@ -514,7 +514,7 @@ public class ContextEditor extends KSJInternalFrame {
                 //  the Kin Term Matrix. For export to a spreadsheet.               
                 String msg;
                 MyResBundle msgs = Library.messages;
-                int population = Context.current.indSerNumGen + Context.current.famSerNumGen;
+                int population = Context.getCurrent().indSerNumGen + Context.getCurrent().famSerNumGen;
                 if (population < 2) {
                     JOptionPane.showMessageDialog(desktop,
                             msgs.getString("exportingOnly") + " " + population
@@ -546,10 +546,10 @@ public class ContextEditor extends KSJInternalFrame {
                     }
                     try {
                         PrintWriter outFile = new PrintWriter(fPath, "UTF-8");
-                        Context.current.exportKTM(outFile, "Reference");
-                        if (Context.current.domTheoryAdrExists()) {
+                        Context.getCurrent().exportKTM(outFile, "Reference");
+                        if (Context.getCurrent().domTheoryAdrExists()) {
                             outFile.println("\n\n");
-                            Context.current.exportKTM(outFile, "Address");
+                            Context.getCurrent().exportKTM(outFile, "Address");
                         }
                         outFile.flush();
                         outFile.close();

@@ -35,7 +35,7 @@ public class ActionDONEorUnDo extends javax.swing.JPanel {
         //  the User can (potentially) undo.
         issue = iss;
         suggNmbr = nmbr;
-        Context ctxt = Context.current;
+        Context ctxt = Context.getCurrent();
         TreeMap<String, ArrayList<Context.HistoryItem>> lrngHist =
                 (dt.addressTerms ? ctxt.learningHistoryAdr : ctxt.learningHistoryRef);
         ArrayList<Context.HistoryItem> hList = lrngHist.get(issue.kinTerm);

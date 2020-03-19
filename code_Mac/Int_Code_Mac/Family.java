@@ -214,8 +214,8 @@ public class Family extends Marriage implements Serializable, Locatable {
 
     public Family(Point loc) {
         location = loc;
-        serialNmbr = Context.current.famSerNumGen++;
-        Context.current.addFamily(this);
+        serialNmbr = Context.getCurrent().famSerNumGen++;
+        Context.getCurrent().addFamily(this);
     }  //  end of constructor for Marriage-oriented family
 
     /**
@@ -256,8 +256,8 @@ public class Family extends Marriage implements Serializable, Locatable {
     @param	date		String: the date as we want it to appear in <code>marriageDate</code>
      */
     public Family(Individual person1, Individual person2, String date) {
-        serialNmbr = Context.current.famSerNumGen++;
-        Context.current.addFamily(this);
+        serialNmbr = Context.getCurrent().famSerNumGen++;
+        Context.getCurrent().addFamily(this);
         if (person1.gender.equals("M")) {
             husband = person1;			// we assume 1 male, 1 female
             wife = person2;
@@ -284,8 +284,8 @@ public class Family extends Marriage implements Serializable, Locatable {
     @param	person1
      */
     public Family(Individual person1) {
-        serialNmbr = Context.current.famSerNumGen++;
-        Context.current.addFamily(this);
+        serialNmbr = Context.getCurrent().famSerNumGen++;
+        Context.getCurrent().addFamily(this);
         if (person1.gender.equals("F")) {
             wife = person1;
             wife.addMarriage(this);
@@ -319,8 +319,8 @@ public class Family extends Marriage implements Serializable, Locatable {
     @param	argname		the name of the variable which this person satisfies in a Horn Clause
      */
     Family(Individual person1, String argName, TreeMap divSpecs) {
-        serialNmbr = Context.current.famSerNumGen++;
-        Context.current.addFamily(this);
+        serialNmbr = Context.getCurrent().famSerNumGen++;
+        Context.getCurrent().addFamily(this);
         if (person1.gender.equals("F")) {
             wife = person1;
             wife.addMarriage(this);
@@ -365,8 +365,8 @@ public class Family extends Marriage implements Serializable, Locatable {
     Family(Individual person1, Individual person2, String argName1, String argName2, boolean divReq, TreeMap divSpecs)
             throws KSConstraintInconsistency {
         // provided for 2 parents w/ divSpecs and a divReq
-        serialNmbr = Context.current.famSerNumGen++;
-        Context.current.addFamily(this);
+        serialNmbr = Context.getCurrent().famSerNumGen++;
+        Context.getCurrent().addFamily(this);
         if ((person1.gender.equals("M")) || (person2.gender.equals("F"))) {
             husband = person1;			// we assume 1 male, 1 female
             wife = person2;
@@ -489,7 +489,7 @@ public class Family extends Marriage implements Serializable, Locatable {
         if (wife.hasDoB()) {
             wifBirthYr += Integer.parseInt(wife.getBirthYr());           
         } //  end of if-husb-or-wife-has-non-null-birthdate
-        if (!(Context.current.polygamyPermit)) {
+        if (!(Context.getCurrent().polygamyPermit)) {
             Literal lit = new Literal(new Predicate("dummy"));
             husbLatestYr = 6 + lit.findLatestYear(Family.listMinus(husband.marriages, this));
             wifLatestYr = 6 + lit.findLatestYear(Family.listMinus(wife.marriages, this));
@@ -1013,7 +1013,7 @@ public class Family extends Marriage implements Serializable, Locatable {
             }
         }
         if (dataAuthor != null) {
-            out.println("1 SUBM @" + Context.current.dataAuthors.indexOf(dataAuthor) + "@");
+            out.println("1 SUBM @" + Context.getCurrent().dataAuthors.indexOf(dataAuthor) + "@");
         }
         if (dataChangeDate != null && !dataChangeDate.isEmpty()
                 && dataChangeDate.length() >= 4) {

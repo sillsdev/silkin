@@ -318,9 +318,9 @@ public void deltaMove(int dx, int dy) {
             }
         }
         TreeMap<String, ArrayList<Context.SpecRelTriple>> specialRels = 
-                Context.current.specialRelationships;
-        if (specialRels != null && specialRels.get(Context.current.currentChart) != null) {
-            ArrayList<Context.SpecRelTriple> srs = specialRels.get(Context.current.currentChart);
+                Context.getCurrent().specialRelationships;
+        if (specialRels != null && specialRels.get(Context.getCurrent().currentChart) != null) {
+            ArrayList<Context.SpecRelTriple> srs = specialRels.get(Context.getCurrent().currentChart);
             for (Context.SpecRelTriple srt : srs) { // move anything attached to a family member by special relationship
                 if (srt.parent == this || srt.parent == husband || srt.parent == wife
                         || children.contains(srt.parent) || srt.parent == husbandLink
@@ -420,9 +420,9 @@ public void lineageDeltaMove(int dx, int dy, ArrayList<Individual> people, Array
             }
         }
         TreeMap<String, ArrayList<Context.SpecRelTriple>> specialRels =
-                Context.current.specialRelationships;
-        if (specialRels != null && specialRels.get(Context.current.currentChart) != null) {
-            ArrayList<Context.SpecRelTriple> srs = specialRels.get(Context.current.currentChart);
+                Context.getCurrent().specialRelationships;
+        if (specialRels != null && specialRels.get(Context.getCurrent().currentChart) != null) {
+            ArrayList<Context.SpecRelTriple> srs = specialRels.get(Context.getCurrent().currentChart);
             for (Context.SpecRelTriple srt : srs) { // move anything attached to a family member by special relationship
                 if (srt.parent == this || srt.parent == husband || srt.parent == wife
                         || children.contains(srt.parent) || srt.parent == husbandLink

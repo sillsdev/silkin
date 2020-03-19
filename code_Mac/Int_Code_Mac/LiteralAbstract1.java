@@ -666,7 +666,7 @@ public void neg_expand(Context hypo, ArrayList<Object> save4Last, ArrayList<Obje
                         else if ((arg instanceof Variable) 
 							&& ((predicate.name.substring(0, 1).equals("*")) && (i == 0)))  {
 							//  arg0 of a *-prop is either a Personal Variable or a MathVariable
-							UserDefinedProperty udp = (UserDefinedProperty)Context.current.userDefinedProperties.get(predicate.name);
+							UserDefinedProperty udp = (UserDefinedProperty)Context.getCurrent().userDefinedProperties.get(predicate.name);
 							if (udp.singleValue && (udp.typ.equals("individual")))  newArg = arg.copy();  
 							//  Multi-person = a list, which needs a MathVariable.  Single person = an individual
 							else newArg = new MathVariable((Variable)arg);
@@ -690,7 +690,7 @@ public void neg_expand(Context hypo, ArrayList<Object> save4Last, ArrayList<Obje
 			Argument arg0 = (Argument)args.get(0), arg1 = null;
 			if (args.size() > 1) arg1 = (Argument)args.get(1);  //  All have 2 args
 			if (predicate.name.substring(0, 1).equals("*")) {
-				UserDefinedProperty udp = (UserDefinedProperty)Context.current.userDefinedProperties.get(predicate.name);
+				UserDefinedProperty udp = (UserDefinedProperty)Context.getCurrent().userDefinedProperties.get(predicate.name);
 				if (arg0.valueType.equals(udp.typ))  {  //  OK.  Do nothing.
 				}else if (arg0.valueType.equals("default"))  {
 					arg0.valueType = udp.typ;
@@ -1091,7 +1091,7 @@ public void neg_expand(Context hypo, ArrayList<Object> save4Last, ArrayList<Obje
                                 + "' and '" + argument0.argName + "'.  Not Allowed!");
                     }  //  end of check for duplicate variable assignments
                     indVarTM.put(predName, argument0);
-                    UserDefinedProperty udp = (UserDefinedProperty) Context.current.userDefinedProperties.get(predName);
+                    UserDefinedProperty udp = (UserDefinedProperty) Context.getCurrent().userDefinedProperties.get(predName);
                     if (udp == null) {
                         String msg = "User-Defined Property '" + predName + "' is not defined for this domain.";
                         throw new KSConstraintInconsistency(msg);

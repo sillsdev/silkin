@@ -290,9 +290,9 @@ public class ActionAnomaly extends JPanel {
             Dyad dy2 = new Dyad(dy);
             dy2.kinTerm = newTerm;
             dy2.confirmed = true;
-            Context.current.deleteDyad(dt, oldTerm, dy.pcString, egoNum, altNum);
-            Context.current.addDyad(dt, dy2);
-            Context.current.ktm.correctKinTerm(egoNum, altNum, oldTerm, newTerm, distinct);
+            Context.getCurrent().deleteDyad(dt, oldTerm, dy.pcString, egoNum, altNum);
+            Context.getCurrent().addDyad(dt, dy2);
+            Context.getCurrent().ktm.correctKinTerm(egoNum, altNum, oldTerm, newTerm, distinct);
             addToDyadsProcessed(dy);
             dy.kinTerm = newTerm;
         }else if (dyadCorrectBtn.isSelected()) {
@@ -303,8 +303,8 @@ public class ActionAnomaly extends JPanel {
             int egoNum = dy.ego.serialNmbr,
                 altNum = dy.alter.serialNmbr;
             boolean distinct = dt.addressTerms;
-            Context.current.deleteDyad(dt, dy.kinTerm, dy.pcString, egoNum, altNum);
-            Context.current.ktm.deleteKinTerm(egoNum, altNum, dy.kinTerm, distinct);
+            Context.getCurrent().deleteDyad(dt, dy.kinTerm, dy.pcString, egoNum, altNum);
+            Context.getCurrent().ktm.deleteKinTerm(egoNum, altNum, dy.kinTerm, distinct);
             addToDyadsProcessed(dy);
             dy.kinTerm = se.getString("dELETED");
         }

@@ -19,7 +19,7 @@ import static java.nio.file.StandardCopyOption.*;
 */
 public class Context implements Serializable {
 
-    static Context current;  // for Library Browser purposes.  User's current Context = Library.contextUnderConstruction
+    private static Context current;  // for Library Browser purposes.  User's current Context = Library.contextUnderConstruction
     static boolean simulation = false;
     static float spellingNoise, classNoise;
     static String[] chartLtrs = LiteralAbstract1.argCodes;
@@ -102,11 +102,19 @@ public class Context implements Serializable {
     public boolean editable, distinctAdrTerms, birthDateNormallyCaptured = false,
             surnameNormallyCaptured = true, displayGEDCOM = false;
     public static String[] priorVersions;
+    
+    public static void setCurrent(Context ctxt) {
+        current = ctxt;
+    }  
+    
+    public static Context getCurrent() {
+        return current;
+    }
 
     /** This zero-arg constructor is for use by Serialization ONLY.  */
     public Context() {
         createDate = UDate.today();
-        Context.current = this;
+        Context.setCurrent(this);
         loadDefaultKinTypeStuff();
     }
 // end of zero-arg constructor
@@ -118,7 +126,7 @@ public class Context implements Serializable {
      */
     public Context(DomainTheory dt) {
         createDate = UDate.today();
-        Context.current = this;
+        Context.setCurrent(this);
         dt.ctxt = this;
         if (dt.addressTerms) {
             domTheoryAdr = dt;
@@ -144,7 +152,7 @@ public class Context implements Serializable {
      */
     public Context(DomainTheory dt, String cmts) {
         createDate = UDate.today();
-        Context.current = this;
+        Context.setCurrent(this);
         dt.ctxt = this;
         comments = cmts;
         if (dt.addressTerms) {
@@ -1265,7 +1273,9 @@ public class Context implements Serializable {
             KSDateParseException {
         String directory = f.getParent(), path, lang;
         PrintWriter silk = null;
-        makePriorVersion(f);
+        if (f.exists()) {  //  i.e. this is not the first save
+            makePriorVersion(f);
+        }        
         try {
             silk = new PrintWriter(f, "UTF-8");
         } catch (Exception ex) {
@@ -1332,7 +1342,7 @@ public class Context implements Serializable {
         Path silkPath = silkFile.toPath();
         Path priorPath = newPrior.toPath();
         try {  //  use 'copy' instead of 'move' so Windows will work -- Grrr!
-            Files.copy(silkPath, priorPath, COPY_ATTRIBUTES);
+            Files.move(silkPath, priorPath);
         }catch(Exception exc) {
             String msg = Library.messages.getString("errorRetrieving")
                     + exc.getMessage();

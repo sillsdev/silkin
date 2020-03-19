@@ -310,7 +310,7 @@ public class LibBrowser extends KSJInternalFrame {
      */
     public void reset(int resetInd, int resetFam) {
         try {
-            Context.current.resetTo(resetInd, resetFam);
+            Context.getCurrent().resetTo(resetInd, resetFam);
         } catch (KSInternalErrorException ouch) {
             JOptionPane.showMessageDialog(desktop,
                     msgs.getString("corruptedData") + ouch
@@ -1127,10 +1127,10 @@ public class LibBrowser extends KSJInternalFrame {
             try {
                 if (actxt != null) {  //  this-language-is-an-active-context
                     currentContext = actxt;
-                    Context.current = currentContext;
+                    Context.setCurrent(currentContext);
                 } else {
                     currentContext = Library.readContextFromDisk(fileName);  //  load it from disk
-                    Context.current = currentContext;
+                    Context.setCurrent(currentContext);
                 }
                 if (adrFlag == language.length()) //  Reference terms are selected
                 {
@@ -1171,8 +1171,8 @@ public class LibBrowser extends KSJInternalFrame {
                 langLoad = false;
                 if (priorContext != null) {
                     currentContext = priorContext;  //  Revert to priors.
-                    Context.current = priorContext;
-                    System.out.println("3  Current context reset to " + Context.current.languageName);
+                    Context.setCurrent(priorContext);
+                    System.out.println("3  Current context reset to " + Context.getCurrent().languageName);
                     currentDomTh = priorDT;
                     DomainTheory.current = priorDT;
                 }
@@ -1470,7 +1470,7 @@ public class LibBrowser extends KSJInternalFrame {
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            Context.current = currentContext;  //  so that the diagram methods can access context
+            Context.setCurrent(currentContext);  //  so that the diagram methods can access context
             DomainTheory.current = currentDomTh;  //  and domTh fields.
             TermChooserFrame picker = new TermChooserFrame(currentDomTh, window);
             picker.desktop = desktop;

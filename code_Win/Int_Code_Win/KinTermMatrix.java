@@ -52,7 +52,7 @@ public class KinTermMatrix implements Serializable {
         if (herRow != null) {
             for (Object o : herRow.values()) {
                 Node nod = (Node) o;
-                Context.current.deleteDyads(nod, ndx);
+                Context.getCurrent().deleteDyads(nod, ndx);
             }
         }
         matrix.remove(ndx);
@@ -62,7 +62,7 @@ public class KinTermMatrix implements Serializable {
             Integer altSerial = (Integer) entry.getKey();
             TreeMap row = (TreeMap) entry.getValue();
             Node nod = (Node) row.get(ndx);
-            Context.current.deleteDyads(nod, altSerial);
+            Context.getCurrent().deleteDyads(nod, altSerial);
             row.remove(ndx);
         }
     }
@@ -153,7 +153,7 @@ public class KinTermMatrix implements Serializable {
      *  appears only if this context has separate terms of address.
      */
     public void checkSelfNodes() {
-        boolean doublEgo = Context.current.distinctAdrTerms;
+        boolean doublEgo = Context.getCurrent().distinctAdrTerms;
         Node cell;
         for (int n=0; n < matrix.size(); n++) {
             cell = getCell(n,n);  //  this is the self node
@@ -335,17 +335,17 @@ public class KinTermMatrix implements Serializable {
             try {
                 ArrayList<String> deletedTerms = oldNode.getKinTerms(false);
                 deletedTerms.removeAll(node.getKinTerms(false));
-                DomainTheory dt = Context.current.domTheoryRef();
+                DomainTheory dt = Context.getCurrent().domTheoryRef();
                 deleteDyads(deletedTerms, egoInt, alterInt, node, dt);                
                 String oldPC = oldNode.pcString, 
                        newPC = node.pcString;
                 if (! oldPC.equals(newPC)) {
-                    KinTypeIndex kti = Context.current.kti;
+                    KinTypeIndex kti = Context.getCurrent().kti;
                     Integer[] pair = {egoInt, alterInt};
                     kti.removePair(oldPC, pair);
                 }
                 if (SIL_Edit.edWin.chart.distinctAdrTerms) {
-                    dt = Context.current.domTheoryAdr();
+                    dt = Context.getCurrent().domTheoryAdr();
                     deletedTerms = oldNode.getKinTerms(true);
                     deletedTerms.removeAll(node.getKinTerms(true));
                     deleteDyads(deletedTerms, egoInt, alterInt, node, dt);                     
@@ -490,7 +490,7 @@ public class KinTermMatrix implements Serializable {
             if (p1 != egoNum && p1 != alterNum && !path.contains(p1)) {
                 path.add(p1);
             }
-            if (Context.current.chartDescriptions.size() > 1 && pcStr.startsWith("St")) {
+            if (Context.getCurrent().chartDescriptions.size() > 1 && pcStr.startsWith("St")) {
                 //  highlighting linking natural kin of step-relations is only needed if multi charts  
                 try {
                     if (pcStr.equals("Stfa") || pcStr.equals("Stmo")) {
@@ -512,8 +512,8 @@ public class KinTermMatrix implements Serializable {
 
     void findNaturalLinkingKin(int parent, int child, ArrayList<Integer> path)
             throws KSInternalErrorException {
-        Individual par = Context.current.individualCensus.get(parent),
-                kid = Context.current.individualCensus.get(child),
+        Individual par = Context.getCurrent().individualCensus.get(parent),
+                kid = Context.getCurrent().individualCensus.get(child),
                 spouse = null, link = null;
         // par is a step-parent of kid
         bigLoop:
